@@ -815,15 +815,14 @@ class InputHandler {
             if (calibratedGamma < -90) calibratedGamma += 180;
             
             // Sensibilidad MUY ALTA para respuesta instantánea
-            const sensitivity = 5;
-            // Smoothing muy alto para respuesta casi directa (0.85 = 85% del nuevo valor)
-            const smoothing = 0.85;
+            const sensitivity = 4; // Más sensible
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
             
-            self.tiltX = self.tiltX * (1 - smoothing) + newTiltX * smoothing;
-            self.tiltY = self.tiltY * (1 - smoothing) + newTiltY * smoothing;
+            // SIN smoothing - respuesta 100% directa
+            self.tiltX = newTiltX;
+            self.tiltY = newTiltY;
         };
         
         window.addEventListener('deviceorientation', handleOrientation, true);
@@ -891,15 +890,16 @@ class InputHandler {
             if (gp.buttons[15]?.pressed) dx = 1;
         }
         
-        // Giroscopio con respuesta MUY directa
+        // Giroscopio con respuesta DIRECTA e INMEDIATA
         if (this.isMobile && !this.touchActive && this.gyroEnabled && this.isGyroWorking()) {
-            const gyroDeadzone = 0.02;
+            const gyroDeadzone = 0.01;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                dx = this.tiltX * 2.5; // Multiplicador alto para respuesta rápida
+                // Multiplicador muy alto para respuesta instantánea
+                dx = this.tiltX * 3.5;
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
-                dy = this.tiltY * 2.5;
+                dy = this.tiltY * 3.5;
             }
         }
         
@@ -1541,17 +1541,28 @@ class Player {
         const touchTarget = input.getTouchTarget();
         
         if (touchTarget.active) {
+            // Control táctil con offset para no tapar la nave
             const targetX = touchTarget.x;
-            const targetY = touchTarget.y - 50;
+            const targetY = touchTarget.y - 100; // Offset grande para que el dedo no tape la nave
             this.x = targetX;
             this.y = targetY;
+            this.vx = 0;
+            this.vy = 0;
+        } else if (input.isMobile && input.gyroEnabled && input.isGyroWorking()) {
+            // Giroscopio: movimiento DIRECTO sin fricción
+            const move = input.getMovement();
+            const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
+            const directSpeed = CONFIG.PLAYER_MAX_SPEED * speedMultiplier * 1.5;
+            
+            // Movimiento directo proporcional a la inclinación
+            this.x += move.dx * directSpeed * dt;
+            this.y += move.dy * directSpeed * dt;
             this.vx = 0;
             this.vy = 0;
         } else {
             const move = input.getMovement();
             const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
             
-            // Movimiento más directo con giroscopio
             this.vx += move.dx * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
             this.vy += move.dy * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
             
@@ -1766,13 +1777,96 @@ class Game {
         this.initialsTouchStart = null;
         this.initialsTouchLetter = -1;
         
+        // Para input de teclado nativo en móvil
+        this.mobileInputElement = null;
+        this.pendingInitialsConfirm = false;
+        
         this.lastTime = 0;
         this.startDebounce = false;
         
         this.setupInitialsTouch();
+        this.setupMobileKeyboardInput();
         
         this.loop = this.loop.bind(this);
         requestAnimationFrame(this.loop);
+    }
+
+    setupMobileKeyboardInput() {
+        // Crear input oculto para teclado nativo en móvil
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = 'mobileInitialsInput';
+        input.maxLength = 3;
+        input.autocomplete = 'off';
+        input.autocapitalize = 'characters';
+        input.style.cssText = 'position:fixed;top:-100px;left:0;width:100px;height:30px;opacity:0;pointer-events:none;';
+        document.body.appendChild(input);
+        this.mobileInputElement = input;
+        
+        const self = this;
+        
+        input.addEventListener('input', (e) => {
+            if (self.state !== GameState.ENTER_INITIALS) return;
+            
+            let value = input.value.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+            value = value.substring(0, 3);
+            
+            for (let i = 0; i < 3; i++) {
+                if (value[i]) {
+                    self.initials[i] = value[i];
+                }
+            }
+            
+            if (value.length >= 3) {
+                self.initialsPosition = 2;
+            } else {
+                self.initialsPosition = value.length;
+            }
+        });
+        
+        input.addEventListener('blur', () => {
+            if (self.state === GameState.ENTER_INITIALS && self.pendingInitialsConfirm) {
+                self.confirmInitials();
+            }
+        });
+        
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && self.state === GameState.ENTER_INITIALS) {
+                e.preventDefault();
+                self.confirmInitials();
+            }
+        });
+    }
+
+    openMobileKeyboard() {
+        if (this.mobileInputElement && this.input.isMobile) {
+            this.mobileInputElement.value = this.initials.join('');
+            this.mobileInputElement.style.pointerEvents = 'auto';
+            this.mobileInputElement.focus();
+            this.pendingInitialsConfirm = true;
+        }
+    }
+
+    confirmInitials() {
+        if (this.startDebounce) return;
+        if (this.state !== GameState.ENTER_INITIALS) return;
+        
+        this.startDebounce = true;
+        this.audio.playConfirm();
+        this.addHighScore(this.initials, this.score, this.wasVictory);
+        this.state = GameState.SHOW_SCORES;
+        this.pendingInitialsConfirm = false;
+        
+        if (this.mobileInputElement) {
+            this.mobileInputElement.blur();
+            this.mobileInputElement.style.pointerEvents = 'none';
+        }
+        
+        // Resetear estados de touch
+        this.input.touchStartPressed = false;
+        this.input.touchBombPressed = false;
+        
+        setTimeout(() => this.startDebounce = false, 500);
     }
 
     setupInitialsTouch() {
@@ -1792,6 +1886,19 @@ class Game {
             
             const touch = e.touches[0];
             const coords = getCanvasCoords(touch);
+            
+            // Detectar si tocó el botón de confirmar
+            if (coords.y > 550 && coords.y < 610) {
+                self.confirmInitials();
+                return;
+            }
+            
+            // Detectar si tocó el área del teclado (botón para abrir teclado)
+            if (coords.y > 470 && coords.y < 530) {
+                // Abrir teclado nativo
+                self.openMobileKeyboard();
+                return;
+            }
             
             // Detectar qué letra se tocó
             const letterSpacing = 60;
@@ -1985,13 +2092,19 @@ class Game {
     }
 
     transitionToScoreEntry() {
+        // Resetear estados de touch para evitar confirmación accidental
+        this.input.touchStartPressed = false;
+        this.input.touchBombPressed = false;
+        this.pendingInitialsConfirm = false;
+        
         if (this.isHighScore(this.score)) {
             this.state = GameState.ENTER_INITIALS;
             this.initials = ['A', 'A', 'A'];
             this.initialsPosition = 0;
             this.scoreRank = this.getScoreRank(this.score);
             this.startDebounce = true;
-            setTimeout(() => this.startDebounce = false, 300);
+            // Debounce más largo para evitar confirmación accidental
+            setTimeout(() => this.startDebounce = false, 800);
         } else {
             this.state = GameState.SHOW_SCORES;
             this.startDebounce = true;
@@ -2189,6 +2302,9 @@ class Game {
     }
 
     updateInitialsInput() {
+        // Solo procesar input de teclado/gamepad si no estamos usando el teclado móvil
+        if (this.pendingInitialsConfirm) return;
+        
         if (this.input.isUpPressed()) {
             this.audio.playSelect();
             const currentChar = this.initials[this.initialsPosition];
@@ -2216,11 +2332,7 @@ class Game {
             if (this.initialsPosition > 2) this.initialsPosition = 0;
         }
         if (this.input.isConfirmPressed() && !this.startDebounce) {
-            this.audio.playConfirm();
-            this.addHighScore(this.initials, this.score, this.wasVictory);
-            this.state = GameState.SHOW_SCORES;
-            this.startDebounce = true;
-            setTimeout(() => this.startDebounce = false, 500);
+            this.confirmInitials();
         }
     }
 
@@ -2313,8 +2425,8 @@ class Game {
         ctx.fillStyle = '#888';
         ctx.font = '11px Courier New';
         if (this.input.isMobile) {
-            ctx.fillText('👆 TOCA Y ARRASTRA = MOVER', CONFIG.WIDTH / 2, 425);
-            ctx.fillText('📱 INCLINA = MOVER (alternativo)', CONFIG.WIDTH / 2, 442);
+            ctx.fillText('👆 ARRASTRA = MOVER (nave arriba del dedo)', CONFIG.WIDTH / 2, 425);
+            ctx.fillText('📱 INCLINA = MOVER DIRECTO', CONFIG.WIDTH / 2, 442);
             ctx.fillText('🔫 DISPARO AUTOMÁTICO', CONFIG.WIDTH / 2, 459);
             ctx.fillText('👆 TAP RÁPIDO = BOMBA', CONFIG.WIDTH / 2, 476);
         } else {
@@ -2580,7 +2692,7 @@ class Game {
                 ctx.fillStyle = '#fff';
             }
             ctx.fillText(displayChar, x, letterY);
-            if (i === this.initialsPosition) {
+            if (i === this.initialsPosition && !this.pendingInitialsConfirm) {
                 ctx.fillStyle = '#fff';
                 const blink = Math.sin(this.initialsBlinkTimer * 8) > 0;
                 if (blink) {
@@ -2610,18 +2722,43 @@ class Game {
         ctx.fillStyle = '#888';
         ctx.font = '12px Courier New';
         if (this.input.isMobile) {
-            ctx.fillText('👆 DESLIZA ARRIBA/ABAJO EN CADA LETRA', CONFIG.WIDTH / 2, 430);
-            ctx.fillText('TOCA PARA CONFIRMAR', CONFIG.WIDTH / 2, 450);
+            ctx.fillText('👆 DESLIZA EN LETRAS O USA TECLADO', CONFIG.WIDTH / 2, 430);
+            
+            // Botón para abrir teclado
+            const btnY = 490;
+            const blink = Math.sin(Date.now() / 300) > 0;
+            ctx.fillStyle = blink ? '#fff' : '#aaa';
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(CONFIG.WIDTH / 2 - 100, btnY - 20, 200, 40);
+            ctx.font = '16px Courier New';
+            ctx.fillText('⌨️ ABRIR TECLADO', CONFIG.WIDTH / 2, btnY + 6);
+            
+            ctx.fillStyle = '#888';
+            ctx.font = '11px Courier New';
+            ctx.fillText('Toca aquí para escribir con teclado', CONFIG.WIDTH / 2, btnY + 35);
         } else {
             ctx.fillText('↑↓ CAMBIAR    ←→ MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ENTER CONFIRMAR', CONFIG.WIDTH / 2, 450);
         }
         
-        const confirmBlink = Math.sin(Date.now() / 300) > 0;
-        if (confirmBlink) {
-            ctx.fillStyle = '#fff';
-            ctx.font = '16px Courier New';
-            ctx.fillText('TAP O ENTER PARA CONFIRMAR', CONFIG.WIDTH / 2, 520);
+        // Botón de confirmar
+        if (!this.input.isMobile) {
+            const confirmBlink = Math.sin(Date.now() / 300) > 0;
+            if (confirmBlink) {
+                ctx.fillStyle = '#fff';
+                ctx.font = '16px Courier New';
+                ctx.fillText('ENTER PARA CONFIRMAR', CONFIG.WIDTH / 2, 520);
+            }
+        } else {
+            // En móvil mostrar botón de confirmar
+            const confirmY = 570;
+            ctx.fillStyle = '#0f0';
+            ctx.strokeStyle = '#0f0';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(CONFIG.WIDTH / 2 - 80, confirmY - 18, 160, 36);
+            ctx.font = 'bold 16px Courier New';
+            ctx.fillText('✓ CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 6);
         }
     }
 

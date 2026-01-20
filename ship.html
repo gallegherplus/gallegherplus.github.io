@@ -140,7 +140,7 @@
         <div class="crt-overlay"></div>
         <div class="crt-effect"></div>
     </div>
-    <div class="gamepad-indicator" id="gamepadIndicator">üéÆ Sin mando</div>
+    <div class="gamepad-indicator" id="gamepadIndicator">?? Sin mando</div>
     <div id="youtube-player"></div>
 
     <script>
@@ -189,15 +189,15 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-    // Cuando la playlist est√° cargada (estado CUED = 5)
+    // Cuando la playlist est®¢ cargada (estado CUED = 5)
     if (event.data === YT.PlayerState.CUED && !playlistLoaded) {
         playlistLoaded = true;
         // Activar shuffle
         ytPlayer.setShuffle(true);
     }
     
-    // Cuando un video termina, el loop de playlist deber√≠a manejarlo autom√°ticamente
-    // pero si no, forzamos reproducci√≥n
+    // Cuando un video termina, el loop de playlist deber®™a manejarlo autom®¢ticamente
+    // pero si no, forzamos reproducci®Æn
     if (event.data === YT.PlayerState.ENDED) {
         if (currentMusicState !== 'none') {
             ytPlayer.nextVideo();
@@ -209,14 +209,14 @@ function playRandomFromPlaylist() {
     if (!ytPlayerReady || !ytPlayer) return;
     
     try {
-        // Obtener el n√∫mero total de videos en la playlist
+        // Obtener el n®≤mero total de videos en la playlist
         const playlist = ytPlayer.getPlaylist();
         if (playlist && playlist.length > 0) {
-            // Saltar a un √≠ndice aleatorio
+            // Saltar a un ®™ndice aleatorio
             const randomIndex = Math.floor(Math.random() * playlist.length);
             ytPlayer.playVideoAt(randomIndex);
         } else {
-            // Si no tenemos la playlist a√∫n, cargarla y reproducir
+            // Si no tenemos la playlist a®≤n, cargarla y reproducir
             ytPlayer.loadPlaylist({
                 listType: 'playlist',
                 list: PLAYLIST_ID,
@@ -588,7 +588,7 @@ class SynthAudio {
 }
 
 // ============================================================
-// CLASE: InputHandler - CON CONTROLES T√ÅCTILES Y GIROSCOPIO MEJORADO
+// CLASE: InputHandler - CON CONTROLES T®¢CTILES Y GIROSCOPIO MEJORADO
 // ============================================================
 class InputHandler {
     constructor() {
@@ -628,7 +628,7 @@ class InputHandler {
         this.touchStartX = 0;
         this.touchStartY = 0;
         
-        // Para entrada de iniciales t√°ctil
+        // Para entrada de iniciales t®¢ctil
         this.initialsTouchData = null;
         
         window.addEventListener('keydown', (e) => {
@@ -814,8 +814,8 @@ class InputHandler {
             if (calibratedGamma > 90) calibratedGamma -= 180;
             if (calibratedGamma < -90) calibratedGamma += 180;
             
-            // Sensibilidad MUY ALTA para respuesta instant√°nea
-            const sensitivity = 4; // M√°s sensible
+            // Sensibilidad MUY ALTA para respuesta instant®¢nea
+            const sensitivity = 4; // M®¢s sensible
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
@@ -844,16 +844,16 @@ class InputHandler {
     updateGamepadIndicator(status) {
         const indicator = document.getElementById('gamepadIndicator');
         if (status === 'gyro') {
-            indicator.textContent = 'üì± T√°ctil activo';
+            indicator.textContent = '?? T®¢ctil activo';
             indicator.classList.add('connected');
         } else if (status === 'mobile') {
-            indicator.textContent = 'üì± Toca para jugar';
+            indicator.textContent = '?? Toca para jugar';
             indicator.classList.add('connected');
         } else if (status === true) {
-            indicator.textContent = 'üéÆ Mando conectado';
+            indicator.textContent = '?? Mando conectado';
             indicator.classList.add('connected');
         } else {
-            indicator.textContent = 'üéÆ Sin mando';
+            indicator.textContent = '?? Sin mando';
             indicator.classList.remove('connected');
         }
     }
@@ -895,7 +895,7 @@ class InputHandler {
             const gyroDeadzone = 0.01;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                // Multiplicador muy alto para respuesta instant√°nea
+                // Multiplicador muy alto para respuesta instant®¢nea
                 dx = this.tiltX * 3.5;
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
@@ -1039,7 +1039,7 @@ class InputHandler {
             if (gp.buttons[9]?.pressed) currentState = true;
         }
         
-        if (this.touchStartPressed) currentState = true;
+        // NO usar touchStartPressed aqu®™ - se maneja por separado en iniciales
         
         const justPressed = currentState && !this.prevConfirmState;
         this.prevConfirmState = currentState;
@@ -1049,7 +1049,7 @@ class InputHandler {
 }
 
 // ============================================================
-// CLASES DE PART√çCULAS Y EFECTOS
+// CLASES DE PART®™CULAS Y EFECTOS
 // ============================================================
 class Particle {
     constructor(x, y, color = '#fff') {
@@ -1541,7 +1541,7 @@ class Player {
         const touchTarget = input.getTouchTarget();
         
         if (touchTarget.active) {
-            // Control t√°ctil con offset para no tapar la nave
+            // Control t®¢ctil con offset para no tapar la nave
             const targetX = touchTarget.x;
             const targetY = touchTarget.y - 100; // Offset grande para que el dedo no tape la nave
             this.x = targetX;
@@ -1549,12 +1549,12 @@ class Player {
             this.vx = 0;
             this.vy = 0;
         } else if (input.isMobile && input.gyroEnabled && input.isGyroWorking()) {
-            // Giroscopio: movimiento DIRECTO sin fricci√≥n
+            // Giroscopio: movimiento DIRECTO sin fricci®Æn
             const move = input.getMovement();
             const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
             const directSpeed = CONFIG.PLAYER_MAX_SPEED * speedMultiplier * 1.5;
             
-            // Movimiento directo proporcional a la inclinaci√≥n
+            // Movimiento directo proporcional a la inclinaci®Æn
             this.x += move.dx * directSpeed * dt;
             this.y += move.dy * directSpeed * dt;
             this.vx = 0;
@@ -1767,7 +1767,7 @@ class Game {
         this.victoryAnimTimer = 0;
         this.wasVictory = false;
         
-        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=?‚ô•‚òÖ'.split('');
+        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=??°Ô'.split('');
         this.initials = ['A', 'A', 'A'];
         this.initialsPosition = 0;
         this.initialsBlinkTimer = 0;
@@ -1777,7 +1777,7 @@ class Game {
         this.initialsTouchStart = null;
         this.initialsTouchLetter = -1;
         
-        // Para input de teclado nativo en m√≥vil
+        // Para input de teclado nativo en m®Ævil
         this.mobileInputElement = null;
         this.pendingInitialsConfirm = false;
         
@@ -1792,14 +1792,16 @@ class Game {
     }
 
     setupMobileKeyboardInput() {
-        // Crear input oculto para teclado nativo en m√≥vil
+        // Crear input oculto para teclado nativo en m®Ævil
         const input = document.createElement('input');
         input.type = 'text';
         input.id = 'mobileInitialsInput';
         input.maxLength = 3;
         input.autocomplete = 'off';
         input.autocapitalize = 'characters';
-        input.style.cssText = 'position:fixed;top:-100px;left:0;width:100px;height:30px;opacity:0;pointer-events:none;';
+        input.autocorrect = 'off';
+        input.spellcheck = false;
+        input.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:50px;font-size:24px;text-align:center;background:#222;color:#fff;border:2px solid #fff;z-index:1000;text-transform:uppercase;';
         document.body.appendChild(input);
         this.mobileInputElement = input;
         
@@ -1810,40 +1812,48 @@ class Game {
             
             let value = input.value.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
             value = value.substring(0, 3);
+            input.value = value;
             
-            for (let i = 0; i < 3; i++) {
-                if (value[i]) {
-                    self.initials[i] = value[i];
-                }
+            // Actualizar iniciales
+            self.initials = ['A', 'A', 'A'];
+            for (let i = 0; i < value.length && i < 3; i++) {
+                self.initials[i] = value[i];
             }
             
-            if (value.length >= 3) {
-                self.initialsPosition = 2;
-            } else {
-                self.initialsPosition = value.length;
-            }
+            self.initialsPosition = Math.min(value.length, 2);
         });
         
         input.addEventListener('blur', () => {
-            if (self.state === GameState.ENTER_INITIALS && self.pendingInitialsConfirm) {
-                self.confirmInitials();
-            }
+            // Ocultar el input cuando pierde el foco
+            input.style.display = 'none';
+            self.pendingInitialsConfirm = false;
         });
         
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && self.state === GameState.ENTER_INITIALS) {
                 e.preventDefault();
-                self.confirmInitials();
+                input.blur();
+                setTimeout(() => {
+                    self.confirmInitials();
+                }, 100);
             }
         });
+        
+        // Ocultar inicialmente
+        input.style.display = 'none';
     }
 
     openMobileKeyboard() {
         if (this.mobileInputElement && this.input.isMobile) {
             this.mobileInputElement.value = this.initials.join('');
+            this.mobileInputElement.style.display = 'block';
             this.mobileInputElement.style.pointerEvents = 'auto';
-            this.mobileInputElement.focus();
             this.pendingInitialsConfirm = true;
+            // Peque?o delay para asegurar que el elemento es visible
+            setTimeout(() => {
+                this.mobileInputElement.focus();
+                this.mobileInputElement.select();
+            }, 50);
         }
     }
 
@@ -1859,6 +1869,7 @@ class Game {
         
         if (this.mobileInputElement) {
             this.mobileInputElement.blur();
+            this.mobileInputElement.style.display = 'none';
             this.mobileInputElement.style.pointerEvents = 'none';
         }
         
@@ -1884,37 +1895,44 @@ class Game {
         canvas.addEventListener('touchstart', (e) => {
             if (self.state !== GameState.ENTER_INITIALS) return;
             
+            // Prevenir que este touch active otros handlers
+            e.stopPropagation();
+            
             const touch = e.touches[0];
             const coords = getCanvasCoords(touch);
             
-            // Detectar si toc√≥ el bot√≥n de confirmar
-            if (coords.y > 550 && coords.y < 610) {
-                self.confirmInitials();
+            // Detectar si toc®Æ el bot®Æn de confirmar (parte inferior - bot®Æn verde grande)
+            if (coords.y > 530 && coords.y < 610 && coords.x > CONFIG.WIDTH / 2 - 110 && coords.x < CONFIG.WIDTH / 2 + 110) {
+                e.preventDefault();
+                setTimeout(() => {
+                    self.confirmInitials();
+                }, 150);
                 return;
             }
             
-            // Detectar si toc√≥ el √°rea del teclado (bot√≥n para abrir teclado)
-            if (coords.y > 470 && coords.y < 530) {
-                // Abrir teclado nativo
+            // Detectar si toc®Æ el ®¢rea del teclado (bot®Æn para abrir teclado)
+            if (coords.y > 460 && coords.y < 520 && coords.x > CONFIG.WIDTH / 2 - 100 && coords.x < CONFIG.WIDTH / 2 + 100) {
+                e.preventDefault();
                 self.openMobileKeyboard();
                 return;
             }
             
-            // Detectar qu√© letra se toc√≥
+            // Detectar qu®¶ letra se toc®Æ (®¢rea central de las letras)
             const letterSpacing = 60;
             const startX = CONFIG.WIDTH / 2 - letterSpacing;
             const letterY = 360;
             
             for (let i = 0; i < 3; i++) {
                 const x = startX + i * letterSpacing;
-                if (coords.x > x - 30 && coords.x < x + 30 && coords.y > letterY - 50 && coords.y < letterY + 40) {
+                if (coords.x > x - 35 && coords.x < x + 35 && coords.y > letterY - 60 && coords.y < letterY + 50) {
                     self.initialsTouchStart = coords.y;
                     self.initialsTouchLetter = i;
                     self.initialsPosition = i;
+                    e.preventDefault();
                     break;
                 }
             }
-        }, { passive: true });
+        }, { passive: false });
         
         canvas.addEventListener('touchmove', (e) => {
             if (self.state !== GameState.ENTER_INITIALS) return;
@@ -2004,7 +2022,7 @@ class Game {
             this.input.requestGyroPermission();
         }
         
-        // Reproducir m√∫sica de gameplay
+        // Reproducir m®≤sica de gameplay
         playGameplayMusic();
     }
 
@@ -2092,10 +2110,13 @@ class Game {
     }
 
     transitionToScoreEntry() {
-        // Resetear estados de touch para evitar confirmaci√≥n accidental
+        // Resetear TODOS los estados de touch para evitar confirmaci®Æn accidental
         this.input.touchStartPressed = false;
         this.input.touchBombPressed = false;
+        this.input.touchActive = false;
         this.pendingInitialsConfirm = false;
+        this.initialsTouchStart = null;
+        this.initialsTouchLetter = -1;
         
         if (this.isHighScore(this.score)) {
             this.state = GameState.ENTER_INITIALS;
@@ -2103,8 +2124,8 @@ class Game {
             this.initialsPosition = 0;
             this.scoreRank = this.getScoreRank(this.score);
             this.startDebounce = true;
-            // Debounce m√°s largo para evitar confirmaci√≥n accidental
-            setTimeout(() => this.startDebounce = false, 800);
+            // Debounce MUY largo para evitar confirmaci®Æn accidental en m®Ævil
+            setTimeout(() => this.startDebounce = false, 1500);
         } else {
             this.state = GameState.SHOW_SCORES;
             this.startDebounce = true;
@@ -2117,16 +2138,16 @@ class Game {
         
         if (this.state === GameState.MENU) {
             this.backgroundStars.forEach(s => s.update(dt, 0.5));
-            // No detener m√∫sica en men√∫ si viene de game over o victory
+            // No detener m®≤sica en men®≤ si viene de game over o victory
             if (this.input.isStartPressed() && !this.startDebounce) this.startGame();
             return;
         }
         
         if (this.state === GameState.SHOW_SCORES) {
-            // La m√∫sica sigue sonando en la pantalla de scores
+            // La m®≤sica sigue sonando en la pantalla de scores
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.state = GameState.MENU;
-                stopAllMusic(); // Detener m√∫sica al volver al men√∫
+                stopAllMusic(); // Detener m®≤sica al volver al men®≤
                 this.startDebounce = true;
                 setTimeout(() => this.startDebounce = false, 500);
             }
@@ -2302,8 +2323,12 @@ class Game {
     }
 
     updateInitialsInput() {
-        // Solo procesar input de teclado/gamepad si no estamos usando el teclado m√≥vil
+        // Solo procesar input de teclado/gamepad si no estamos usando el teclado m®Ævil
         if (this.pendingInitialsConfirm) return;
+        
+        // En m®Ævil, no procesar input de teclado/gamepad para confirmar
+        // La confirmaci®Æn se hace tocando el bot®Æn en pantalla
+        if (this.input.isMobile) return;
         
         if (this.input.isUpPressed()) {
             this.audio.playSelect();
@@ -2369,7 +2394,7 @@ class Game {
         this.audio.playExplosion();
         this.screenShake(20, 0.6);
         this.victoryAnimTimer = 0;
-        // Reproducir m√∫sica aleatoria para game over
+        // Reproducir m®≤sica aleatoria para game over
         playGameOverMusic();
     }
 
@@ -2425,30 +2450,30 @@ class Game {
         ctx.fillStyle = '#888';
         ctx.font = '11px Courier New';
         if (this.input.isMobile) {
-            ctx.fillText('üëÜ ARRASTRA = MOVER (nave arriba del dedo)', CONFIG.WIDTH / 2, 425);
-            ctx.fillText('üì± INCLINA = MOVER DIRECTO', CONFIG.WIDTH / 2, 442);
-            ctx.fillText('üî´ DISPARO AUTOM√ÅTICO', CONFIG.WIDTH / 2, 459);
-            ctx.fillText('üëÜ TAP R√ÅPIDO = BOMBA', CONFIG.WIDTH / 2, 476);
+            ctx.fillText('?? ARRASTRA = MOVER (nave arriba del dedo)', CONFIG.WIDTH / 2, 425);
+            ctx.fillText('?? INCLINA = MOVER DIRECTO', CONFIG.WIDTH / 2, 442);
+            ctx.fillText('?? DISPARO AUTOM®¢TICO', CONFIG.WIDTH / 2, 459);
+            ctx.fillText('?? TAP R®¢PIDO = BOMBA', CONFIG.WIDTH / 2, 476);
         } else {
-            ctx.fillText('‚Üê ‚Üí ‚Üë ‚Üì / WASD  MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('°˚ °˙ °¸ °˝ / WASD  MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ESPACIO / Z  DISPARAR', CONFIG.WIDTH / 2, 447);
             ctx.fillText('X / C  BOMBA', CONFIG.WIDTH / 2, 464);
-            ctx.fillText('üéÆ GAMEPAD COMPATIBLE', CONFIG.WIDTH / 2, 481);
+            ctx.fillText('?? GAMEPAD COMPATIBLE', CONFIG.WIDTH / 2, 481);
         }
         
         ctx.fillStyle = '#fff';
         ctx.font = '12px Courier New';
-        ctx.fillText('‚îÄ‚îÄ‚îÄ HIGH SCORES ‚îÄ‚îÄ‚îÄ', CONFIG.WIDTH / 2, 515);
+        ctx.fillText('©§©§©§ HIGH SCORES ©§©§©§', CONFIG.WIDTH / 2, 515);
         ctx.font = '11px Courier New';
         const topScores = this.highScores.slice(0, 3);
         topScores.forEach((entry, i) => {
-            const victoryMark = entry.victory ? '‚òÖ' : ' ';
+            const victoryMark = entry.victory ? '°Ô' : ' ';
             ctx.fillText(`${i + 1}. ${entry.initials} ${victoryMark} ${entry.score.toString().padStart(6, ' ')}`, CONFIG.WIDTH / 2, 535 + i * 16);
         });
         
         ctx.fillStyle = '#666';
         ctx.font = '10px Courier New';
-        ctx.fillText('CONSIGUE 7 CA√ëONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
+        ctx.fillText('CONSIGUE 7 CA?ONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
     }
 
     drawDemoShip(ctx, x, y, level) {
@@ -2504,7 +2529,7 @@ class Game {
         ctx.textAlign = 'center';
         ctx.shadowColor = '#ff0';
         ctx.shadowBlur = 10;
-        ctx.fillText('¬°FASE FINAL!', CONFIG.WIDTH / 2, 80);
+        ctx.fillText('?FASE FINAL!', CONFIG.WIDTH / 2, 80);
         ctx.font = '14px Courier New';
         ctx.fillText(`${Math.max(0, this.finalPhasePointsRemaining)} PUNTOS`, CONFIG.WIDTH / 2, 100);
         ctx.restore();
@@ -2564,7 +2589,7 @@ class Game {
         ctx.fillText(`SCORE: ${this.score}`, 15, 25);
         ctx.textAlign = 'right';
         let livesText = '';
-        for (let i = 0; i < this.player.lives; i++) livesText += '‚ñ≤ ';
+        for (let i = 0; i < this.player.lives; i++) livesText += '°¯ ';
         ctx.fillText(livesText, CONFIG.WIDTH - 15, 25);
         ctx.textAlign = 'left';
         ctx.font = '12px Courier New';
@@ -2574,7 +2599,7 @@ class Game {
         if (this.player.missiles > 0) ctx.fillText(`M:${this.player.missiles}`, 140, 48);
         ctx.textAlign = 'right';
         let bombText = '';
-        for (let i = 0; i < this.player.bombs; i++) bombText += '‚óè ';
+        for (let i = 0; i < this.player.bombs; i++) bombText += '°Ò ';
         if (this.player.bombs === 0) bombText = '---';
         ctx.fillText(bombText, CONFIG.WIDTH - 15, 48);
     }
@@ -2597,7 +2622,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '20px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('‚òÖ NEW HIGH SCORE ‚òÖ', CONFIG.WIDTH / 2, 410);
+            if (blink) ctx.fillText('°Ô NEW HIGH SCORE °Ô', CONFIG.WIDTH / 2, 410);
         }
         ctx.fillStyle = '#fff';
         ctx.font = '16px Courier New';
@@ -2623,7 +2648,7 @@ class Game {
         ctx.translate(CONFIG.WIDTH / 2, 130);
         ctx.scale(scale, scale);
         ctx.font = 'bold 42px Courier New';
-        ctx.fillText('¬°VICTORIA!', 0, 0);
+        ctx.fillText('?VICTORIA!', 0, 0);
         ctx.restore();
         ctx.font = 'bold 24px Courier New';
         ctx.fillText('VIAJE COMPLETADO', CONFIG.WIDTH / 2, 180);
@@ -2636,7 +2661,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '22px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('‚òÖ NUEVO R√âCORD ‚òÖ', CONFIG.WIDTH / 2, 380);
+            if (blink) ctx.fillText('°Ô NUEVO R®¶CORD °Ô', CONFIG.WIDTH / 2, 380);
         }
         if (this.player) {
             ctx.save();
@@ -2661,7 +2686,7 @@ class Game {
         ctx.shadowBlur = 15;
         if (this.wasVictory) {
             ctx.font = 'bold 32px Courier New';
-            ctx.fillText('¬°VICTORIA!', CONFIG.WIDTH / 2, 80);
+            ctx.fillText('?VICTORIA!', CONFIG.WIDTH / 2, 80);
         }
         ctx.font = 'bold 28px Courier New';
         ctx.fillText('NEW HIGH SCORE!', CONFIG.WIDTH / 2, 140);
@@ -2722,43 +2747,36 @@ class Game {
         ctx.fillStyle = '#888';
         ctx.font = '12px Courier New';
         if (this.input.isMobile) {
-            ctx.fillText('üëÜ DESLIZA EN LETRAS O USA TECLADO', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('?? DESLIZA ARRIBA/ABAJO EN CADA LETRA', CONFIG.WIDTH / 2, 420);
+            ctx.fillText('O TOCA EL BOT®ÆN PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
             
-            // Bot√≥n para abrir teclado
-            const btnY = 490;
-            const blink = Math.sin(Date.now() / 300) > 0;
-            ctx.fillStyle = blink ? '#fff' : '#aaa';
+            // Bot®Æn para abrir teclado
+            const btnY = 485;
+            ctx.fillStyle = '#fff';
             ctx.strokeStyle = '#fff';
             ctx.lineWidth = 2;
-            ctx.strokeRect(CONFIG.WIDTH / 2 - 100, btnY - 20, 200, 40);
-            ctx.font = '16px Courier New';
-            ctx.fillText('‚å®Ô∏è ABRIR TECLADO', CONFIG.WIDTH / 2, btnY + 6);
+            ctx.strokeRect(CONFIG.WIDTH / 2 - 90, btnY - 18, 180, 36);
+            ctx.font = '14px Courier New';
+            ctx.fillText('?? ESCRIBIR CON TECLADO', CONFIG.WIDTH / 2, btnY + 5);
             
-            ctx.fillStyle = '#888';
-            ctx.font = '11px Courier New';
-            ctx.fillText('Toca aqu√≠ para escribir con teclado', CONFIG.WIDTH / 2, btnY + 35);
+            // Bot®Æn de confirmar grande y visible
+            const confirmY = 560;
+            const confirmBlink = Math.sin(Date.now() / 400) > 0;
+            ctx.fillStyle = confirmBlink ? '#0f0' : '#0a0';
+            ctx.fillRect(CONFIG.WIDTH / 2 - 100, confirmY - 22, 200, 44);
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 18px Courier New';
+            ctx.fillText('? CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 7);
         } else {
-            ctx.fillText('‚Üë‚Üì CAMBIAR    ‚Üê‚Üí MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('°¸°˝ CAMBIAR    °˚°˙ MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ENTER CONFIRMAR', CONFIG.WIDTH / 2, 450);
-        }
-        
-        // Bot√≥n de confirmar
-        if (!this.input.isMobile) {
+            
             const confirmBlink = Math.sin(Date.now() / 300) > 0;
             if (confirmBlink) {
                 ctx.fillStyle = '#fff';
                 ctx.font = '16px Courier New';
                 ctx.fillText('ENTER PARA CONFIRMAR', CONFIG.WIDTH / 2, 520);
             }
-        } else {
-            // En m√≥vil mostrar bot√≥n de confirmar
-            const confirmY = 570;
-            ctx.fillStyle = '#0f0';
-            ctx.strokeStyle = '#0f0';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(CONFIG.WIDTH / 2 - 80, confirmY - 18, 160, 36);
-            ctx.font = 'bold 16px Courier New';
-            ctx.fillText('‚úì CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 6);
         }
     }
 
@@ -2804,7 +2822,7 @@ class Game {
             ctx.fillText(entry.initials, 130, y);
             ctx.fillText(entry.score.toString().padStart(8, ' '), 210, y);
             ctx.textAlign = 'center';
-            if (entry.victory) ctx.fillText('‚òÖ', 370, y);
+            if (entry.victory) ctx.fillText('°Ô', 370, y);
             else {
                 ctx.fillStyle = isNewScore ? ctx.fillStyle : '#444';
                 ctx.fillText('-', 370, y);

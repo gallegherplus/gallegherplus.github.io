@@ -111,7 +111,7 @@
             opacity: 1;
         }
 
-        #youtube-player, #youtube-player2 {
+        #youtube-player {
             position: absolute;
             top: -9999px;
             left: -9999px;
@@ -142,24 +142,23 @@
     </div>
     <div class="gamepad-indicator" id="gamepadIndicator">🎮 Sin mando</div>
     <div id="youtube-player"></div>
-    <div id="youtube-player2"></div>
 
     <script>
 // ============================================================
-// YOUTUBE BACKGROUND MUSIC CONTROLLER - DOS TRACKS
+// YOUTUBE BACKGROUND MUSIC CONTROLLER - PLAYLIST ALEATORIO
 // ============================================================
-let ytPlayer1 = null;  // Track de gameplay
-let ytPlayer2 = null;  // Track de victoria
-let ytPlayer1Ready = false;
-let ytPlayer2Ready = false;
-let currentTrack = 1;  // 1 = gameplay, 2 = victory
+let ytPlayer = null;
+let ytPlayerReady = false;
+let currentMusicState = 'none'; // 'gameplay', 'victory', 'gameover', 'none'
+let playlistLoaded = false;
+
+// ID de la playlist de Kavinsky - OutRun
+const PLAYLIST_ID = 'OLAK5uy_kWYNbMMdMSJtbek_C_rsr42WxI2VwOjXk';
 
 function onYouTubeIframeAPIReady() {
-    // Track 1 - Gameplay
-    ytPlayer1 = new YT.Player('youtube-player', {
+    ytPlayer = new YT.Player('youtube-player', {
         height: '1',
         width: '1',
-        videoId: 'Xzj6FCUvNvQ',
         playerVars: {
             'autoplay': 0,
             'controls': 0,
@@ -168,90 +167,104 @@ function onYouTubeIframeAPIReady() {
             'modestbranding': 1,
             'rel': 0,
             'showinfo': 0,
-            'loop': 1,
-            'playlist': 'Xzj6FCUvNvQ'
+            'loop': 1
         },
         events: {
-            'onReady': onPlayer1Ready,
-            'onStateChange': onPlayer1StateChange
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
         }
     });
+}
+
+function onPlayerReady(event) {
+    ytPlayerReady = true;
+    ytPlayer.setVolume(50);
+    // Cargar la playlist
+    ytPlayer.cuePlaylist({
+        listType: 'playlist',
+        list: PLAYLIST_ID,
+        index: 0,
+        startSeconds: 0
+    });
+}
+
+function onPlayerStateChange(event) {
+    // Cuando la playlist está cargada (estado CUED = 5)
+    if (event.data === YT.PlayerState.CUED && !playlistLoaded) {
+        playlistLoaded = true;
+        // Activar shuffle
+        ytPlayer.setShuffle(true);
+    }
     
-    // Track 2 - Victory
-    ytPlayer2 = new YT.Player('youtube-player2', {
-        height: '1',
-        width: '1',
-        videoId: 'nLbGHbBHbeA',
-        playerVars: {
-            'autoplay': 0,
-            'controls': 0,
-            'disablekb': 1,
-            'fs': 0,
-            'modestbranding': 1,
-            'rel': 0,
-            'showinfo': 0,
-            'loop': 1,
-            'playlist': 'nLbGHbBHbeA'
-        },
-        events: {
-            'onReady': onPlayer2Ready,
-            'onStateChange': onPlayer2StateChange
-        }
-    });
-}
-
-function onPlayer1Ready(event) {
-    ytPlayer1Ready = true;
-    ytPlayer1.setVolume(50);
-}
-
-function onPlayer2Ready(event) {
-    ytPlayer2Ready = true;
-    ytPlayer2.setVolume(50);
-}
-
-function onPlayer1StateChange(event) {
+    // Cuando un video termina, el loop de playlist debería manejarlo automáticamente
+    // pero si no, forzamos reproducción
     if (event.data === YT.PlayerState.ENDED) {
-        ytPlayer1.seekTo(0);
-        ytPlayer1.playVideo();
+        if (currentMusicState !== 'none') {
+            ytPlayer.nextVideo();
+        }
     }
 }
 
-function onPlayer2StateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
-        ytPlayer2.seekTo(0);
-        ytPlayer2.playVideo();
+function playRandomFromPlaylist() {
+    if (!ytPlayerReady || !ytPlayer) return;
+    
+    try {
+        // Obtener el número total de videos en la playlist
+        const playlist = ytPlayer.getPlaylist();
+        if (playlist && playlist.length > 0) {
+            // Saltar a un índice aleatorio
+            const randomIndex = Math.floor(Math.random() * playlist.length);
+            ytPlayer.playVideoAt(randomIndex);
+        } else {
+            // Si no tenemos la playlist aún, cargarla y reproducir
+            ytPlayer.loadPlaylist({
+                listType: 'playlist',
+                list: PLAYLIST_ID,
+                index: Math.floor(Math.random() * 15), // Asumir ~15 tracks
+                startSeconds: 0
+            });
+            ytPlayer.setShuffle(true);
+        }
+    } catch (e) {
+        // Fallback: simplemente reproducir
+        ytPlayer.playVideo();
     }
 }
 
 function playGameplayMusic() {
-    currentTrack = 1;
-    if (ytPlayer2Ready && ytPlayer2) {
-        ytPlayer2.pauseVideo();
-    }
-    if (ytPlayer1Ready && ytPlayer1) {
-        ytPlayer1.seekTo(0);
-        ytPlayer1.playVideo();
-    }
+    if (currentMusicState === 'gameplay') return;
+    currentMusicState = 'gameplay';
+    
+    if (!ytPlayerReady || !ytPlayer) return;
+    
+    // Reproducir un track aleatorio de la playlist
+    playRandomFromPlaylist();
 }
 
 function playVictoryMusic() {
-    currentTrack = 2;
-    if (ytPlayer1Ready && ytPlayer1) {
-        ytPlayer1.pauseVideo();
-    }
-    if (ytPlayer2Ready && ytPlayer2) {
-        ytPlayer2.seekTo(0);
-        ytPlayer2.playVideo();
-    }
+    if (currentMusicState === 'victory') return;
+    currentMusicState = 'victory';
+    
+    if (!ytPlayerReady || !ytPlayer) return;
+    
+    // Saltar a otro track aleatorio para victoria
+    playRandomFromPlaylist();
+}
+
+function playGameOverMusic() {
+    if (currentMusicState === 'gameover') return;
+    currentMusicState = 'gameover';
+    
+    if (!ytPlayerReady || !ytPlayer) return;
+    
+    // Saltar a otro track aleatorio para game over
+    playRandomFromPlaylist();
 }
 
 function stopAllMusic() {
-    if (ytPlayer1Ready && ytPlayer1) {
-        ytPlayer1.pauseVideo();
-    }
-    if (ytPlayer2Ready && ytPlayer2) {
-        ytPlayer2.pauseVideo();
+    currentMusicState = 'none';
+    if (ytPlayerReady && ytPlayer) {
+        ytPlayer.pauseVideo();
     }
 }
 
@@ -801,10 +814,10 @@ class InputHandler {
             if (calibratedGamma > 90) calibratedGamma -= 180;
             if (calibratedGamma < -90) calibratedGamma += 180;
             
-            // Sensibilidad MÁS ALTA para respuesta más rápida
-            const sensitivity = 8;
-            // Menos suavizado para respuesta más directa
-            const smoothing = 0.6;
+            // Sensibilidad MUY ALTA para respuesta instantánea
+            const sensitivity = 5;
+            // Smoothing muy alto para respuesta casi directa (0.85 = 85% del nuevo valor)
+            const smoothing = 0.85;
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
@@ -878,15 +891,15 @@ class InputHandler {
             if (gp.buttons[15]?.pressed) dx = 1;
         }
         
-        // Giroscopio con respuesta más directa
+        // Giroscopio con respuesta MUY directa
         if (this.isMobile && !this.touchActive && this.gyroEnabled && this.isGyroWorking()) {
-            const gyroDeadzone = 0.03;
+            const gyroDeadzone = 0.02;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                dx = this.tiltX * 1.5; // Multiplicador para más velocidad
+                dx = this.tiltX * 2.5; // Multiplicador alto para respuesta rápida
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
-                dy = this.tiltY * 1.5;
+                dy = this.tiltY * 2.5;
             }
         }
         
@@ -1967,7 +1980,7 @@ class Game {
         this.wasVictory = true;
         this.screenShake(12, 0.8);
         
-        // Cambiar a música de victoria
+        // Cambiar a un track aleatorio para victoria
         playVictoryMusic();
     }
 
@@ -1991,15 +2004,16 @@ class Game {
         
         if (this.state === GameState.MENU) {
             this.backgroundStars.forEach(s => s.update(dt, 0.5));
-            stopAllMusic();
+            // No detener música en menú si viene de game over o victory
             if (this.input.isStartPressed() && !this.startDebounce) this.startGame();
             return;
         }
         
         if (this.state === GameState.SHOW_SCORES) {
-            stopAllMusic();
+            // La música sigue sonando en la pantalla de scores
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.state = GameState.MENU;
+                stopAllMusic(); // Detener música al volver al menú
                 this.startDebounce = true;
                 setTimeout(() => this.startDebounce = false, 500);
             }
@@ -2243,7 +2257,8 @@ class Game {
         this.audio.playExplosion();
         this.screenShake(20, 0.6);
         this.victoryAnimTimer = 0;
-        stopAllMusic();
+        // Reproducir música aleatoria para game over
+        playGameOverMusic();
     }
 
     draw() {

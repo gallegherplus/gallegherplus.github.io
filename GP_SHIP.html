@@ -19,21 +19,37 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             overflow: hidden;
             font-family: 'Courier New', monospace;
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html {
+            height: -webkit-fill-available;
         }
 
         .game-container {
             position: relative;
-            border: 4px solid #fff;
+            border: 2px solid #fff;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
                         0 0 40px rgba(255, 255, 255, 0.1),
                         inset 0 0 20px rgba(255, 255, 255, 0.05);
+            max-width: 100vw;
+            max-height: 100vh;
+            max-height: -webkit-fill-available;
         }
 
         #gameCanvas {
             display: block;
             background: #000;
+            max-width: 100vw;
+            max-height: 100vh;
+            max-height: -webkit-fill-available;
+            touch-action: none;
         }
 
         .crt-overlay {
@@ -81,10 +97,10 @@
             top: 10px;
             right: 10px;
             color: #fff;
-            font-size: 11px;
+            font-size: 10px;
             opacity: 0.7;
             z-index: 100;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             padding: 4px 8px;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
@@ -103,6 +119,19 @@
             height: 1px;
             opacity: 0;
             pointer-events: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 500px), (max-height: 700px) {
+            .game-container {
+                border-width: 1px;
+            }
+            .gamepad-indicator {
+                font-size: 9px;
+                padding: 3px 6px;
+                top: 5px;
+                right: 5px;
+            }
         }
     </style>
 </head>
@@ -590,22 +619,23 @@ class InputHandler {
         this.calibrated = false;
         this.lastGyroUpdate = 0;
         
-        // Touch controls - MEJORADO
+        // Touch controls - MEJORADO - Movimiento directo
         this.touchActive = false;
-        this.touchStartX = 0;
-        this.touchStartY = 0;
         this.touchCurrentX = 0;
         this.touchCurrentY = 0;
-        this.touchDeltaX = 0;
-        this.touchDeltaY = 0;
+        this.touchTargetX = 0;  // Posición objetivo de la nave
+        this.touchTargetY = 0;
         this.touchBombPressed = false;
         this.touchStartPressed = false;
         this.lastTouchTime = 0;
         this.touchMoveId = null;
+        this.useDirectTouch = true;  // Modo de control directo
         
         // Para diferenciar tap de drag
         this.touchMoved = false;
         this.touchStartTime = 0;
+        this.touchStartX = 0;
+        this.touchStartY = 0;
         
         window.addEventListener('keydown', (e) => {
             this.keys[e.code] = true;
@@ -629,6 +659,7 @@ class InputHandler {
         // Setup mobile controls if on mobile device
         if (this.isMobile) {
             this.setupMobileControls();
+            this.updateGamepadIndicator('mobile');
         }
     }
     
@@ -662,6 +693,8 @@ class InputHandler {
             this.touchStartY = coords.y;
             this.touchCurrentX = coords.x;
             this.touchCurrentY = coords.y;
+            this.touchTargetX = coords.x;
+            this.touchTargetY = coords.y;
             this.touchMoveId = touch.identifier;
             this.touchMoved = false;
             this.touchStartTime = Date.now();
@@ -670,7 +703,6 @@ class InputHandler {
             // Detectar doble tap para bomba
             const currentTime = Date.now();
             if (currentTime - this.lastTouchTime < 300) {
-                // Doble tap = bomba
                 this.touchBombPressed = true;
             }
             this.lastTouchTime = currentTime;
@@ -689,14 +721,12 @@ class InputHandler {
                     const coords = getCanvasCoords(touch);
                     this.touchCurrentX = coords.x;
                     this.touchCurrentY = coords.y;
+                    this.touchTargetX = coords.x;
+                    this.touchTargetY = coords.y;
                     this.touchMoved = true;
                     break;
                 }
             }
-            
-            // Calcular delta desde el punto inicial
-            this.touchDeltaX = this.touchCurrentX - this.touchStartX;
-            this.touchDeltaY = this.touchCurrentY - this.touchStartY;
             
         }, { passive: false });
         
@@ -705,15 +735,15 @@ class InputHandler {
             
             // Si fue un tap corto sin mucho movimiento = bomba
             const touchDuration = Date.now() - this.touchStartTime;
-            const moveDistance = Math.sqrt(this.touchDeltaX * this.touchDeltaX + this.touchDeltaY * this.touchDeltaY);
+            const dx = this.touchCurrentX - this.touchStartX;
+            const dy = this.touchCurrentY - this.touchStartY;
+            const moveDistance = Math.sqrt(dx * dx + dy * dy);
             
-            if (touchDuration < 200 && moveDistance < 20) {
+            if (touchDuration < 200 && moveDistance < 30) {
                 this.touchBombPressed = true;
             }
             
             this.touchActive = false;
-            this.touchDeltaX = 0;
-            this.touchDeltaY = 0;
             
             setTimeout(() => {
                 this.touchBombPressed = false;
@@ -724,8 +754,6 @@ class InputHandler {
         
         canvas.addEventListener('touchcancel', (e) => {
             this.touchActive = false;
-            this.touchDeltaX = 0;
-            this.touchDeltaY = 0;
             this.touchBombPressed = false;
         }, { passive: false });
         
@@ -742,10 +770,11 @@ class InputHandler {
             }, 100);
         }, { passive: true });
         
-        // Intentar activar giroscopio automáticamente
+        // Intentar activar giroscopio automáticamente (como backup)
         this.tryEnableGyro();
         
-        this.updateGamepadIndicator('mobile');
+        // Actualizar indicador para modo táctil
+        this.updateGamepadIndicator('gyro');
     }
     
     tryEnableGyro() {
@@ -840,27 +869,24 @@ class InputHandler {
     updateGamepadIndicator(status) {
         const indicator = document.getElementById('gamepadIndicator');
         if (status === 'gyro') {
-            indicator.textContent = '📱 Giroscopio activo';
+            indicator.textContent = '📱 Táctil activo';
             indicator.classList.add('connected');
             
             const self = this;
             if (!this.gyroIndicatorInterval) {
                 this.gyroIndicatorInterval = setInterval(() => {
                     if (self.touchActive) {
-                        indicator.textContent = `📱 Arrastrando`;
-                        indicator.classList.add('connected');
-                    } else if (self.gyroActive && self.isGyroWorking()) {
-                        indicator.textContent = `📱 Gyro OK`;
+                        indicator.textContent = `📱 Tocando`;
                         indicator.classList.add('connected');
                     } else {
-                        indicator.textContent = '📱 Arrastra para mover';
+                        indicator.textContent = '📱 Táctil OK';
                         indicator.classList.add('connected');
                     }
                 }, 200);
             }
         } else if (status === 'mobile') {
             indicator.textContent = '📱 Toca para jugar';
-            indicator.classList.remove('connected');
+            indicator.classList.add('connected');
         } else if (status === true) {
             indicator.textContent = '🎮 Mando conectado';
             indicator.classList.add('connected');
@@ -904,16 +930,8 @@ class InputHandler {
             if (gp.buttons[15]?.pressed) dx = 1;
         }
         
-        // TOUCH CONTROLS - Arrastrar para mover (PRIORITARIO)
-        if (this.isMobile && this.touchActive) {
-            // Sensibilidad del arrastre - cuántos píxeles = movimiento completo
-            const dragSensitivity = 50;
-            
-            dx = Math.max(-1, Math.min(1, this.touchDeltaX / dragSensitivity));
-            dy = Math.max(-1, Math.min(1, this.touchDeltaY / dragSensitivity));
-        }
         // Giroscopio como alternativa si no hay toque activo
-        else if (this.isMobile && this.gyroEnabled && this.isGyroWorking()) {
+        if (this.isMobile && !this.touchActive && this.gyroEnabled && this.isGyroWorking()) {
             const gyroDeadzone = 0.05;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
@@ -932,6 +950,18 @@ class InputHandler {
         }
         
         return { dx, dy };
+    }
+    
+    // Obtener posición objetivo para control táctil directo
+    getTouchTarget() {
+        if (this.isMobile && this.touchActive) {
+            return {
+                active: true,
+                x: this.touchTargetX,
+                y: this.touchTargetY
+            };
+        }
+        return { active: false, x: 0, y: 0 };
     }
 
     isShooting() {
@@ -1721,26 +1751,58 @@ class Player {
     }
 
     update(dt, input) {
-        const move = input.getMovement();
+        const touchTarget = input.getTouchTarget();
         
-        const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
-        
-        this.vx += move.dx * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
-        this.vy += move.dy * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
-        
-        this.vx *= CONFIG.PLAYER_FRICTION;
-        this.vy *= CONFIG.PLAYER_FRICTION;
-        
-        const maxSpeed = CONFIG.PLAYER_MAX_SPEED * speedMultiplier;
-        const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-        if (speed > maxSpeed) {
-            this.vx = (this.vx / speed) * maxSpeed;
-            this.vy = (this.vy / speed) * maxSpeed;
+        // Si hay control táctil activo, mover hacia el dedo directamente
+        if (touchTarget.active) {
+            // Calcular diferencia hacia el objetivo
+            const targetX = touchTarget.x;
+            const targetY = touchTarget.y - 60; // Offset para que el dedo no tape la nave
+            
+            const dx = targetX - this.x;
+            const dy = targetY - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            // Movimiento suave pero inmediato
+            const followSpeed = 12; // Velocidad de seguimiento (mayor = más rápido)
+            const minDist = 5; // Distancia mínima para moverse
+            
+            if (dist > minDist) {
+                // Interpolación suave hacia el objetivo
+                this.x += dx * followSpeed * dt;
+                this.y += dy * followSpeed * dt;
+                
+                // Actualizar velocidad para efectos visuales
+                this.vx = dx * followSpeed;
+                this.vy = dy * followSpeed;
+            } else {
+                this.vx *= 0.8;
+                this.vy *= 0.8;
+            }
+        } else {
+            // Control tradicional con teclado/gamepad/giroscopio
+            const move = input.getMovement();
+            
+            const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
+            
+            this.vx += move.dx * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
+            this.vy += move.dy * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
+            
+            this.vx *= CONFIG.PLAYER_FRICTION;
+            this.vy *= CONFIG.PLAYER_FRICTION;
+            
+            const maxSpeed = CONFIG.PLAYER_MAX_SPEED * speedMultiplier;
+            const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+            if (speed > maxSpeed) {
+                this.vx = (this.vx / speed) * maxSpeed;
+                this.vy = (this.vy / speed) * maxSpeed;
+            }
+            
+            this.x += this.vx * dt;
+            this.y += this.vy * dt;
         }
         
-        this.x += this.vx * dt;
-        this.y += this.vy * dt;
-        
+        // Limitar a los bordes
         const halfWidth = this.getFullWidth() / 2;
         this.x = Math.max(halfWidth, Math.min(CONFIG.WIDTH - halfWidth, this.x));
         this.y = Math.max(this.height / 2, Math.min(CONFIG.HEIGHT - this.height / 2, this.y));
@@ -2685,10 +2747,10 @@ class Game {
         
         if (this.input.isMobile) {
             // Mobile instructions - CONTROLES TÁCTILES
-            ctx.fillText('👆 ARRASTRA PARA MOVER LA NAVE', CONFIG.WIDTH / 2, 425);
+            ctx.fillText('👆 TOCA Y ARRASTRA = MOVER NAVE', CONFIG.WIDTH / 2, 425);
             ctx.fillText('🔫 DISPARO AUTOMÁTICO', CONFIG.WIDTH / 2, 442);
             ctx.fillText('👆 TAP RÁPIDO = BOMBA', CONFIG.WIDTH / 2, 459);
-            ctx.fillText('📱 GIROSCOPIO TAMBIÉN FUNCIONA', CONFIG.WIDTH / 2, 476);
+            ctx.fillText('LA NAVE SIGUE TU DEDO', CONFIG.WIDTH / 2, 476);
             ctx.fillText('TOCA PARA INICIAR', CONFIG.WIDTH / 2, 493);
         } else {
             ctx.fillText('← → ↑ ↓ / WASD  MOVER', CONFIG.WIDTH / 2, 430);
@@ -2923,7 +2985,7 @@ class Game {
             ctx.textAlign = 'center';
             
             if (this.player.bombs > 0) {
-                ctx.fillText('👆 TAP = BOMBA', CONFIG.WIDTH / 2, CONFIG.HEIGHT - 15);
+                ctx.fillText('TAP RÁPIDO = BOMBA', CONFIG.WIDTH / 2, CONFIG.HEIGHT - 10);
             }
         }
     }
@@ -3234,11 +3296,48 @@ class Game {
 }
 
 // ============================================================
+// RESPONSIVE CANVAS
+// ============================================================
+function resizeCanvas() {
+    const canvas = document.getElementById('gameCanvas');
+    const container = document.querySelector('.game-container');
+    
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    
+    // Ratio del juego (480x640 = 0.75)
+    const gameRatio = CONFIG.WIDTH / CONFIG.HEIGHT;
+    const windowRatio = windowWidth / windowHeight;
+    
+    let newWidth, newHeight;
+    
+    if (windowRatio > gameRatio) {
+        // Ventana más ancha que el juego - ajustar por altura
+        newHeight = windowHeight;
+        newWidth = newHeight * gameRatio;
+    } else {
+        // Ventana más alta que el juego - ajustar por ancho
+        newWidth = windowWidth;
+        newHeight = newWidth / gameRatio;
+    }
+    
+    // Aplicar tamaño (el canvas interno mantiene su resolución)
+    canvas.style.width = newWidth + 'px';
+    canvas.style.height = newHeight + 'px';
+}
+
+// ============================================================
 // INICIALIZACIÓN
 // ============================================================
 window.onload = () => {
+    resizeCanvas();
     new Game();
 };
+
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', () => {
+    setTimeout(resizeCanvas, 100);
+});
     </script>
 </body>
 </html>

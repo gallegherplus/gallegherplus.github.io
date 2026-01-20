@@ -111,7 +111,8 @@
             opacity: 1;
         }
 
-        #youtube-player {
+        #youtube-player-game,
+        #youtube-player-victory {
             position: absolute;
             top: -9999px;
             left: -9999px;
@@ -142,18 +143,22 @@
         <div class="crt-effect"></div>
     </div>
     <div class="gamepad-indicator" id="gamepadIndicator">🎮 Sin mando</div>
-    <div id="youtube-player"></div>
+    <div id="youtube-player-game"></div>
+    <div id="youtube-player-victory"></div>
 
     <script>
 // ============================================================
-// YOUTUBE BACKGROUND MUSIC CONTROLLER
+// YOUTUBE BACKGROUND MUSIC CONTROLLER - DUAL TRACK SYSTEM
 // ============================================================
-let ytPlayer = null;
-let ytPlayerReady = false;
-let musicShouldPlay = false;
+let ytPlayerGame = null;
+let ytPlayerVictory = null;
+let ytGameReady = false;
+let ytVictoryReady = false;
+let currentTrack = 'game'; // 'game' or 'victory'
 
 function onYouTubeIframeAPIReady() {
-    ytPlayer = new YT.Player('youtube-player', {
+    // Player para música del juego
+    ytPlayerGame = new YT.Player('youtube-player-game', {
         height: '1',
         width: '1',
         videoId: 'Xzj6FCUvNvQ',
@@ -169,47 +174,94 @@ function onYouTubeIframeAPIReady() {
             'playlist': 'Xzj6FCUvNvQ'
         },
         events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onReady': onGamePlayerReady,
+            'onStateChange': onGamePlayerStateChange
+        }
+    });
+    
+    // Player para música de victoria
+    ytPlayerVictory = new YT.Player('youtube-player-victory', {
+        height: '1',
+        width: '1',
+        videoId: 'nLbGHbBHbeA',
+        playerVars: {
+            'autoplay': 0,
+            'controls': 0,
+            'disablekb': 1,
+            'fs': 0,
+            'modestbranding': 1,
+            'rel': 0,
+            'showinfo': 0,
+            'loop': 1,
+            'playlist': 'nLbGHbBHbeA'
+        },
+        events: {
+            'onReady': onVictoryPlayerReady,
+            'onStateChange': onVictoryPlayerStateChange
         }
     });
 }
 
-function onPlayerReady(event) {
-    ytPlayerReady = true;
-    ytPlayer.setVolume(50);
-    if (musicShouldPlay) {
-        ytPlayer.playVideo();
-    }
+function onGamePlayerReady(event) {
+    ytGameReady = true;
+    ytPlayerGame.setVolume(50);
 }
 
-function onPlayerStateChange(event) {
-    // If video ended, restart it (backup for loop)
+function onVictoryPlayerReady(event) {
+    ytVictoryReady = true;
+    ytPlayerVictory.setVolume(50);
+}
+
+function onGamePlayerStateChange(event) {
     if (event.data === YT.PlayerState.ENDED) {
-        ytPlayer.seekTo(0);
-        ytPlayer.playVideo();
+        ytPlayerGame.seekTo(0);
+        ytPlayerGame.playVideo();
     }
 }
 
-function startBackgroundMusic() {
-    musicShouldPlay = true;
-    if (ytPlayerReady && ytPlayer) {
-        ytPlayer.playVideo();
+function onVictoryPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED) {
+        ytPlayerVictory.seekTo(0);
+        ytPlayerVictory.playVideo();
     }
 }
 
-function stopBackgroundMusic() {
-    musicShouldPlay = false;
-    if (ytPlayerReady && ytPlayer) {
-        ytPlayer.pauseVideo();
+function startGameMusic() {
+    currentTrack = 'game';
+    if (ytVictoryReady && ytPlayerVictory) {
+        ytPlayerVictory.pauseVideo();
+    }
+    if (ytGameReady && ytPlayerGame) {
+        ytPlayerGame.seekTo(0);
+        ytPlayerGame.playVideo();
     }
 }
 
-function restartBackgroundMusic() {
-    musicShouldPlay = true;
-    if (ytPlayerReady && ytPlayer) {
-        ytPlayer.seekTo(0);
-        ytPlayer.playVideo();
+function startVictoryMusic() {
+    currentTrack = 'victory';
+    if (ytGameReady && ytPlayerGame) {
+        ytPlayerGame.pauseVideo();
+    }
+    if (ytVictoryReady && ytPlayerVictory) {
+        ytPlayerVictory.seekTo(0);
+        ytPlayerVictory.playVideo();
+    }
+}
+
+function stopAllMusic() {
+    if (ytGameReady && ytPlayerGame) {
+        ytPlayerGame.pauseVideo();
+    }
+    if (ytVictoryReady && ytPlayerVictory) {
+        ytPlayerVictory.pauseVideo();
+    }
+}
+
+function resumeCurrentMusic() {
+    if (currentTrack === 'game' && ytGameReady && ytPlayerGame) {
+        ytPlayerGame.playVideo();
+    } else if (currentTrack === 'victory' && ytVictoryReady && ytPlayerVictory) {
+        ytPlayerVictory.playVideo();
     }
 }
 
@@ -840,14 +892,22 @@ class InputHandler {
             if (calibratedGamma > 90) calibratedGamma -= 180;
             if (calibratedGamma < -90) calibratedGamma += 180;
             
-            const sensitivity = 15; // Más sensible
-            const smoothing = 0.25;
+            // MUY sensible - respuesta rápida
+            const sensitivity = 8; // Mucho más sensible (era 15)
+            const smoothing = 0.6; // Menos suavizado = más directo (era 0.25)
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
             
-            self.tiltX = self.tiltX * (1 - smoothing) + newTiltX * smoothing;
-            self.tiltY = self.tiltY * (1 - smoothing) + newTiltY * smoothing;
+            // Aplicar curva de respuesta para más precisión en movimientos pequeños
+            const applyCurve = (val) => {
+                const sign = Math.sign(val);
+                const abs = Math.abs(val);
+                return sign * Math.pow(abs, 0.7); // Curva más agresiva
+            };
+            
+            self.tiltX = self.tiltX * (1 - smoothing) + applyCurve(newTiltX) * smoothing;
+            self.tiltY = self.tiltY * (1 - smoothing) + applyCurve(newTiltY) * smoothing;
         };
         
         window.addEventListener('deviceorientation', handleOrientation, true);
@@ -932,14 +992,19 @@ class InputHandler {
         
         // Giroscopio como alternativa si no hay toque activo
         if (this.isMobile && !this.touchActive && this.gyroEnabled && this.isGyroWorking()) {
-            const gyroDeadzone = 0.05;
+            const gyroDeadzone = 0.02; // Zona muerta muy pequeña
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                dx = this.tiltX;
+                // Amplificar el movimiento del giroscopio
+                dx = this.tiltX * 1.5;
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
-                dy = this.tiltY;
+                dy = this.tiltY * 1.5;
             }
+            
+            // Limitar a -1, 1
+            dx = Math.max(-1, Math.min(1, dx));
+            dy = Math.max(-1, Math.min(1, dy));
         }
         
         // Normalizar
@@ -2054,6 +2119,14 @@ class Game {
         this.initialsBlinkTimer = 0;
         this.scoreRank = -1;
         
+        // Touch para iniciales
+        this.initialsTouchActive = false;
+        this.initialsTouchStartY = 0;
+        this.initialsTouchPosition = -1;
+        this.initialsTouchLastY = 0;
+        this.initialsSwipeThreshold = 30; // pixels para cambiar letra
+        this.setupInitialsTouchControls();
+        
         this.lastTime = 0;
         this.startDebounce = false;
         
@@ -2147,8 +2220,8 @@ class Game {
             this.input.requestGyroPermission();
         }
         
-        // Restart background music from beginning
-        restartBackgroundMusic();
+        // Start game music from beginning
+        startGameMusic();
     }
 
     spawnEnemy() {
@@ -2258,6 +2331,8 @@ class Game {
         this.victoryAnimTimer = 0;
         this.wasVictory = true;
         this.screenShake(12, 0.8);
+        // Start victory music
+        startVictoryMusic();
     }
 
     transitionToScoreEntry() {
@@ -2285,7 +2360,7 @@ class Game {
             this.backgroundStars.forEach(s => s.update(dt, 0.5));
             
             // Stop music in menu
-            stopBackgroundMusic();
+            stopAllMusic();
             
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.startGame();
@@ -2295,7 +2370,7 @@ class Game {
         
         if (this.state === GameState.SHOW_SCORES) {
             // Stop music when showing scores
-            stopBackgroundMusic();
+            stopAllMusic();
             
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.state = GameState.MENU;
@@ -2656,7 +2731,7 @@ class Game {
         this.victoryAnimTimer = 0;
         
         // Stop music on game over
-        stopBackgroundMusic();
+        stopAllMusic();
     }
 
     draw() {

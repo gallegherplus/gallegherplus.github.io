@@ -189,15 +189,15 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-    // Cuando la playlist est芍 cargada (estado CUED = 5)
+    // Cuando la playlist esta cargada (estado CUED = 5)
     if (event.data === YT.PlayerState.CUED && !playlistLoaded) {
         playlistLoaded = true;
         // Activar shuffle
         ytPlayer.setShuffle(true);
     }
     
-    // Cuando un video termina, el loop de playlist deber赤a manejarlo autom芍ticamente
-    // pero si no, forzamos reproducci車n
+    // Cuando un video termina, el loop de playlist deberia manejarlo automaticamente
+    // pero si no, forzamos reproduccion
     if (event.data === YT.PlayerState.ENDED) {
         if (currentMusicState !== 'none') {
             ytPlayer.nextVideo();
@@ -209,14 +209,14 @@ function playRandomFromPlaylist() {
     if (!ytPlayerReady || !ytPlayer) return;
     
     try {
-        // Obtener el n迆mero total de videos en la playlist
+        // Obtener el numero total de videos en la playlist
         const playlist = ytPlayer.getPlaylist();
         if (playlist && playlist.length > 0) {
-            // Saltar a un 赤ndice aleatorio
+            // Saltar a un indice aleatorio
             const randomIndex = Math.floor(Math.random() * playlist.length);
             ytPlayer.playVideoAt(randomIndex);
         } else {
-            // Si no tenemos la playlist a迆n, cargarla y reproducir
+            // Si no tenemos la playlist aun, cargarla y reproducir
             ytPlayer.loadPlaylist({
                 listType: 'playlist',
                 list: PLAYLIST_ID,
@@ -588,7 +588,7 @@ class SynthAudio {
 }
 
 // ============================================================
-// CLASE: InputHandler - CON CONTROLES T芍CTILES Y GIROSCOPIO MEJORADO
+// CLASE: InputHandler - CON CONTROLES TACTILES Y GIROSCOPIO MEJORADO
 // ============================================================
 class InputHandler {
     constructor() {
@@ -628,7 +628,7 @@ class InputHandler {
         this.touchStartX = 0;
         this.touchStartY = 0;
         
-        // Para entrada de iniciales t芍ctil
+        // Para entrada de iniciales tactil
         this.initialsTouchData = null;
         
         window.addEventListener('keydown', (e) => {
@@ -814,8 +814,8 @@ class InputHandler {
             if (calibratedGamma > 90) calibratedGamma -= 180;
             if (calibratedGamma < -90) calibratedGamma += 180;
             
-            // Sensibilidad MUY ALTA para respuesta instant芍nea
-            const sensitivity = 4; // M芍s sensible
+            // Sensibilidad MUY ALTA para respuesta instantanea
+            const sensitivity = 4; // Mas sensible
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
@@ -844,7 +844,7 @@ class InputHandler {
     updateGamepadIndicator(status) {
         const indicator = document.getElementById('gamepadIndicator');
         if (status === 'gyro') {
-            indicator.textContent = '?? T芍ctil activo';
+            indicator.textContent = '?? Tactil activo';
             indicator.classList.add('connected');
         } else if (status === 'mobile') {
             indicator.textContent = '?? Toca para jugar';
@@ -895,7 +895,7 @@ class InputHandler {
             const gyroDeadzone = 0.01;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                // Multiplicador muy alto para respuesta instant芍nea
+                // Multiplicador muy alto para respuesta instantanea
                 dx = this.tiltX * 3.5;
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
@@ -1039,7 +1039,7 @@ class InputHandler {
             if (gp.buttons[9]?.pressed) currentState = true;
         }
         
-        // NO usar touchStartPressed aqu赤 - se maneja por separado en iniciales
+        // NO usar touchStartPressed aqui - se maneja por separado en iniciales
         
         const justPressed = currentState && !this.prevConfirmState;
         this.prevConfirmState = currentState;
@@ -1049,7 +1049,7 @@ class InputHandler {
 }
 
 // ============================================================
-// CLASES DE PART赤CULAS Y EFECTOS
+// CLASES DE PARTICULAS Y EFECTOS
 // ============================================================
 class Particle {
     constructor(x, y, color = '#fff') {
@@ -1541,7 +1541,7 @@ class Player {
         const touchTarget = input.getTouchTarget();
         
         if (touchTarget.active) {
-            // Control t芍ctil con offset para no tapar la nave
+            // Control tactil con offset para no tapar la nave
             const targetX = touchTarget.x;
             const targetY = touchTarget.y - 100; // Offset grande para que el dedo no tape la nave
             this.x = targetX;
@@ -1549,16 +1549,26 @@ class Player {
             this.vx = 0;
             this.vy = 0;
         } else if (input.isMobile && input.gyroEnabled && input.isGyroWorking()) {
-            // Giroscopio: movimiento DIRECTO sin fricci車n
+            // Giroscopio: movimiento con friccion reducida (mitad de la original)
             const move = input.getMovement();
             const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
-            const directSpeed = CONFIG.PLAYER_MAX_SPEED * speedMultiplier * 1.5;
+            const gyroFriction = 0.94; // Mitad de friccion (original era 0.88)
             
-            // Movimiento directo proporcional a la inclinaci車n
-            this.x += move.dx * directSpeed * dt;
-            this.y += move.dy * directSpeed * dt;
-            this.vx = 0;
-            this.vy = 0;
+            this.vx += move.dx * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
+            this.vy += move.dy * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
+            
+            this.vx *= gyroFriction;
+            this.vy *= gyroFriction;
+            
+            const maxSpeed = CONFIG.PLAYER_MAX_SPEED * speedMultiplier * 1.5;
+            const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+            if (speed > maxSpeed) {
+                this.vx = (this.vx / speed) * maxSpeed;
+                this.vy = (this.vy / speed) * maxSpeed;
+            }
+            
+            this.x += this.vx * dt;
+            this.y += this.vy * dt;
         } else {
             const move = input.getMovement();
             const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
@@ -1767,7 +1777,7 @@ class Game {
         this.victoryAnimTimer = 0;
         this.wasVictory = false;
         
-        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=??∴'.split('');
+        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=??★'.split('');
         this.initials = ['A', 'A', 'A'];
         this.initialsPosition = 0;
         this.initialsBlinkTimer = 0;
@@ -1777,7 +1787,7 @@ class Game {
         this.initialsTouchStart = null;
         this.initialsTouchLetter = -1;
         
-        // Para input de teclado nativo en m車vil
+        // Para input de teclado nativo en movil
         this.mobileInputElement = null;
         this.pendingInitialsConfirm = false;
         
@@ -1792,7 +1802,7 @@ class Game {
     }
 
     setupMobileKeyboardInput() {
-        // Crear input oculto para teclado nativo en m車vil
+        // Crear input oculto para teclado nativo en movil
         const input = document.createElement('input');
         input.type = 'text';
         input.id = 'mobileInitialsInput';
@@ -1849,7 +1859,7 @@ class Game {
             this.mobileInputElement.style.display = 'block';
             this.mobileInputElement.style.pointerEvents = 'auto';
             this.pendingInitialsConfirm = true;
-            // Peque?o delay para asegurar que el elemento es visible
+            // Pequeno delay para asegurar que el elemento es visible
             setTimeout(() => {
                 this.mobileInputElement.focus();
                 this.mobileInputElement.select();
@@ -1901,7 +1911,7 @@ class Game {
             const touch = e.touches[0];
             const coords = getCanvasCoords(touch);
             
-            // Detectar si toc車 el bot車n de confirmar (parte inferior - bot車n verde grande)
+            // Detectar si toco el boton de confirmar (parte inferior - boton verde grande)
             if (coords.y > 530 && coords.y < 610 && coords.x > CONFIG.WIDTH / 2 - 110 && coords.x < CONFIG.WIDTH / 2 + 110) {
                 e.preventDefault();
                 setTimeout(() => {
@@ -1910,14 +1920,14 @@ class Game {
                 return;
             }
             
-            // Detectar si toc車 el 芍rea del teclado (bot車n para abrir teclado)
+            // Detectar si toco el area del teclado (boton para abrir teclado)
             if (coords.y > 460 && coords.y < 520 && coords.x > CONFIG.WIDTH / 2 - 100 && coords.x < CONFIG.WIDTH / 2 + 100) {
                 e.preventDefault();
                 self.openMobileKeyboard();
                 return;
             }
             
-            // Detectar qu谷 letra se toc車 (芍rea central de las letras)
+            // Detectar que letra se toco (area central de las letras)
             const letterSpacing = 60;
             const startX = CONFIG.WIDTH / 2 - letterSpacing;
             const letterY = 360;
@@ -2022,7 +2032,7 @@ class Game {
             this.input.requestGyroPermission();
         }
         
-        // Reproducir m迆sica de gameplay
+        // Reproducir musica de gameplay
         playGameplayMusic();
     }
 
@@ -2110,7 +2120,7 @@ class Game {
     }
 
     transitionToScoreEntry() {
-        // Resetear TODOS los estados de touch para evitar confirmaci車n accidental
+        // Resetear TODOS los estados de touch para evitar confirmacion accidental
         this.input.touchStartPressed = false;
         this.input.touchBombPressed = false;
         this.input.touchActive = false;
@@ -2124,7 +2134,7 @@ class Game {
             this.initialsPosition = 0;
             this.scoreRank = this.getScoreRank(this.score);
             this.startDebounce = true;
-            // Debounce MUY largo para evitar confirmaci車n accidental en m車vil
+            // Debounce MUY largo para evitar confirmacion accidental en movil
             setTimeout(() => this.startDebounce = false, 1500);
         } else {
             this.state = GameState.SHOW_SCORES;
@@ -2138,16 +2148,16 @@ class Game {
         
         if (this.state === GameState.MENU) {
             this.backgroundStars.forEach(s => s.update(dt, 0.5));
-            // No detener m迆sica en men迆 si viene de game over o victory
+            // No detener musica en menu si viene de game over o victory
             if (this.input.isStartPressed() && !this.startDebounce) this.startGame();
             return;
         }
         
         if (this.state === GameState.SHOW_SCORES) {
-            // La m迆sica sigue sonando en la pantalla de scores
+            // La musica sigue sonando en la pantalla de scores
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.state = GameState.MENU;
-                stopAllMusic(); // Detener m迆sica al volver al men迆
+                stopAllMusic(); // Detener musica al volver al menu
                 this.startDebounce = true;
                 setTimeout(() => this.startDebounce = false, 500);
             }
@@ -2323,11 +2333,11 @@ class Game {
     }
 
     updateInitialsInput() {
-        // Solo procesar input de teclado/gamepad si no estamos usando el teclado m車vil
+        // Solo procesar input de teclado/gamepad si no estamos usando el teclado movil
         if (this.pendingInitialsConfirm) return;
         
-        // En m車vil, no procesar input de teclado/gamepad para confirmar
-        // La confirmaci車n se hace tocando el bot車n en pantalla
+        // En movil, no procesar input de teclado/gamepad para confirmar
+        // La confirmacion se hace tocando el boton en pantalla
         if (this.input.isMobile) return;
         
         if (this.input.isUpPressed()) {
@@ -2394,7 +2404,7 @@ class Game {
         this.audio.playExplosion();
         this.screenShake(20, 0.6);
         this.victoryAnimTimer = 0;
-        // Reproducir m迆sica aleatoria para game over
+        // Reproducir musica aleatoria para game over
         playGameOverMusic();
     }
 
@@ -2452,10 +2462,10 @@ class Game {
         if (this.input.isMobile) {
             ctx.fillText('?? ARRASTRA = MOVER (nave arriba del dedo)', CONFIG.WIDTH / 2, 425);
             ctx.fillText('?? INCLINA = MOVER DIRECTO', CONFIG.WIDTH / 2, 442);
-            ctx.fillText('?? DISPARO AUTOM芍TICO', CONFIG.WIDTH / 2, 459);
-            ctx.fillText('?? TAP R芍PIDO = BOMBA', CONFIG.WIDTH / 2, 476);
+            ctx.fillText('?? DISPARO AUTOMATICO', CONFIG.WIDTH / 2, 459);
+            ctx.fillText('?? TAP RAPIDO = BOMBA', CONFIG.WIDTH / 2, 476);
         } else {
-            ctx.fillText('↘ ↙ ∥ ∣ / WASD  MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('← → ↑ ↓ / WASD  MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ESPACIO / Z  DISPARAR', CONFIG.WIDTH / 2, 447);
             ctx.fillText('X / C  BOMBA', CONFIG.WIDTH / 2, 464);
             ctx.fillText('?? GAMEPAD COMPATIBLE', CONFIG.WIDTH / 2, 481);
@@ -2463,17 +2473,17 @@ class Game {
         
         ctx.fillStyle = '#fff';
         ctx.font = '12px Courier New';
-        ctx.fillText('岸岸岸 HIGH SCORES 岸岸岸', CONFIG.WIDTH / 2, 515);
+        ctx.fillText('─── HIGH SCORES ───', CONFIG.WIDTH / 2, 515);
         ctx.font = '11px Courier New';
         const topScores = this.highScores.slice(0, 3);
         topScores.forEach((entry, i) => {
-            const victoryMark = entry.victory ? '∴' : ' ';
+            const victoryMark = entry.victory ? '★' : ' ';
             ctx.fillText(`${i + 1}. ${entry.initials} ${victoryMark} ${entry.score.toString().padStart(6, ' ')}`, CONFIG.WIDTH / 2, 535 + i * 16);
         });
         
         ctx.fillStyle = '#666';
         ctx.font = '10px Courier New';
-        ctx.fillText('CONSIGUE 7 CA?ONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
+        ctx.fillText('CONSIGUE 7 CANONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
     }
 
     drawDemoShip(ctx, x, y, level) {
@@ -2529,7 +2539,7 @@ class Game {
         ctx.textAlign = 'center';
         ctx.shadowColor = '#ff0';
         ctx.shadowBlur = 10;
-        ctx.fillText('?FASE FINAL!', CONFIG.WIDTH / 2, 80);
+        ctx.fillText('!FASE FINAL!', CONFIG.WIDTH / 2, 80);
         ctx.font = '14px Courier New';
         ctx.fillText(`${Math.max(0, this.finalPhasePointsRemaining)} PUNTOS`, CONFIG.WIDTH / 2, 100);
         ctx.restore();
@@ -2589,7 +2599,7 @@ class Game {
         ctx.fillText(`SCORE: ${this.score}`, 15, 25);
         ctx.textAlign = 'right';
         let livesText = '';
-        for (let i = 0; i < this.player.lives; i++) livesText += '↖ ';
+        for (let i = 0; i < this.player.lives; i++) livesText += '▲ ';
         ctx.fillText(livesText, CONFIG.WIDTH - 15, 25);
         ctx.textAlign = 'left';
         ctx.font = '12px Courier New';
@@ -2599,7 +2609,7 @@ class Game {
         if (this.player.missiles > 0) ctx.fillText(`M:${this.player.missiles}`, 140, 48);
         ctx.textAlign = 'right';
         let bombText = '';
-        for (let i = 0; i < this.player.bombs; i++) bombText += '♂ ';
+        for (let i = 0; i < this.player.bombs; i++) bombText += '● ';
         if (this.player.bombs === 0) bombText = '---';
         ctx.fillText(bombText, CONFIG.WIDTH - 15, 48);
     }
@@ -2622,7 +2632,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '20px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('∴ NEW HIGH SCORE ∴', CONFIG.WIDTH / 2, 410);
+            if (blink) ctx.fillText('★ NEW HIGH SCORE ★', CONFIG.WIDTH / 2, 410);
         }
         ctx.fillStyle = '#fff';
         ctx.font = '16px Courier New';
@@ -2648,7 +2658,7 @@ class Game {
         ctx.translate(CONFIG.WIDTH / 2, 130);
         ctx.scale(scale, scale);
         ctx.font = 'bold 42px Courier New';
-        ctx.fillText('?VICTORIA!', 0, 0);
+        ctx.fillText('!VICTORIA!', 0, 0);
         ctx.restore();
         ctx.font = 'bold 24px Courier New';
         ctx.fillText('VIAJE COMPLETADO', CONFIG.WIDTH / 2, 180);
@@ -2661,7 +2671,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '22px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('∴ NUEVO R谷CORD ∴', CONFIG.WIDTH / 2, 380);
+            if (blink) ctx.fillText('★ NUEVO RECORD ★', CONFIG.WIDTH / 2, 380);
         }
         if (this.player) {
             ctx.save();
@@ -2686,7 +2696,7 @@ class Game {
         ctx.shadowBlur = 15;
         if (this.wasVictory) {
             ctx.font = 'bold 32px Courier New';
-            ctx.fillText('?VICTORIA!', CONFIG.WIDTH / 2, 80);
+            ctx.fillText('!VICTORIA!', CONFIG.WIDTH / 2, 80);
         }
         ctx.font = 'bold 28px Courier New';
         ctx.fillText('NEW HIGH SCORE!', CONFIG.WIDTH / 2, 140);
@@ -2748,9 +2758,9 @@ class Game {
         ctx.font = '12px Courier New';
         if (this.input.isMobile) {
             ctx.fillText('?? DESLIZA ARRIBA/ABAJO EN CADA LETRA', CONFIG.WIDTH / 2, 420);
-            ctx.fillText('O TOCA EL BOT車N PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
+            ctx.fillText('O TOCA EL BOTON PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
             
-            // Bot車n para abrir teclado
+            // Boton para abrir teclado
             const btnY = 485;
             ctx.fillStyle = '#fff';
             ctx.strokeStyle = '#fff';
@@ -2759,7 +2769,7 @@ class Game {
             ctx.font = '14px Courier New';
             ctx.fillText('?? ESCRIBIR CON TECLADO', CONFIG.WIDTH / 2, btnY + 5);
             
-            // Bot車n de confirmar grande y visible
+            // Boton de confirmar grande y visible
             const confirmY = 560;
             const confirmBlink = Math.sin(Date.now() / 400) > 0;
             ctx.fillStyle = confirmBlink ? '#0f0' : '#0a0';
@@ -2768,7 +2778,7 @@ class Game {
             ctx.font = 'bold 18px Courier New';
             ctx.fillText('? CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 7);
         } else {
-            ctx.fillText('∥∣ CAMBIAR    ↘↙ MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('↑↓ CAMBIAR    ←→ MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ENTER CONFIRMAR', CONFIG.WIDTH / 2, 450);
             
             const confirmBlink = Math.sin(Date.now() / 300) > 0;
@@ -2822,7 +2832,7 @@ class Game {
             ctx.fillText(entry.initials, 130, y);
             ctx.fillText(entry.score.toString().padStart(8, ' '), 210, y);
             ctx.textAlign = 'center';
-            if (entry.victory) ctx.fillText('∴', 370, y);
+            if (entry.victory) ctx.fillText('★', 370, y);
             else {
                 ctx.fillStyle = isNewScore ? ctx.fillStyle : '#444';
                 ctx.fillText('-', 370, y);

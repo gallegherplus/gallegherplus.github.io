@@ -19,17 +19,21 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            min-height: -webkit-fill-available;
+            min-height: 100dvh;
             overflow: hidden;
             font-family: 'Courier New', monospace;
             touch-action: none;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+            padding: 0;
+            margin: 0;
         }
 
         html {
-            height: -webkit-fill-available;
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden;
         }
 
         .game-container {
@@ -38,17 +42,14 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
                         0 0 40px rgba(255, 255, 255, 0.1),
                         inset 0 0 20px rgba(255, 255, 255, 0.05);
-            max-width: 100vw;
-            max-height: 100vh;
-            max-height: -webkit-fill-available;
+            max-width: calc(100vw - 4px);
+            max-height: calc(100vh - 4px);
+            max-height: calc(100dvh - 4px);
         }
 
         #gameCanvas {
             display: block;
             background: #000;
-            max-width: 100vw;
-            max-height: 100vh;
-            max-height: -webkit-fill-available;
             touch-action: none;
         }
 
@@ -189,15 +190,15 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-    // Cuando la playlist esta cargada (estado CUED = 5)
+    // Cuando la playlist está cargada (estado CUED = 5)
     if (event.data === YT.PlayerState.CUED && !playlistLoaded) {
         playlistLoaded = true;
         // Activar shuffle
         ytPlayer.setShuffle(true);
     }
     
-    // Cuando un video termina, el loop de playlist deberia manejarlo automaticamente
-    // pero si no, forzamos reproduccion
+    // Cuando un video termina, el loop de playlist debería manejarlo automáticamente
+    // pero si no, forzamos reproducción
     if (event.data === YT.PlayerState.ENDED) {
         if (currentMusicState !== 'none') {
             ytPlayer.nextVideo();
@@ -209,14 +210,14 @@ function playRandomFromPlaylist() {
     if (!ytPlayerReady || !ytPlayer) return;
     
     try {
-        // Obtener el numero total de videos en la playlist
+        // Obtener el número total de videos en la playlist
         const playlist = ytPlayer.getPlaylist();
         if (playlist && playlist.length > 0) {
-            // Saltar a un indice aleatorio
+            // Saltar a un índice aleatorio
             const randomIndex = Math.floor(Math.random() * playlist.length);
             ytPlayer.playVideoAt(randomIndex);
         } else {
-            // Si no tenemos la playlist aun, cargarla y reproducir
+            // Si no tenemos la playlist aún, cargarla y reproducir
             ytPlayer.loadPlaylist({
                 listType: 'playlist',
                 list: PLAYLIST_ID,
@@ -588,7 +589,7 @@ class SynthAudio {
 }
 
 // ============================================================
-// CLASE: InputHandler - CON CONTROLES TACTILES Y GIROSCOPIO MEJORADO
+// CLASE: InputHandler - CON CONTROLES TÁCTILES Y GIROSCOPIO MEJORADO
 // ============================================================
 class InputHandler {
     constructor() {
@@ -628,7 +629,7 @@ class InputHandler {
         this.touchStartX = 0;
         this.touchStartY = 0;
         
-        // Para entrada de iniciales tactil
+        // Para entrada de iniciales táctil
         this.initialsTouchData = null;
         
         window.addEventListener('keydown', (e) => {
@@ -814,8 +815,8 @@ class InputHandler {
             if (calibratedGamma > 90) calibratedGamma -= 180;
             if (calibratedGamma < -90) calibratedGamma += 180;
             
-            // Sensibilidad MUY ALTA para respuesta instantanea
-            const sensitivity = 4; // Mas sensible
+            // Sensibilidad MUY ALTA para respuesta instantánea
+            const sensitivity = 4; // Más sensible
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
@@ -844,7 +845,7 @@ class InputHandler {
     updateGamepadIndicator(status) {
         const indicator = document.getElementById('gamepadIndicator');
         if (status === 'gyro') {
-            indicator.textContent = '?? Tactil activo';
+            indicator.textContent = '?? Táctil activo';
             indicator.classList.add('connected');
         } else if (status === 'mobile') {
             indicator.textContent = '?? Toca para jugar';
@@ -895,7 +896,7 @@ class InputHandler {
             const gyroDeadzone = 0.01;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                // Multiplicador muy alto para respuesta instantanea
+                // Multiplicador muy alto para respuesta instantánea
                 dx = this.tiltX * 3.5;
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
@@ -1039,7 +1040,7 @@ class InputHandler {
             if (gp.buttons[9]?.pressed) currentState = true;
         }
         
-        // NO usar touchStartPressed aqui - se maneja por separado en iniciales
+        // NO usar touchStartPressed aquí - se maneja por separado en iniciales
         
         const justPressed = currentState && !this.prevConfirmState;
         this.prevConfirmState = currentState;
@@ -1049,7 +1050,7 @@ class InputHandler {
 }
 
 // ============================================================
-// CLASES DE PARTICULAS Y EFECTOS
+// CLASES DE PARTÍCULAS Y EFECTOS
 // ============================================================
 class Particle {
     constructor(x, y, color = '#fff') {
@@ -1541,7 +1542,7 @@ class Player {
         const touchTarget = input.getTouchTarget();
         
         if (touchTarget.active) {
-            // Control tactil con offset para no tapar la nave
+            // Control táctil con offset para no tapar la nave
             const targetX = touchTarget.x;
             const targetY = touchTarget.y - 100; // Offset grande para que el dedo no tape la nave
             this.x = targetX;
@@ -1549,10 +1550,10 @@ class Player {
             this.vx = 0;
             this.vy = 0;
         } else if (input.isMobile && input.gyroEnabled && input.isGyroWorking()) {
-            // Giroscopio: movimiento con friccion reducida (mitad de la original)
+            // Giroscopio: movimiento con fricción reducida (mitad de la original)
             const move = input.getMovement();
             const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
-            const gyroFriction = 0.94; // Mitad de friccion (original era 0.88)
+            const gyroFriction = 0.94; // Mitad de fricción (original era 0.88)
             
             this.vx += move.dx * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
             this.vy += move.dy * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
@@ -1777,7 +1778,7 @@ class Game {
         this.victoryAnimTimer = 0;
         this.wasVictory = false;
         
-        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=??¡¹'.split('');
+        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=???'.split('');
         this.initials = ['A', 'A', 'A'];
         this.initialsPosition = 0;
         this.initialsBlinkTimer = 0;
@@ -1787,7 +1788,7 @@ class Game {
         this.initialsTouchStart = null;
         this.initialsTouchLetter = -1;
         
-        // Para input de teclado nativo en movil
+        // Para input de teclado nativo en móvil
         this.mobileInputElement = null;
         this.pendingInitialsConfirm = false;
         
@@ -1802,7 +1803,7 @@ class Game {
     }
 
     setupMobileKeyboardInput() {
-        // Crear input oculto para teclado nativo en movil
+        // Crear input oculto para teclado nativo en móvil
         const input = document.createElement('input');
         input.type = 'text';
         input.id = 'mobileInitialsInput';
@@ -1859,7 +1860,7 @@ class Game {
             this.mobileInputElement.style.display = 'block';
             this.mobileInputElement.style.pointerEvents = 'auto';
             this.pendingInitialsConfirm = true;
-            // Pequeno delay para asegurar que el elemento es visible
+            // Pequeño delay para asegurar que el elemento es visible
             setTimeout(() => {
                 this.mobileInputElement.focus();
                 this.mobileInputElement.select();
@@ -1911,7 +1912,7 @@ class Game {
             const touch = e.touches[0];
             const coords = getCanvasCoords(touch);
             
-            // Detectar si toco el boton de confirmar (parte inferior - boton verde grande)
+            // Detectar si tocó el botón de confirmar (parte inferior - botón verde grande)
             if (coords.y > 530 && coords.y < 610 && coords.x > CONFIG.WIDTH / 2 - 110 && coords.x < CONFIG.WIDTH / 2 + 110) {
                 e.preventDefault();
                 setTimeout(() => {
@@ -1920,14 +1921,14 @@ class Game {
                 return;
             }
             
-            // Detectar si toco el area del teclado (boton para abrir teclado)
+            // Detectar si tocó el área del teclado (botón para abrir teclado)
             if (coords.y > 460 && coords.y < 520 && coords.x > CONFIG.WIDTH / 2 - 100 && coords.x < CONFIG.WIDTH / 2 + 100) {
                 e.preventDefault();
                 self.openMobileKeyboard();
                 return;
             }
             
-            // Detectar que letra se toco (area central de las letras)
+            // Detectar qué letra se tocó (área central de las letras)
             const letterSpacing = 60;
             const startX = CONFIG.WIDTH / 2 - letterSpacing;
             const letterY = 360;
@@ -2032,7 +2033,7 @@ class Game {
             this.input.requestGyroPermission();
         }
         
-        // Reproducir musica de gameplay
+        // Reproducir música de gameplay
         playGameplayMusic();
     }
 
@@ -2120,7 +2121,7 @@ class Game {
     }
 
     transitionToScoreEntry() {
-        // Resetear TODOS los estados de touch para evitar confirmacion accidental
+        // Resetear TODOS los estados de touch para evitar confirmación accidental
         this.input.touchStartPressed = false;
         this.input.touchBombPressed = false;
         this.input.touchActive = false;
@@ -2134,7 +2135,7 @@ class Game {
             this.initialsPosition = 0;
             this.scoreRank = this.getScoreRank(this.score);
             this.startDebounce = true;
-            // Debounce MUY largo para evitar confirmacion accidental en movil
+            // Debounce MUY largo para evitar confirmación accidental en móvil
             setTimeout(() => this.startDebounce = false, 1500);
         } else {
             this.state = GameState.SHOW_SCORES;
@@ -2148,16 +2149,16 @@ class Game {
         
         if (this.state === GameState.MENU) {
             this.backgroundStars.forEach(s => s.update(dt, 0.5));
-            // No detener musica en menu si viene de game over o victory
+            // No detener música en menú si viene de game over o victory
             if (this.input.isStartPressed() && !this.startDebounce) this.startGame();
             return;
         }
         
         if (this.state === GameState.SHOW_SCORES) {
-            // La musica sigue sonando en la pantalla de scores
+            // La música sigue sonando en la pantalla de scores
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.state = GameState.MENU;
-                stopAllMusic(); // Detener musica al volver al menu
+                stopAllMusic(); // Detener música al volver al menú
                 this.startDebounce = true;
                 setTimeout(() => this.startDebounce = false, 500);
             }
@@ -2333,11 +2334,11 @@ class Game {
     }
 
     updateInitialsInput() {
-        // Solo procesar input de teclado/gamepad si no estamos usando el teclado movil
+        // Solo procesar input de teclado/gamepad si no estamos usando el teclado móvil
         if (this.pendingInitialsConfirm) return;
         
-        // En movil, no procesar input de teclado/gamepad para confirmar
-        // La confirmacion se hace tocando el boton en pantalla
+        // En móvil, no procesar input de teclado/gamepad para confirmar
+        // La confirmación se hace tocando el botón en pantalla
         if (this.input.isMobile) return;
         
         if (this.input.isUpPressed()) {
@@ -2404,7 +2405,7 @@ class Game {
         this.audio.playExplosion();
         this.screenShake(20, 0.6);
         this.victoryAnimTimer = 0;
-        // Reproducir musica aleatoria para game over
+        // Reproducir música aleatoria para game over
         playGameOverMusic();
     }
 
@@ -2462,10 +2463,10 @@ class Game {
         if (this.input.isMobile) {
             ctx.fillText('?? ARRASTRA = MOVER (nave arriba del dedo)', CONFIG.WIDTH / 2, 425);
             ctx.fillText('?? INCLINA = MOVER DIRECTO', CONFIG.WIDTH / 2, 442);
-            ctx.fillText('?? DISPARO AUTOMATICO', CONFIG.WIDTH / 2, 459);
-            ctx.fillText('?? TAP RAPIDO = BOMBA', CONFIG.WIDTH / 2, 476);
+            ctx.fillText('?? DISPARO AUTOMÁTICO', CONFIG.WIDTH / 2, 459);
+            ctx.fillText('?? TAP RÁPIDO = BOMBA', CONFIG.WIDTH / 2, 476);
         } else {
-            ctx.fillText('¡ö ¡÷ ¡ô ¡õ / WASD  MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('? ? ? ? / WASD  MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ESPACIO / Z  DISPARAR', CONFIG.WIDTH / 2, 447);
             ctx.fillText('X / C  BOMBA', CONFIG.WIDTH / 2, 464);
             ctx.fillText('?? GAMEPAD COMPATIBLE', CONFIG.WIDTH / 2, 481);
@@ -2473,17 +2474,17 @@ class Game {
         
         ctx.fillStyle = '#fff';
         ctx.font = '12px Courier New';
-        ctx.fillText('¢w¢w¢w HIGH SCORES ¢w¢w¢w', CONFIG.WIDTH / 2, 515);
+        ctx.fillText('--- HIGH SCORES ---', CONFIG.WIDTH / 2, 515);
         ctx.font = '11px Courier New';
         const topScores = this.highScores.slice(0, 3);
         topScores.forEach((entry, i) => {
-            const victoryMark = entry.victory ? '¡¹' : ' ';
+            const victoryMark = entry.victory ? '?' : ' ';
             ctx.fillText(`${i + 1}. ${entry.initials} ${victoryMark} ${entry.score.toString().padStart(6, ' ')}`, CONFIG.WIDTH / 2, 535 + i * 16);
         });
         
         ctx.fillStyle = '#666';
         ctx.font = '10px Courier New';
-        ctx.fillText('CONSIGUE 7 CANONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
+        ctx.fillText('CONSIGUE 7 CAÑONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
     }
 
     drawDemoShip(ctx, x, y, level) {
@@ -2539,7 +2540,7 @@ class Game {
         ctx.textAlign = 'center';
         ctx.shadowColor = '#ff0';
         ctx.shadowBlur = 10;
-        ctx.fillText('!FASE FINAL!', CONFIG.WIDTH / 2, 80);
+        ctx.fillText('¡FASE FINAL!', CONFIG.WIDTH / 2, 80);
         ctx.font = '14px Courier New';
         ctx.fillText(`${Math.max(0, this.finalPhasePointsRemaining)} PUNTOS`, CONFIG.WIDTH / 2, 100);
         ctx.restore();
@@ -2599,7 +2600,7 @@ class Game {
         ctx.fillText(`SCORE: ${this.score}`, 15, 25);
         ctx.textAlign = 'right';
         let livesText = '';
-        for (let i = 0; i < this.player.lives; i++) livesText += '¡¶ ';
+        for (let i = 0; i < this.player.lives; i++) livesText += '? ';
         ctx.fillText(livesText, CONFIG.WIDTH - 15, 25);
         ctx.textAlign = 'left';
         ctx.font = '12px Courier New';
@@ -2609,7 +2610,7 @@ class Game {
         if (this.player.missiles > 0) ctx.fillText(`M:${this.player.missiles}`, 140, 48);
         ctx.textAlign = 'right';
         let bombText = '';
-        for (let i = 0; i < this.player.bombs; i++) bombText += '¡´ ';
+        for (let i = 0; i < this.player.bombs; i++) bombText += '? ';
         if (this.player.bombs === 0) bombText = '---';
         ctx.fillText(bombText, CONFIG.WIDTH - 15, 48);
     }
@@ -2632,7 +2633,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '20px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('¡¹ NEW HIGH SCORE ¡¹', CONFIG.WIDTH / 2, 410);
+            if (blink) ctx.fillText('? NEW HIGH SCORE ?', CONFIG.WIDTH / 2, 410);
         }
         ctx.fillStyle = '#fff';
         ctx.font = '16px Courier New';
@@ -2658,7 +2659,7 @@ class Game {
         ctx.translate(CONFIG.WIDTH / 2, 130);
         ctx.scale(scale, scale);
         ctx.font = 'bold 42px Courier New';
-        ctx.fillText('!VICTORIA!', 0, 0);
+        ctx.fillText('¡VICTORIA!', 0, 0);
         ctx.restore();
         ctx.font = 'bold 24px Courier New';
         ctx.fillText('VIAJE COMPLETADO', CONFIG.WIDTH / 2, 180);
@@ -2671,7 +2672,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '22px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('¡¹ NUEVO RECORD ¡¹', CONFIG.WIDTH / 2, 380);
+            if (blink) ctx.fillText('? NUEVO RÉCORD ?', CONFIG.WIDTH / 2, 380);
         }
         if (this.player) {
             ctx.save();
@@ -2696,7 +2697,7 @@ class Game {
         ctx.shadowBlur = 15;
         if (this.wasVictory) {
             ctx.font = 'bold 32px Courier New';
-            ctx.fillText('!VICTORIA!', CONFIG.WIDTH / 2, 80);
+            ctx.fillText('¡VICTORIA!', CONFIG.WIDTH / 2, 80);
         }
         ctx.font = 'bold 28px Courier New';
         ctx.fillText('NEW HIGH SCORE!', CONFIG.WIDTH / 2, 140);
@@ -2758,9 +2759,9 @@ class Game {
         ctx.font = '12px Courier New';
         if (this.input.isMobile) {
             ctx.fillText('?? DESLIZA ARRIBA/ABAJO EN CADA LETRA', CONFIG.WIDTH / 2, 420);
-            ctx.fillText('O TOCA EL BOTON PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
+            ctx.fillText('O TOCA EL BOTÓN PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
             
-            // Boton para abrir teclado
+            // Botón para abrir teclado
             const btnY = 485;
             ctx.fillStyle = '#fff';
             ctx.strokeStyle = '#fff';
@@ -2769,7 +2770,7 @@ class Game {
             ctx.font = '14px Courier New';
             ctx.fillText('?? ESCRIBIR CON TECLADO', CONFIG.WIDTH / 2, btnY + 5);
             
-            // Boton de confirmar grande y visible
+            // Botón de confirmar grande y visible
             const confirmY = 560;
             const confirmBlink = Math.sin(Date.now() / 400) > 0;
             ctx.fillStyle = confirmBlink ? '#0f0' : '#0a0';
@@ -2778,7 +2779,7 @@ class Game {
             ctx.font = 'bold 18px Courier New';
             ctx.fillText('? CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 7);
         } else {
-            ctx.fillText('¡ô¡õ CAMBIAR    ¡ö¡÷ MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('?? CAMBIAR    ?? MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ENTER CONFIRMAR', CONFIG.WIDTH / 2, 450);
             
             const confirmBlink = Math.sin(Date.now() / 300) > 0;
@@ -2832,7 +2833,7 @@ class Game {
             ctx.fillText(entry.initials, 130, y);
             ctx.fillText(entry.score.toString().padStart(8, ' '), 210, y);
             ctx.textAlign = 'center';
-            if (entry.victory) ctx.fillText('¡¹', 370, y);
+            if (entry.victory) ctx.fillText('?', 370, y);
             else {
                 ctx.fillStyle = isNewScore ? ctx.fillStyle : '#444';
                 ctx.fillText('-', 370, y);
@@ -2854,24 +2855,48 @@ class Game {
 }
 
 // ============================================================
-// RESPONSIVE CANVAS
+// RESPONSIVE CANVAS - ADAPTATIVO PARA MÓVILES 1080x1920
 // ============================================================
 function resizeCanvas() {
     const canvas = document.getElementById('gameCanvas');
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const gameRatio = CONFIG.WIDTH / CONFIG.HEIGHT;
-    const windowRatio = windowWidth / windowHeight;
+    const container = document.querySelector('.game-container');
+    
+    // Usar visualViewport si está disponible (más preciso en móviles)
+    const windowWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+    const windowHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    
+    // Margen de seguridad para el borde (4px total = 2px por lado)
+    const safeMargin = 8;
+    const availableWidth = windowWidth - safeMargin;
+    const availableHeight = windowHeight - safeMargin;
+    
+    const gameRatio = CONFIG.WIDTH / CONFIG.HEIGHT; // 480/640 = 0.75
+    const windowRatio = availableWidth / availableHeight;
+    
     let newWidth, newHeight;
+    
     if (windowRatio > gameRatio) {
-        newHeight = windowHeight;
+        // Ventana más ancha que el juego - ajustar por altura
+        newHeight = availableHeight;
         newWidth = newHeight * gameRatio;
     } else {
-        newWidth = windowWidth;
+        // Ventana más alta que el juego - ajustar por ancho
+        newWidth = availableWidth;
         newHeight = newWidth / gameRatio;
     }
+    
+    // Redondear para evitar problemas de subpixel
+    newWidth = Math.floor(newWidth);
+    newHeight = Math.floor(newHeight);
+    
     canvas.style.width = newWidth + 'px';
     canvas.style.height = newHeight + 'px';
+    
+    // Ajustar el contenedor también
+    if (container) {
+        container.style.width = newWidth + 'px';
+        container.style.height = newHeight + 'px';
+    }
 }
 
 window.onload = () => {
@@ -2880,7 +2905,17 @@ window.onload = () => {
 };
 
 window.addEventListener('resize', resizeCanvas);
-window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 100));
+window.addEventListener('orientationchange', () => {
+    // Múltiples intentos para asegurar que se redimensione correctamente
+    setTimeout(resizeCanvas, 50);
+    setTimeout(resizeCanvas, 150);
+    setTimeout(resizeCanvas, 300);
+});
+
+// Escuchar cambios en el visualViewport (más preciso en móviles)
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', resizeCanvas);
+}
     </script>
 </body>
 </html>

@@ -51,40 +51,90 @@
             </div>
 
             <!-- SECCIÓN MÚSICA (Players) -->
-            <div class="w-full max-w-md space-y-6">
-                <h3 class="text-center text-green-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-green-500/30 pb-2">Música / Music</h3>
+            <div class="w-full max-w-md space-y-8 flex flex-col items-center">
+                <h3 class="text-center text-green-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-green-500/30 pb-2 w-full">Música / Music</h3>
 
-                <!-- Spotify Embed 1 -->
-                <div class="rounded-2xl overflow-hidden shadow-lg shadow-green-900/20 border border-green-500/20 hover:border-green-400/50 transition-all duration-300">
-                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/37FGouLKHkE5kOvDTAhM8V?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <!-- 1. Bandcamp Album (Ciberdelia) -->
+                <div class="rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=1489493561/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/track=4237668646/transparent=true/" seamless><a href="https://cphnkx.bandcamp.com/album/ciberdelia-volumen-1">Ciberdelia - Volumen 1 by Gallegher Plus &amp; Tavo Pez</a></iframe>
                 </div>
 
-                <!-- Spotify Embed 2 -->
-                <div class="rounded-2xl overflow-hidden shadow-lg shadow-green-900/20 border border-green-500/20 hover:border-green-400/50 transition-all duration-300">
-                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/4tt4yvwP1IhAvsUsjpH68F?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <!-- 2. Spotify Album 1 -->
+                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-green-900/20 border border-green-500/20 hover:border-green-400/50 transition-all duration-300">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/5Irw3rBvFMO30ORmkwBL8s?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
 
-                <!-- SoundCloud Embed -->
-                <div class="rounded-2xl overflow-hidden shadow-lg shadow-orange-900/20 border border-orange-500/20 hover:border-orange-400/50 transition-all duration-300 mt-6">
+                <!-- 3. Spotify Album 2 (NEW) -->
+                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-green-900/20 border border-green-500/20 hover:border-green-400/50 transition-all duration-300">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/30VWqubwOLIcyitfQQKfPO?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+
+                <!-- 4. Spotify Album 3 -->
+                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-green-900/20 border border-green-500/20 hover:border-green-400/50 transition-all duration-300">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/6cD6wQLYulaEasUkPTJqOj?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+
+                <!-- 5. SoundCloud Embed -->
+                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-orange-900/20 border border-orange-500/20 hover:border-orange-400/50 transition-all duration-300">
                     <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gallegherplus&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
                 </div>
 
-                <!-- Bandcamp & ReverbNation Embeds -->
-                <div class="pt-6 space-y-8 flex flex-col items-center w-full">
-                    
-                    <!-- Bandcamp Album 1 -->
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
-                         <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2308284593/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011">Live in Loser Party (2011) by Gallegher Plus</a></iframe>
+                <!-- 6. YouTube Embed -->
+                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 hover:border-red-400/50 transition-all duration-300 aspect-video">
+                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/87Pg9DTzjpc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+
+
+
+                <!-- 9. Bandcamp Album (Artificial Intelligence) -->
+                <div class="rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=479373965/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008">Artificial intelligence (2008) by Gallegher Plus</a></iframe>
+                </div>
+                
+                <!-- 10. Bandcamp (40 Años - Small) -->
+                <div class="w-full rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3486002417/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/track=1055934601/transparent=true/" seamless><a href="https://cosmocumples.bandcamp.com/album/40-a-os-en-el-mismo-sistema-solar">40 años en el mismo Sistema Solar by Gallegher Plus</a></iframe>
+                </div>
+
+                <!-- 11. ReverbNation Embed -->
+                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 bg-black/40 transition-transform hover:scale-[1.01] duration-300">
+                    <iframe width="100%" height="520" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_840307?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_840307" style="width:0px;min-width:100%;max-width:100%;"></iframe>
+                </div>
+            </div>
+
+            <!-- SECCIÓN GRABACIONES EN VIVO -->
+            <div class="w-full max-w-md space-y-6 mt-16 mb-4 flex flex-col items-center">
+                <h3 class="text-center text-red-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-red-500/30 pb-2 w-full">Grabaciones en vivo</h3>
+                
+                <!-- Bandcamp Album (El Acustico) -->
+                <div class="rounded-xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=421278355/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://elacustico.bandcamp.com/album/gallegher-plus">Gallegher Plus by Gallegher Plus</a></iframe>
+                </div>
+
+                <!-- Bandcamp Album (Loser Party) -->
+                <div class="rounded-xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2308284593/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011">Live in Loser Party (2011) by Gallegher Plus</a></iframe>
+                </div>
+            </div>
+
+            <!-- SECCIÓN COSMOMEDIA COLECTIVO -->
+            <div class="w-full max-w-md space-y-6 mt-16 mb-16">
+                <h3 class="text-center text-yellow-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-yellow-500/30 pb-2">CosmoMedia Colectivo</h3>
+                
+                <div class="flex flex-col items-center space-y-8 w-full">
+                    <!-- Vol 1 -->
+                    <div class="rounded-xl overflow-hidden shadow-lg shadow-yellow-900/20 border border-yellow-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                        <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3756104505/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-1">VA - CosmoMedia Vol. 1 by CosmoMedia</a></iframe>
                     </div>
 
-                    <!-- Bandcamp Album 2 -->
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
-                        <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=479373965/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008">Artificial intelligence (2008) by Gallegher Plus</a></iframe>
+                    <!-- Vol 2 -->
+                    <div class="rounded-xl overflow-hidden shadow-lg shadow-yellow-900/20 border border-yellow-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                        <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=15350491/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-2">VA - CosmoMedia Vol. 2 by CosmoMedia Colectivo</a></iframe>
                     </div>
-                    
-                    <!-- ReverbNation Embed -->
-                    <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 bg-black/40 mt-4 transition-transform hover:scale-[1.01] duration-300">
-                         <iframe width="100%" height="520" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_840307?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_840307" style="width:0px;min-width:100%;max-width:100%;"></iframe>
+
+                    <!-- Intervención -->
+                    <div class="rounded-xl overflow-hidden shadow-lg shadow-yellow-900/20 border border-yellow-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                        <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=134645260/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/intervenci-n-audiovisual-en-vivo">Intervención Audiovisual en vivo by CosmoMedia Colectivo</a></iframe>
                     </div>
                 </div>
             </div>

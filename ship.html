@@ -312,6 +312,7 @@ const CONFIG = {
 
 const GameState = {
     MENU: 'MENU',
+    DEMO: 'DEMO',
     PLAYING: 'PLAYING',
     FINAL_PHASE: 'FINAL_PHASE',
     INTERSTELLAR: 'INTERSTELLAR',
@@ -1805,6 +1806,21 @@ class Game {
         this.lastTime = 0;
         this.startDebounce = false;
         
+        // Demo mode
+        this.menuIdleTimer = 0;
+        this.demoModeDelay = 10; // segundos antes de iniciar demo
+        this.demoPlayer = null;
+        this.demoBullets = [];
+        this.demoEnemies = [];
+        this.demoParticles = [];
+        this.demoPowerUps = [];
+        this.demoTexts = []; // Textos flotantes explicativos
+        this.demoTime = 0;
+        this.demoSpawnTimer = 0;
+        this.demoPowerUpTimer = 0;
+        this.demoTargetX = CONFIG.WIDTH / 2;
+        this.demoTargetY = CONFIG.HEIGHT - 100;
+        
         this.setupInitialsTouch();
         this.setupMobileKeyboardInput();
         
@@ -2018,8 +2034,276 @@ class Game {
         this.saveHighScores();
     }
 
+    startDemo() {
+        this.state = GameState.DEMO;
+        this.demoPlayer = new Player(CONFIG.WIDTH / 2, CONFIG.HEIGHT - 100);
+        this.demoPlayer.lives = 999; // Invencible en demo
+        this.demoBullets = [];
+        this.demoEnemies = [];
+        this.demoParticles = [];
+        this.demoPowerUps = [];
+        this.demoTexts = [];
+        this.demoTime = 0;
+        this.demoSpawnTimer = 0;
+        this.demoPowerUpTimer = 0;
+        this.demoTargetX = CONFIG.WIDTH / 2;
+        this.demoTargetY = CONFIG.HEIGHT - 100;
+    }
+
+    updateDemo(dt) {
+        this.demoTime += dt;
+        this.backgroundStars.forEach(s => s.update(dt, 0.8));
+        
+        // Movimiento de la nave demo - buscar power ups o patrón serpenteante
+        let foundPowerUp = false;
+        for (const pu of this.demoPowerUps) {
+            // Si hay un power up cerca, ir hacia él
+            if (pu.y > 100 && pu.y < CONFIG.HEIGHT - 150) {
+                this.demoTargetX = pu.x;
+                this.demoTargetY = pu.y + 60; // Posicionarse debajo para recogerlo
+                foundPowerUp = true;
+                break;
+            }
+        }
+        
+        if (!foundPowerUp) {
+            // Patrón serpenteante normal
+            this.demoTargetX = CONFIG.WIDTH / 2 + Math.sin(this.demoTime * 1.5) * 150;
+            this.demoTargetY = CONFIG.HEIGHT - 120 + Math.sin(this.demoTime * 2) * 40;
+        }
+        
+        // Mover nave hacia objetivo
+        const dx = this.demoTargetX - this.demoPlayer.x;
+        const dy = this.demoTargetY - this.demoPlayer.y;
+        this.demoPlayer.x += dx * dt * 3;
+        this.demoPlayer.y += dy * dt * 3;
+        
+        // Mantener dentro de límites
+        const halfWidth = this.demoPlayer.getFullWidth() / 2;
+        this.demoPlayer.x = Math.max(halfWidth, Math.min(CONFIG.WIDTH - halfWidth, this.demoPlayer.x));
+        this.demoPlayer.y = Math.max(50, Math.min(CONFIG.HEIGHT - 50, this.demoPlayer.y));
+        
+        // Disparar automáticamente
+        if (this.demoPlayer.fireTimer > 0) this.demoPlayer.fireTimer -= dt * 1000;
+        if (this.demoPlayer.fireTimer <= 0) {
+            this.demoPlayer.fireTimer = CONFIG.FIRE_RATE;
+            const patterns = this.demoPlayer.getBulletPattern();
+            patterns.forEach(p => {
+                this.demoBullets.push(new Bullet(
+                    this.demoPlayer.x + p.offsetX,
+                    this.demoPlayer.y - this.demoPlayer.height / 2 + p.offsetY,
+                    p.vx, p.vy
+                ));
+            });
+            // Disparar desde módulos
+            this.demoPlayer.modules.forEach(mod => {
+                if (mod.hasCannon) {
+                    this.demoBullets.push(new Bullet(
+                        this.demoPlayer.x + mod.offsetX,
+                        this.demoPlayer.y + mod.offsetY - mod.height / 2,
+                        0, -CONFIG.BULLET_SPEED
+                    ));
+                }
+            });
+        }
+        
+        // Spawn enemigos
+        this.demoSpawnTimer += dt * 1000;
+        if (this.demoSpawnTimer >= 800) {
+            this.demoSpawnTimer = 0;
+            const x = Math.random() * (CONFIG.WIDTH - 60) + 30;
+            const types = ['kamikaze', 'wave', 'kamikaze'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            this.demoEnemies.push(new Enemy(x, -30, type));
+        }
+        
+        // Spawn power ups periódicamente
+        this.demoPowerUpTimer += dt;
+        if (this.demoPowerUpTimer >= 2.5) {
+            this.demoPowerUpTimer = 0;
+            const types = ['power', 'missile', 'bomb'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            // Spawn cerca de donde va la nave para que los recoja
+            const spawnX = this.demoTargetX + (Math.random() - 0.5) * 100;
+            this.demoPowerUps.push(new PowerUp(Math.max(30, Math.min(CONFIG.WIDTH - 30, spawnX)), -20, type));
+        }
+        
+        // Actualizar power ups
+        this.demoPowerUps.forEach(p => p.update(dt));
+        this.demoPowerUps = this.demoPowerUps.filter(p => !p.isOffScreen());
+        
+        // Colisiones nave-powerups
+        for (let i = this.demoPowerUps.length - 1; i >= 0; i--) {
+            const pu = this.demoPowerUps[i];
+            const dx = pu.x - this.demoPlayer.x;
+            const dy = pu.y - this.demoPlayer.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 40) {
+                // Recoger power up
+                let text = '';
+                let color = '#fff';
+                
+                if (pu.type === 'power') {
+                    this.demoPlayer.evolve();
+                    text = '¡CAÑÓN EXTRA!';
+                    color = '#0f0';
+                    for (let j = 0; j < 15; j++) {
+                        this.demoParticles.push(new Particle(this.demoPlayer.x, this.demoPlayer.y));
+                    }
+                } else if (pu.type === 'missile') {
+                    this.demoPlayer.addMissiles(3);
+                    text = '¡MISILES RASTREADORES!';
+                    color = '#0af';
+                } else if (pu.type === 'bomb') {
+                    this.demoPlayer.addBombs(1);
+                    text = '¡BOMBA!';
+                    color = '#f80';
+                }
+                
+                // Agregar texto flotante
+                this.demoTexts.push({
+                    text: text,
+                    x: pu.x,
+                    y: pu.y,
+                    color: color,
+                    life: 2,
+                    vy: -50
+                });
+                
+                this.demoPowerUps.splice(i, 1);
+            }
+        }
+        
+        // Actualizar textos flotantes
+        this.demoTexts.forEach(t => {
+            t.y += t.vy * dt;
+            t.life -= dt;
+        });
+        this.demoTexts = this.demoTexts.filter(t => t.life > 0);
+        
+        // Reiniciar demo después de evolución máxima
+        if (this.demoPlayer.evolutionLevel >= CONFIG.MAX_EVOLUTION) {
+            // Esperar 3 segundos mostrando la nave completa
+            this.demoPowerUpTimer = -10; // Pausar spawn de powerups
+            if (this.demoTime > 30) { // Después de ~30 segundos reiniciar
+                this.startDemo();
+                return;
+            }
+        }
+        
+        // Actualizar balas
+        this.demoBullets.forEach(b => b.update(dt));
+        this.demoBullets = this.demoBullets.filter(b => !b.isOffScreen());
+        
+        // Actualizar enemigos
+        const dummyGame = { enemyBullets: [] };
+        this.demoEnemies.forEach(e => e.update(dt, dummyGame));
+        this.demoEnemies = this.demoEnemies.filter(e => !e.isOffScreen());
+        
+        // Actualizar partículas
+        this.demoParticles.forEach(p => p.update(dt));
+        this.demoParticles = this.demoParticles.filter(p => !p.isDead());
+        
+        // Colisiones balas-enemigos
+        this.demoBullets.forEach((bullet, bi) => {
+            this.demoEnemies.forEach((enemy, ei) => {
+                if (bullet && enemy) {
+                    const bb = bullet.getBounds();
+                    const eb = enemy.getBounds();
+                    if (bb.x < eb.x + eb.width && bb.x + bb.width > eb.x &&
+                        bb.y < eb.y + eb.height && bb.y + bb.height > eb.y) {
+                        this.demoBullets[bi] = null;
+                        enemy.health--;
+                        for (let i = 0; i < 5; i++) {
+                            this.demoParticles.push(new Particle(bullet.x, bullet.y));
+                        }
+                        if (enemy.health <= 0) {
+                            for (let i = 0; i < 12; i++) {
+                                this.demoParticles.push(new Particle(enemy.x, enemy.y));
+                            }
+                            this.demoEnemies[ei] = null;
+                        }
+                    }
+                }
+            });
+        });
+        this.demoBullets = this.demoBullets.filter(b => b !== null);
+        this.demoEnemies = this.demoEnemies.filter(e => e !== null);
+    }
+
+    drawDemo(ctx) {
+        // Fondo de estrellas
+        this.backgroundStars.forEach(s => s.draw(ctx, 0.3));
+        
+        // Partículas
+        this.demoParticles.forEach(p => p.draw(ctx));
+        
+        // Power ups
+        this.demoPowerUps.forEach(pu => pu.draw(ctx));
+        
+        // Balas
+        this.demoBullets.forEach(b => b.draw(ctx));
+        
+        // Enemigos
+        this.demoEnemies.forEach(e => e.draw(ctx));
+        
+        // Jugador demo
+        if (this.demoPlayer) {
+            this.demoPlayer.draw(ctx);
+        }
+        
+        // Textos flotantes de power ups
+        this.demoTexts.forEach(t => {
+            ctx.save();
+            ctx.globalAlpha = Math.min(1, t.life);
+            ctx.fillStyle = t.color;
+            ctx.font = 'bold 18px Courier New';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = t.color;
+            ctx.shadowBlur = 10;
+            ctx.fillText(t.text, t.x, t.y);
+            ctx.restore();
+        });
+        
+        // Overlay con información
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillRect(0, 0, CONFIG.WIDTH, 70);
+        ctx.fillRect(0, CONFIG.HEIGHT - 50, CONFIG.WIDTH, 50);
+        
+        // Título
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 15;
+        ctx.font = 'bold 28px Courier New';
+        ctx.fillText('GALLEGHER STARSHIP', CONFIG.WIDTH / 2, 35);
+        ctx.shadowBlur = 0;
+        
+        ctx.font = '12px Courier New';
+        ctx.fillStyle = '#ff0';
+        ctx.fillText('--- DEMO ---', CONFIG.WIDTH / 2, 55);
+        
+        // Mostrar nivel de evolución y stats
+        ctx.fillStyle = '#fff';
+        ctx.font = '14px Courier New';
+        const cannons = this.demoPlayer ? this.demoPlayer.countCannonsPerSide() : { left: 0, right: 0 };
+        const missiles = this.demoPlayer ? this.demoPlayer.missiles : 0;
+        const bombs = this.demoPlayer ? this.demoPlayer.bombs : 0;
+        ctx.fillText(`LV.${this.demoPlayer ? this.demoPlayer.evolutionLevel : 1} | ${cannons.left}L/${cannons.right}R | M:${missiles} | B:${bombs}`, CONFIG.WIDTH / 2, CONFIG.HEIGHT - 30);
+        
+        // Instrucción para salir
+        const blink = Math.sin(Date.now() / 400) > 0;
+        if (blink) {
+            ctx.fillStyle = '#0f0';
+            ctx.font = '16px Courier New';
+            ctx.fillText('TOCA O PRESIONA PARA JUGAR', CONFIG.WIDTH / 2, CONFIG.HEIGHT - 10);
+        }
+    }
+
     startGame() {
         this.audio.init();
+        this.menuIdleTimer = 0;
         this.state = GameState.PLAYING;
         this.score = 0;
         this.gameTime = 0;
@@ -2162,8 +2446,35 @@ class Game {
         
         if (this.state === GameState.MENU) {
             this.backgroundStars.forEach(s => s.update(dt, 0.5));
-            // No detener música en menú si viene de game over o victory
+            
+            // Timer para modo demo
+            this.menuIdleTimer += dt;
+            
+            // Si hay cualquier input, resetear timer
+            if (this.input.isStartPressed() || this.input.getMovement().dx !== 0 || this.input.getMovement().dy !== 0) {
+                this.menuIdleTimer = 0;
+            }
+            
+            // Iniciar demo después de 10 segundos
+            if (this.menuIdleTimer >= this.demoModeDelay) {
+                this.startDemo();
+                return;
+            }
+            
             if (this.input.isStartPressed() && !this.startDebounce) this.startGame();
+            return;
+        }
+        
+        if (this.state === GameState.DEMO) {
+            this.updateDemo(dt);
+            
+            // Salir del demo con cualquier input
+            if (this.input.isStartPressed() || this.input.touchStartPressed) {
+                this.state = GameState.MENU;
+                this.menuIdleTimer = 0;
+                this.startDebounce = true;
+                setTimeout(() => this.startDebounce = false, 300);
+            }
             return;
         }
         
@@ -2434,6 +2745,7 @@ class Game {
         ctx.fillRect(0, 0, CONFIG.WIDTH, CONFIG.HEIGHT);
         
         if (this.state === GameState.MENU) this.drawMenu(ctx);
+        else if (this.state === GameState.DEMO) this.drawDemo(ctx);
         else if (this.state === GameState.PLAYING) this.drawGame(ctx);
         else if (this.state === GameState.INTERSTELLAR) this.drawInterstellar(ctx);
         else if (this.state === GameState.GAME_OVER) { this.drawGame(ctx); this.drawGameOver(ctx); }
@@ -2498,6 +2810,14 @@ class Game {
         ctx.fillStyle = '#666';
         ctx.font = '10px Courier New';
         ctx.fillText('CONSIGUE 7 CAÑONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
+        
+        // Indicador de demo próximo
+        if (this.menuIdleTimer > 5) {
+            const remaining = Math.ceil(this.demoModeDelay - this.menuIdleTimer);
+            ctx.fillStyle = '#555';
+            ctx.font = '10px Courier New';
+            ctx.fillText(`Demo en ${remaining}s...`, CONFIG.WIDTH / 2, 620);
+        }
     }
 
     drawDemoShip(ctx, x, y, level) {

@@ -190,15 +190,15 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-    // Cuando la playlist está cargada (estado CUED = 5)
+    // Cuando la playlist est? cargada (estado CUED = 5)
     if (event.data === YT.PlayerState.CUED && !playlistLoaded) {
         playlistLoaded = true;
         // Activar shuffle
         ytPlayer.setShuffle(true);
     }
     
-    // Cuando un video termina, el loop de playlist debería manejarlo automáticamente
-    // pero si no, forzamos reproducción
+    // Cuando un video termina, el loop de playlist deber?a manejarlo autom?ticamente
+    // pero si no, forzamos reproducci?n
     if (event.data === YT.PlayerState.ENDED) {
         if (currentMusicState !== 'none') {
             ytPlayer.nextVideo();
@@ -210,14 +210,14 @@ function playRandomFromPlaylist() {
     if (!ytPlayerReady || !ytPlayer) return;
     
     try {
-        // Obtener el número total de videos en la playlist
+        // Obtener el n?mero total de videos en la playlist
         const playlist = ytPlayer.getPlaylist();
         if (playlist && playlist.length > 0) {
-            // Saltar a un índice aleatorio
+            // Saltar a un ?ndice aleatorio
             const randomIndex = Math.floor(Math.random() * playlist.length);
             ytPlayer.playVideoAt(randomIndex);
         } else {
-            // Si no tenemos la playlist aún, cargarla y reproducir
+            // Si no tenemos la playlist a?n, cargarla y reproducir
             ytPlayer.loadPlaylist({
                 listType: 'playlist',
                 list: PLAYLIST_ID,
@@ -590,7 +590,7 @@ class SynthAudio {
 }
 
 // ============================================================
-// CLASE: InputHandler - CON CONTROLES TÁCTILES Y GIROSCOPIO MEJORADO
+// CLASE: InputHandler - CON CONTROLES T?CTILES Y GIROSCOPIO MEJORADO
 // ============================================================
 class InputHandler {
     constructor() {
@@ -633,7 +633,7 @@ class InputHandler {
         // Para evitar bomba en el primer toque
         this.isFirstTouch = true;
         
-        // Para entrada de iniciales táctil
+        // Para entrada de iniciales t?ctil
         this.initialsTouchData = null;
         
         window.addEventListener('keydown', (e) => {
@@ -733,12 +733,12 @@ class InputHandler {
             const dy = this.touchCurrentY - this.touchStartY;
             const moveDistance = Math.sqrt(dx * dx + dy * dy);
             
-            // Solo activar bomba con tap rápido si NO es el primer toque
+            // Solo activar bomba con tap r?pido si NO es el primer toque
             if (touchDuration < 200 && moveDistance < 30 && !this.isFirstTouch) {
                 this.touchBombPressed = true;
             }
             
-            // Después del primer toque, ya no es el primero
+            // Despu?s del primer toque, ya no es el primero
             if (this.isFirstTouch) {
                 this.isFirstTouch = false;
             }
@@ -826,8 +826,8 @@ class InputHandler {
             if (calibratedGamma > 90) calibratedGamma -= 180;
             if (calibratedGamma < -90) calibratedGamma += 180;
             
-            // Sensibilidad MUY ALTA para respuesta instantánea
-            const sensitivity = 4; // Más sensible
+            // Sensibilidad MUY ALTA para respuesta instant?nea
+            const sensitivity = 4; // M?s sensible
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
@@ -856,7 +856,7 @@ class InputHandler {
     updateGamepadIndicator(status) {
         const indicator = document.getElementById('gamepadIndicator');
         if (status === 'gyro') {
-            indicator.textContent = '?? Táctil activo';
+            indicator.textContent = '?? T?ctil activo';
             indicator.classList.add('connected');
         } else if (status === 'mobile') {
             indicator.textContent = '?? Toca para jugar';
@@ -907,7 +907,7 @@ class InputHandler {
             const gyroDeadzone = 0.01;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                // Multiplicador muy alto para respuesta instantánea
+                // Multiplicador muy alto para respuesta instant?nea
                 dx = this.tiltX * 3.5;
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
@@ -1051,7 +1051,7 @@ class InputHandler {
             if (gp.buttons[9]?.pressed) currentState = true;
         }
         
-        // NO usar touchStartPressed aquí - se maneja por separado en iniciales
+        // NO usar touchStartPressed aqu? - se maneja por separado en iniciales
         
         const justPressed = currentState && !this.prevConfirmState;
         this.prevConfirmState = currentState;
@@ -1061,7 +1061,7 @@ class InputHandler {
 }
 
 // ============================================================
-// CLASES DE PARTÍCULAS Y EFECTOS
+// CLASES DE PART?CULAS Y EFECTOS
 // ============================================================
 class Particle {
     constructor(x, y, color = '#fff') {
@@ -1553,7 +1553,7 @@ class Player {
         const touchTarget = input.getTouchTarget();
         
         if (touchTarget.active) {
-            // Control táctil con offset para no tapar la nave
+            // Control t?ctil con offset para no tapar la nave
             const targetX = touchTarget.x;
             const targetY = touchTarget.y - 100; // Offset grande para que el dedo no tape la nave
             this.x = targetX;
@@ -1561,10 +1561,10 @@ class Player {
             this.vx = 0;
             this.vy = 0;
         } else if (input.isMobile && input.gyroEnabled && input.isGyroWorking()) {
-            // Giroscopio: movimiento con fricción reducida (mitad de la original)
+            // Giroscopio: movimiento con fricci?n reducida (mitad de la original)
             const move = input.getMovement();
             const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
-            const gyroFriction = 0.94; // Mitad de fricción (original era 0.88)
+            const gyroFriction = 0.94; // Mitad de fricci?n (original era 0.88)
             
             this.vx += move.dx * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
             this.vy += move.dy * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
@@ -1789,7 +1789,7 @@ class Game {
         this.victoryAnimTimer = 0;
         this.wasVictory = false;
         
-        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=???'.split('');
+        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=????'.split('');
         this.initials = ['A', 'A', 'A'];
         this.initialsPosition = 0;
         this.initialsBlinkTimer = 0;
@@ -1799,7 +1799,7 @@ class Game {
         this.initialsTouchStart = null;
         this.initialsTouchLetter = -1;
         
-        // Para input de teclado nativo en móvil
+        // Para input de teclado nativo en m?vil
         this.mobileInputElement = null;
         this.pendingInitialsConfirm = false;
         
@@ -1811,15 +1811,19 @@ class Game {
         this.demoModeDelay = 10; // segundos antes de iniciar demo
         this.demoPlayer = null;
         this.demoBullets = [];
+        this.demoMissiles = [];
         this.demoEnemies = [];
         this.demoParticles = [];
         this.demoPowerUps = [];
+        this.demoBombWaves = [];
         this.demoTexts = []; // Textos flotantes explicativos
         this.demoTime = 0;
         this.demoSpawnTimer = 0;
         this.demoPowerUpTimer = 0;
         this.demoTargetX = CONFIG.WIDTH / 2;
         this.demoTargetY = CONFIG.HEIGHT - 100;
+        this.demoPendingAction = null; // Acci?n pendiente despu?s de recoger power up
+        this.demoPendingTimer = 0;
         
         this.setupInitialsTouch();
         this.setupMobileKeyboardInput();
@@ -1829,7 +1833,7 @@ class Game {
     }
 
     setupMobileKeyboardInput() {
-        // Crear input oculto para teclado nativo en móvil
+        // Crear input oculto para teclado nativo en m?vil
         const input = document.createElement('input');
         input.type = 'text';
         input.id = 'mobileInitialsInput';
@@ -1886,7 +1890,7 @@ class Game {
             this.mobileInputElement.style.display = 'block';
             this.mobileInputElement.style.pointerEvents = 'auto';
             this.pendingInitialsConfirm = true;
-            // Pequeño delay para asegurar que el elemento es visible
+            // Peque?o delay para asegurar que el elemento es visible
             setTimeout(() => {
                 this.mobileInputElement.focus();
                 this.mobileInputElement.select();
@@ -1938,7 +1942,7 @@ class Game {
             const touch = e.touches[0];
             const coords = getCanvasCoords(touch);
             
-            // Detectar si tocó el botón de confirmar (parte inferior - botón verde grande)
+            // Detectar si toc? el bot?n de confirmar (parte inferior - bot?n verde grande)
             if (coords.y > 530 && coords.y < 610 && coords.x > CONFIG.WIDTH / 2 - 110 && coords.x < CONFIG.WIDTH / 2 + 110) {
                 e.preventDefault();
                 setTimeout(() => {
@@ -1947,14 +1951,14 @@ class Game {
                 return;
             }
             
-            // Detectar si tocó el área del teclado (botón para abrir teclado)
+            // Detectar si toc? el ?rea del teclado (bot?n para abrir teclado)
             if (coords.y > 460 && coords.y < 520 && coords.x > CONFIG.WIDTH / 2 - 100 && coords.x < CONFIG.WIDTH / 2 + 100) {
                 e.preventDefault();
                 self.openMobileKeyboard();
                 return;
             }
             
-            // Detectar qué letra se tocó (área central de las letras)
+            // Detectar qu? letra se toc? (?rea central de las letras)
             const letterSpacing = 60;
             const startX = CONFIG.WIDTH / 2 - letterSpacing;
             const letterY = 360;
@@ -2039,51 +2043,138 @@ class Game {
         this.demoPlayer = new Player(CONFIG.WIDTH / 2, CONFIG.HEIGHT - 100);
         this.demoPlayer.lives = 999; // Invencible en demo
         this.demoBullets = [];
+        this.demoMissiles = [];
         this.demoEnemies = [];
         this.demoParticles = [];
         this.demoPowerUps = [];
+        this.demoBombWaves = [];
         this.demoTexts = [];
         this.demoTime = 0;
         this.demoSpawnTimer = 0;
         this.demoPowerUpTimer = 0;
         this.demoTargetX = CONFIG.WIDTH / 2;
         this.demoTargetY = CONFIG.HEIGHT - 100;
+        this.demoPendingAction = null;
+        this.demoPendingTimer = 0;
     }
 
     updateDemo(dt) {
+        // Verificar que demoPlayer existe
+        if (!this.demoPlayer) {
+            this.startDemo();
+            return;
+        }
+        
         this.demoTime += dt;
         this.backgroundStars.forEach(s => s.update(dt, 0.8));
         
-        // Movimiento de la nave demo - buscar power ups o patrón serpenteante
+        // Limitar cantidad de objetos para evitar problemas de memoria
+        if (this.demoBullets.length > 100) {
+            this.demoBullets = this.demoBullets.slice(-50);
+        }
+        if (this.demoParticles.length > 200) {
+            this.demoParticles = this.demoParticles.slice(-100);
+        }
+        if (this.demoEnemies.length > 20) {
+            this.demoEnemies = this.demoEnemies.slice(-10);
+        }
+        
+        // Procesar acciones pendientes (demostrar uso de power ups)
+        if (this.demoPendingAction) {
+            this.demoPendingTimer -= dt;
+            if (this.demoPendingTimer <= 0) {
+                try {
+                    if (this.demoPendingAction === 'bomb' && this.demoPlayer.bombs > 0) {
+                        this.demoPlayer.bombs--;
+                        this.demoBombWaves.push(new BombWave(this.demoPlayer.x, this.demoPlayer.y));
+                        this.audio.playBomb();
+                        
+                        this.demoEnemies.forEach(enemy => {
+                            if (enemy) {
+                                for (let i = 0; i < 15; i++) {
+                                    this.demoParticles.push(new Particle(enemy.x, enemy.y));
+                                }
+                            }
+                        });
+                        this.demoEnemies = [];
+                        
+                        this.demoTexts.push({
+                            text: '?DESTRUYE TODO EN PANTALLA!',
+                            x: CONFIG.WIDTH / 2,
+                            y: CONFIG.HEIGHT / 2,
+                            color: '#f80',
+                            life: 2.5,
+                            vy: -30
+                        });
+                        
+                    } else if (this.demoPendingAction === 'missile' && this.demoPlayer.missiles > 0) {
+                        const missileCount = Math.min(this.demoPlayer.missiles, 3);
+                        for (let i = 0; i < missileCount; i++) {
+                            const offsetX = (i - (missileCount - 1) / 2) * 30;
+                            this.demoMissiles.push(new HomingMissile(
+                                this.demoPlayer.x + offsetX,
+                                this.demoPlayer.y - this.demoPlayer.height / 2
+                            ));
+                            this.demoPlayer.missiles--;
+                        }
+                        this.audio.playMissile();
+                        
+                        this.demoTexts.push({
+                            text: '?PERSIGUEN ENEMIGOS!',
+                            x: CONFIG.WIDTH / 2,
+                            y: this.demoPlayer.y - 80,
+                            color: '#0af',
+                            life: 2.5,
+                            vy: -40
+                        });
+                        
+                    } else if (this.demoPendingAction === 'cannon') {
+                        this.demoTexts.push({
+                            text: '?M?S POTENCIA DE FUEGO!',
+                            x: CONFIG.WIDTH / 2,
+                            y: this.demoPlayer.y - 60,
+                            color: '#0f0',
+                            life: 2.5,
+                            vy: -40
+                        });
+                    }
+                } catch (e) {
+                    // Ignorar errores en acciones pendientes
+                }
+                
+                this.demoPendingAction = null;
+            }
+        }
+        
+        // Movimiento de la nave demo - buscar power ups o patr?n serpenteante
         let foundPowerUp = false;
-        for (const pu of this.demoPowerUps) {
-            // Si hay un power up cerca, ir hacia él
-            if (pu.y > 100 && pu.y < CONFIG.HEIGHT - 150) {
+        for (let i = 0; i < this.demoPowerUps.length; i++) {
+            const pu = this.demoPowerUps[i];
+            if (pu && pu.y > 100 && pu.y < CONFIG.HEIGHT - 150) {
                 this.demoTargetX = pu.x;
-                this.demoTargetY = pu.y + 60; // Posicionarse debajo para recogerlo
+                this.demoTargetY = pu.y + 60;
                 foundPowerUp = true;
                 break;
             }
         }
         
         if (!foundPowerUp) {
-            // Patrón serpenteante normal
             this.demoTargetX = CONFIG.WIDTH / 2 + Math.sin(this.demoTime * 1.5) * 150;
             this.demoTargetY = CONFIG.HEIGHT - 120 + Math.sin(this.demoTime * 2) * 40;
         }
         
         // Mover nave hacia objetivo
-        const dx = this.demoTargetX - this.demoPlayer.x;
-        const dy = this.demoTargetY - this.demoPlayer.y;
-        this.demoPlayer.x += dx * dt * 3;
-        this.demoPlayer.y += dy * dt * 3;
+        const dxMove = this.demoTargetX - this.demoPlayer.x;
+        const dyMove = this.demoTargetY - this.demoPlayer.y;
+        this.demoPlayer.x += dxMove * dt * 3;
+        this.demoPlayer.y += dyMove * dt * 3;
         
-        // Mantener dentro de límites
+        // Mantener dentro de l?mites
         const halfWidth = this.demoPlayer.getFullWidth() / 2;
         this.demoPlayer.x = Math.max(halfWidth, Math.min(CONFIG.WIDTH - halfWidth, this.demoPlayer.x));
         this.demoPlayer.y = Math.max(50, Math.min(CONFIG.HEIGHT - 50, this.demoPlayer.y));
         
-        // Disparar automáticamente
+        // Disparar autom?ticamente
         if (this.demoPlayer.fireTimer > 0) this.demoPlayer.fireTimer -= dt * 1000;
         if (this.demoPlayer.fireTimer <= 0) {
             this.demoPlayer.fireTimer = CONFIG.FIRE_RATE;
@@ -2095,7 +2186,6 @@ class Game {
                     p.vx, p.vy
                 ));
             });
-            // Disparar desde módulos
             this.demoPlayer.modules.forEach(mod => {
                 if (mod.hasCannon) {
                     this.demoBullets.push(new Bullet(
@@ -2107,9 +2197,9 @@ class Game {
             });
         }
         
-        // Spawn enemigos
+        // Spawn enemigos (menos frecuente para evitar acumulaci?n)
         this.demoSpawnTimer += dt * 1000;
-        if (this.demoSpawnTimer >= 800) {
+        if (this.demoSpawnTimer >= 1200 && this.demoEnemies.length < 10) {
             this.demoSpawnTimer = 0;
             const x = Math.random() * (CONFIG.WIDTH - 60) + 30;
             const types = ['kamikaze', 'wave', 'kamikaze'];
@@ -2117,51 +2207,65 @@ class Game {
             this.demoEnemies.push(new Enemy(x, -30, type));
         }
         
-        // Spawn power ups periódicamente
+        // Spawn power ups peri?dicamente
         this.demoPowerUpTimer += dt;
-        if (this.demoPowerUpTimer >= 2.5) {
+        if (this.demoPowerUpTimer >= 4 && !this.demoPendingAction && this.demoPowerUps.length < 3) {
             this.demoPowerUpTimer = 0;
             const types = ['power', 'missile', 'bomb'];
             const type = types[Math.floor(Math.random() * types.length)];
-            // Spawn cerca de donde va la nave para que los recoja
             const spawnX = this.demoTargetX + (Math.random() - 0.5) * 100;
             this.demoPowerUps.push(new PowerUp(Math.max(30, Math.min(CONFIG.WIDTH - 30, spawnX)), -20, type));
         }
         
         // Actualizar power ups
-        this.demoPowerUps.forEach(p => p.update(dt));
-        this.demoPowerUps = this.demoPowerUps.filter(p => !p.isOffScreen());
+        for (let i = this.demoPowerUps.length - 1; i >= 0; i--) {
+            const p = this.demoPowerUps[i];
+            if (p) {
+                p.update(dt);
+                if (p.isOffScreen()) {
+                    this.demoPowerUps.splice(i, 1);
+                }
+            }
+        }
         
         // Colisiones nave-powerups
         for (let i = this.demoPowerUps.length - 1; i >= 0; i--) {
             const pu = this.demoPowerUps[i];
+            if (!pu) continue;
+            
             const dx = pu.x - this.demoPlayer.x;
             const dy = pu.y - this.demoPlayer.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
             
             if (dist < 40) {
-                // Recoger power up
                 let text = '';
                 let color = '#fff';
                 
                 if (pu.type === 'power') {
                     this.demoPlayer.evolve();
-                    text = '¡CAÑÓN EXTRA!';
+                    text = '?CA??N EXTRA!';
                     color = '#0f0';
-                    for (let j = 0; j < 15; j++) {
+                    for (let j = 0; j < 10; j++) {
                         this.demoParticles.push(new Particle(this.demoPlayer.x, this.demoPlayer.y));
                     }
+                    this.demoPendingAction = 'cannon';
+                    this.demoPendingTimer = 0.8;
+                    
                 } else if (pu.type === 'missile') {
                     this.demoPlayer.addMissiles(3);
-                    text = '¡MISILES RASTREADORES!';
+                    text = '?MISILES RASTREADORES!';
                     color = '#0af';
+                    this.demoPendingAction = 'missile';
+                    this.demoPendingTimer = 0.5;
+                    
                 } else if (pu.type === 'bomb') {
                     this.demoPlayer.addBombs(1);
-                    text = '¡BOMBA!';
+                    text = '?BOMBA!';
                     color = '#f80';
+                    this.demoPendingAction = 'bomb';
+                    this.demoPendingTimer = 0.8;
                 }
                 
-                // Agregar texto flotante
                 this.demoTexts.push({
                     text: text,
                     x: pu.x,
@@ -2176,67 +2280,165 @@ class Game {
         }
         
         // Actualizar textos flotantes
-        this.demoTexts.forEach(t => {
-            t.y += t.vy * dt;
-            t.life -= dt;
-        });
-        this.demoTexts = this.demoTexts.filter(t => t.life > 0);
+        for (let i = this.demoTexts.length - 1; i >= 0; i--) {
+            const t = this.demoTexts[i];
+            if (t) {
+                t.y += t.vy * dt;
+                t.life -= dt;
+                if (t.life <= 0) {
+                    this.demoTexts.splice(i, 1);
+                }
+            }
+        }
         
-        // Reiniciar demo después de evolución máxima
-        if (this.demoPlayer.evolutionLevel >= CONFIG.MAX_EVOLUTION) {
-            // Esperar 3 segundos mostrando la nave completa
-            this.demoPowerUpTimer = -10; // Pausar spawn de powerups
-            if (this.demoTime > 30) { // Después de ~30 segundos reiniciar
+        // Actualizar bombWaves del demo
+        for (let i = this.demoBombWaves.length - 1; i >= 0; i--) {
+            const w = this.demoBombWaves[i];
+            if (w) {
+                w.update(dt);
+                if (w.isDead()) {
+                    this.demoBombWaves.splice(i, 1);
+                }
+            }
+        }
+        
+        // Reiniciar demo despu?s de evoluci?n m?xima o tiempo excesivo
+        if (this.demoPlayer.evolutionLevel >= CONFIG.MAX_EVOLUTION || this.demoTime > 60) {
+            this.demoPowerUpTimer = -10;
+            if (this.demoTime > 35) {
                 this.startDemo();
                 return;
             }
         }
         
         // Actualizar balas
-        this.demoBullets.forEach(b => b.update(dt));
-        this.demoBullets = this.demoBullets.filter(b => !b.isOffScreen());
+        for (let i = this.demoBullets.length - 1; i >= 0; i--) {
+            const b = this.demoBullets[i];
+            if (b) {
+                b.update(dt);
+                if (b.isOffScreen()) {
+                    this.demoBullets.splice(i, 1);
+                }
+            } else {
+                this.demoBullets.splice(i, 1);
+            }
+        }
+        
+        // Actualizar misiles del demo
+        const validEnemies = this.demoEnemies.filter(e => e !== null);
+        for (let i = this.demoMissiles.length - 1; i >= 0; i--) {
+            const m = this.demoMissiles[i];
+            if (m) {
+                m.update(dt, validEnemies);
+                if (m.isOffScreen()) {
+                    this.demoMissiles.splice(i, 1);
+                }
+            } else {
+                this.demoMissiles.splice(i, 1);
+            }
+        }
         
         // Actualizar enemigos
         const dummyGame = { enemyBullets: [] };
-        this.demoEnemies.forEach(e => e.update(dt, dummyGame));
-        this.demoEnemies = this.demoEnemies.filter(e => !e.isOffScreen());
-        
-        // Actualizar partículas
-        this.demoParticles.forEach(p => p.update(dt));
-        this.demoParticles = this.demoParticles.filter(p => !p.isDead());
-        
-        // Colisiones balas-enemigos
-        this.demoBullets.forEach((bullet, bi) => {
-            this.demoEnemies.forEach((enemy, ei) => {
-                if (bullet && enemy) {
-                    const bb = bullet.getBounds();
-                    const eb = enemy.getBounds();
-                    if (bb.x < eb.x + eb.width && bb.x + bb.width > eb.x &&
-                        bb.y < eb.y + eb.height && bb.y + bb.height > eb.y) {
-                        this.demoBullets[bi] = null;
-                        enemy.health--;
-                        for (let i = 0; i < 5; i++) {
-                            this.demoParticles.push(new Particle(bullet.x, bullet.y));
-                        }
-                        if (enemy.health <= 0) {
-                            for (let i = 0; i < 12; i++) {
-                                this.demoParticles.push(new Particle(enemy.x, enemy.y));
-                            }
-                            this.demoEnemies[ei] = null;
-                        }
-                    }
+        for (let i = this.demoEnemies.length - 1; i >= 0; i--) {
+            const e = this.demoEnemies[i];
+            if (e) {
+                e.update(dt, dummyGame);
+                if (e.isOffScreen()) {
+                    this.demoEnemies.splice(i, 1);
                 }
-            });
-        });
-        this.demoBullets = this.demoBullets.filter(b => b !== null);
-        this.demoEnemies = this.demoEnemies.filter(e => e !== null);
+            } else {
+                this.demoEnemies.splice(i, 1);
+            }
+        }
+        
+        // Actualizar part?culas
+        for (let i = this.demoParticles.length - 1; i >= 0; i--) {
+            const p = this.demoParticles[i];
+            if (p) {
+                p.update(dt);
+                if (p.isDead()) {
+                    this.demoParticles.splice(i, 1);
+                }
+            } else {
+                this.demoParticles.splice(i, 1);
+            }
+        }
+        
+        // Colisiones balas-enemigos (simplificado)
+        for (let bi = this.demoBullets.length - 1; bi >= 0; bi--) {
+            const bullet = this.demoBullets[bi];
+            if (!bullet) continue;
+            
+            for (let ei = this.demoEnemies.length - 1; ei >= 0; ei--) {
+                const enemy = this.demoEnemies[ei];
+                if (!enemy) continue;
+                
+                const bb = bullet.getBounds();
+                const eb = enemy.getBounds();
+                if (bb.x < eb.x + eb.width && bb.x + bb.width > eb.x &&
+                    bb.y < eb.y + eb.height && bb.y + bb.height > eb.y) {
+                    
+                    this.demoBullets.splice(bi, 1);
+                    enemy.health--;
+                    
+                    for (let i = 0; i < 3; i++) {
+                        this.demoParticles.push(new Particle(bullet.x, bullet.y));
+                    }
+                    
+                    if (enemy.health <= 0) {
+                        for (let i = 0; i < 8; i++) {
+                            this.demoParticles.push(new Particle(enemy.x, enemy.y));
+                        }
+                        this.demoEnemies.splice(ei, 1);
+                    }
+                    break;
+                }
+            }
+        }
+        
+        // Colisiones misiles-enemigos (simplificado)
+        for (let mi = this.demoMissiles.length - 1; mi >= 0; mi--) {
+            const missile = this.demoMissiles[mi];
+            if (!missile) continue;
+            
+            for (let ei = this.demoEnemies.length - 1; ei >= 0; ei--) {
+                const enemy = this.demoEnemies[ei];
+                if (!enemy) continue;
+                
+                const mb = missile.getBounds();
+                const eb = enemy.getBounds();
+                if (mb.x < eb.x + eb.width && mb.x + mb.width > eb.x &&
+                    mb.y < eb.y + eb.height && mb.y + mb.height > eb.y) {
+                    
+                    this.demoMissiles.splice(mi, 1);
+                    enemy.health -= 2;
+                    
+                    for (let i = 0; i < 6; i++) {
+                        this.demoParticles.push(new Particle(missile.x, missile.y));
+                    }
+                    this.audio.playExplosion();
+                    
+                    if (enemy.health <= 0) {
+                        for (let i = 0; i < 10; i++) {
+                            this.demoParticles.push(new Particle(enemy.x, enemy.y));
+                        }
+                        this.demoEnemies.splice(ei, 1);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     drawDemo(ctx) {
         // Fondo de estrellas
         this.backgroundStars.forEach(s => s.draw(ctx, 0.3));
         
-        // Partículas
+        // BombWaves
+        this.demoBombWaves.forEach(w => w.draw(ctx));
+        
+        // Part?culas
         this.demoParticles.forEach(p => p.draw(ctx));
         
         // Power ups
@@ -2244,6 +2446,9 @@ class Game {
         
         // Balas
         this.demoBullets.forEach(b => b.draw(ctx));
+        
+        // Misiles
+        this.demoMissiles.forEach(m => m.draw(ctx));
         
         // Enemigos
         this.demoEnemies.forEach(e => e.draw(ctx));
@@ -2266,12 +2471,12 @@ class Game {
             ctx.restore();
         });
         
-        // Overlay con información
+        // Overlay con informaci?n
         ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
         ctx.fillRect(0, 0, CONFIG.WIDTH, 70);
         ctx.fillRect(0, CONFIG.HEIGHT - 50, CONFIG.WIDTH, 50);
         
-        // Título
+        // T?tulo
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.shadowColor = '#fff';
@@ -2282,9 +2487,9 @@ class Game {
         
         ctx.font = '12px Courier New';
         ctx.fillStyle = '#ff0';
-        ctx.fillText('--- DEMO ---', CONFIG.WIDTH / 2, 55);
+        ctx.fillText('?€?€?€ DEMO ?€?€?€', CONFIG.WIDTH / 2, 55);
         
-        // Mostrar nivel de evolución y stats
+        // Mostrar nivel de evoluci?n y stats
         ctx.fillStyle = '#fff';
         ctx.font = '14px Courier New';
         const cannons = this.demoPlayer ? this.demoPlayer.countCannonsPerSide() : { left: 0, right: 0 };
@@ -2292,7 +2497,7 @@ class Game {
         const bombs = this.demoPlayer ? this.demoPlayer.bombs : 0;
         ctx.fillText(`LV.${this.demoPlayer ? this.demoPlayer.evolutionLevel : 1} | ${cannons.left}L/${cannons.right}R | M:${missiles} | B:${bombs}`, CONFIG.WIDTH / 2, CONFIG.HEIGHT - 30);
         
-        // Instrucción para salir
+        // Instrucci?n para salir
         const blink = Math.sin(Date.now() / 400) > 0;
         if (blink) {
             ctx.fillStyle = '#0f0';
@@ -2330,7 +2535,7 @@ class Game {
         // Resetear el primer toque para la nueva partida
         this.input.isFirstTouch = true;
         
-        // Reproducir música de gameplay
+        // Reproducir m?sica de gameplay
         playGameplayMusic();
     }
 
@@ -2418,7 +2623,7 @@ class Game {
     }
 
     transitionToScoreEntry() {
-        // Resetear TODOS los estados de touch para evitar confirmación accidental
+        // Resetear TODOS los estados de touch para evitar confirmaci?n accidental
         this.input.touchStartPressed = false;
         this.input.touchBombPressed = false;
         this.input.touchActive = false;
@@ -2432,7 +2637,7 @@ class Game {
             this.initialsPosition = 0;
             this.scoreRank = this.getScoreRank(this.score);
             this.startDebounce = true;
-            // Debounce MUY largo para evitar confirmación accidental en móvil
+            // Debounce MUY largo para evitar confirmaci?n accidental en m?vil
             setTimeout(() => this.startDebounce = false, 1500);
         } else {
             this.state = GameState.SHOW_SCORES;
@@ -2455,7 +2660,7 @@ class Game {
                 this.menuIdleTimer = 0;
             }
             
-            // Iniciar demo después de 10 segundos
+            // Iniciar demo despu?s de 10 segundos
             if (this.menuIdleTimer >= this.demoModeDelay) {
                 this.startDemo();
                 return;
@@ -2479,10 +2684,10 @@ class Game {
         }
         
         if (this.state === GameState.SHOW_SCORES) {
-            // La música sigue sonando en la pantalla de scores
+            // La m?sica sigue sonando en la pantalla de scores
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.state = GameState.MENU;
-                stopAllMusic(); // Detener música al volver al menú
+                stopAllMusic(); // Detener m?sica al volver al men?
                 this.startDebounce = true;
                 setTimeout(() => this.startDebounce = false, 500);
             }
@@ -2658,11 +2863,11 @@ class Game {
     }
 
     updateInitialsInput() {
-        // Solo procesar input de teclado/gamepad si no estamos usando el teclado móvil
+        // Solo procesar input de teclado/gamepad si no estamos usando el teclado m?vil
         if (this.pendingInitialsConfirm) return;
         
-        // En móvil, no procesar input de teclado/gamepad para confirmar
-        // La confirmación se hace tocando el botón en pantalla
+        // En m?vil, no procesar input de teclado/gamepad para confirmar
+        // La confirmaci?n se hace tocando el bot?n en pantalla
         if (this.input.isMobile) return;
         
         if (this.input.isUpPressed()) {
@@ -2729,7 +2934,7 @@ class Game {
         this.audio.playExplosion();
         this.screenShake(20, 0.6);
         this.victoryAnimTimer = 0;
-        // Reproducir música aleatoria para game over
+        // Reproducir m?sica aleatoria para game over
         playGameOverMusic();
     }
 
@@ -2788,10 +2993,10 @@ class Game {
         if (this.input.isMobile) {
             ctx.fillText('?? ARRASTRA = MOVER (nave arriba del dedo)', CONFIG.WIDTH / 2, 425);
             ctx.fillText('?? INCLINA = MOVER DIRECTO', CONFIG.WIDTH / 2, 442);
-            ctx.fillText('?? DISPARO AUTOMÁTICO', CONFIG.WIDTH / 2, 459);
-            ctx.fillText('?? TAP RÁPIDO = BOMBA', CONFIG.WIDTH / 2, 476);
+            ctx.fillText('?? DISPARO AUTOM?TICO', CONFIG.WIDTH / 2, 459);
+            ctx.fillText('?? TAP R?PIDO = BOMBA', CONFIG.WIDTH / 2, 476);
         } else {
-            ctx.fillText('? ? ? ?  MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('???????? MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('A  DISPARAR', CONFIG.WIDTH / 2, 447);
             ctx.fillText('S  BOMBA', CONFIG.WIDTH / 2, 464);
             ctx.fillText('D  INICIAR / REINICIAR', CONFIG.WIDTH / 2, 481);
@@ -2799,19 +3004,19 @@ class Game {
         
         ctx.fillStyle = '#fff';
         ctx.font = '12px Courier New';
-        ctx.fillText('--- HIGH SCORES ---', CONFIG.WIDTH / 2, 515);
+        ctx.fillText('?€?€?€ HIGH SCORES ?€?€?€', CONFIG.WIDTH / 2, 515);
         ctx.font = '11px Courier New';
         const topScores = this.highScores.slice(0, 3);
         topScores.forEach((entry, i) => {
-            const victoryMark = entry.victory ? '?' : ' ';
+            const victoryMark = entry.victory ? '?? : ' ';
             ctx.fillText(`${i + 1}. ${entry.initials} ${victoryMark} ${entry.score.toString().padStart(6, ' ')}`, CONFIG.WIDTH / 2, 535 + i * 16);
         });
         
         ctx.fillStyle = '#666';
         ctx.font = '10px Courier New';
-        ctx.fillText('CONSIGUE 7 CAÑONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
+        ctx.fillText('CONSIGUE 7 CA?ONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
         
-        // Indicador de demo próximo
+        // Indicador de demo pr?ximo
         if (this.menuIdleTimer > 5) {
             const remaining = Math.ceil(this.demoModeDelay - this.menuIdleTimer);
             ctx.fillStyle = '#555';
@@ -2873,7 +3078,7 @@ class Game {
         ctx.textAlign = 'center';
         ctx.shadowColor = '#ff0';
         ctx.shadowBlur = 10;
-        ctx.fillText('¡FASE FINAL!', CONFIG.WIDTH / 2, 80);
+        ctx.fillText('?FASE FINAL!', CONFIG.WIDTH / 2, 80);
         ctx.font = '14px Courier New';
         ctx.fillText(`${Math.max(0, this.finalPhasePointsRemaining)} PUNTOS`, CONFIG.WIDTH / 2, 100);
         ctx.restore();
@@ -2933,7 +3138,7 @@ class Game {
         ctx.fillText(`SCORE: ${this.score}`, 15, 25);
         ctx.textAlign = 'right';
         let livesText = '';
-        for (let i = 0; i < this.player.lives; i++) livesText += '? ';
+        for (let i = 0; i < this.player.lives; i++) livesText += '??';
         ctx.fillText(livesText, CONFIG.WIDTH - 15, 25);
         ctx.textAlign = 'left';
         ctx.font = '12px Courier New';
@@ -2943,7 +3148,7 @@ class Game {
         if (this.player.missiles > 0) ctx.fillText(`M:${this.player.missiles}`, 140, 48);
         ctx.textAlign = 'right';
         let bombText = '';
-        for (let i = 0; i < this.player.bombs; i++) bombText += '? ';
+        for (let i = 0; i < this.player.bombs; i++) bombText += '??';
         if (this.player.bombs === 0) bombText = '---';
         ctx.fillText(bombText, CONFIG.WIDTH - 15, 48);
     }
@@ -2966,7 +3171,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '20px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('? NEW HIGH SCORE ?', CONFIG.WIDTH / 2, 410);
+            if (blink) ctx.fillText('??NEW HIGH SCORE ??, CONFIG.WIDTH / 2, 410);
         }
         ctx.fillStyle = '#fff';
         ctx.font = '16px Courier New';
@@ -2992,7 +3197,7 @@ class Game {
         ctx.translate(CONFIG.WIDTH / 2, 130);
         ctx.scale(scale, scale);
         ctx.font = 'bold 42px Courier New';
-        ctx.fillText('¡VICTORIA!', 0, 0);
+        ctx.fillText('?VICTORIA!', 0, 0);
         ctx.restore();
         ctx.font = 'bold 24px Courier New';
         ctx.fillText('VIAJE COMPLETADO', CONFIG.WIDTH / 2, 180);
@@ -3005,7 +3210,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '22px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('? NUEVO RÉCORD ?', CONFIG.WIDTH / 2, 380);
+            if (blink) ctx.fillText('??NUEVO R?CORD ??, CONFIG.WIDTH / 2, 380);
         }
         if (this.player) {
             ctx.save();
@@ -3030,7 +3235,7 @@ class Game {
         ctx.shadowBlur = 15;
         if (this.wasVictory) {
             ctx.font = 'bold 32px Courier New';
-            ctx.fillText('¡VICTORIA!', CONFIG.WIDTH / 2, 80);
+            ctx.fillText('?VICTORIA!', CONFIG.WIDTH / 2, 80);
         }
         ctx.font = 'bold 28px Courier New';
         ctx.fillText('NEW HIGH SCORE!', CONFIG.WIDTH / 2, 140);
@@ -3092,27 +3297,27 @@ class Game {
         ctx.font = '12px Courier New';
         if (this.input.isMobile) {
             ctx.fillText('?? DESLIZA ARRIBA/ABAJO EN CADA LETRA', CONFIG.WIDTH / 2, 420);
-            ctx.fillText('O TOCA EL BOTÓN PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
+            ctx.fillText('O TOCA EL BOT?N PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
             
-            // Botón para abrir teclado
+            // Bot?n para abrir teclado
             const btnY = 485;
             ctx.fillStyle = '#fff';
             ctx.strokeStyle = '#fff';
             ctx.lineWidth = 2;
             ctx.strokeRect(CONFIG.WIDTH / 2 - 90, btnY - 18, 180, 36);
             ctx.font = '14px Courier New';
-            ctx.fillText('?? ESCRIBIR CON TECLADO', CONFIG.WIDTH / 2, btnY + 5);
+            ctx.fillText('??? ESCRIBIR CON TECLADO', CONFIG.WIDTH / 2, btnY + 5);
             
-            // Botón de confirmar grande y visible
+            // Bot?n de confirmar grande y visible
             const confirmY = 560;
             const confirmBlink = Math.sin(Date.now() / 400) > 0;
             ctx.fillStyle = confirmBlink ? '#0f0' : '#0a0';
             ctx.fillRect(CONFIG.WIDTH / 2 - 100, confirmY - 22, 200, 44);
             ctx.fillStyle = '#000';
             ctx.font = 'bold 18px Courier New';
-            ctx.fillText('? CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 7);
+            ctx.fillText('??CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 7);
         } else {
-            ctx.fillText('?? CAMBIAR    ?? MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('??? CAMBIAR    ??? MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ENTER CONFIRMAR', CONFIG.WIDTH / 2, 450);
             
             const confirmBlink = Math.sin(Date.now() / 300) > 0;
@@ -3166,7 +3371,7 @@ class Game {
             ctx.fillText(entry.initials, 130, y);
             ctx.fillText(entry.score.toString().padStart(8, ' '), 210, y);
             ctx.textAlign = 'center';
-            if (entry.victory) ctx.fillText('?', 370, y);
+            if (entry.victory) ctx.fillText('??, 370, y);
             else {
                 ctx.fillStyle = isNewScore ? ctx.fillStyle : '#444';
                 ctx.fillText('-', 370, y);
@@ -3188,13 +3393,13 @@ class Game {
 }
 
 // ============================================================
-// RESPONSIVE CANVAS - ADAPTATIVO PARA MÓVILES 1080x1920
+// RESPONSIVE CANVAS - ADAPTATIVO PARA M?VILES 1080x1920
 // ============================================================
 function resizeCanvas() {
     const canvas = document.getElementById('gameCanvas');
     const container = document.querySelector('.game-container');
     
-    // Usar visualViewport si está disponible (más preciso en móviles)
+    // Usar visualViewport si est? disponible (m?s preciso en m?viles)
     const windowWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
     const windowHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
     
@@ -3209,11 +3414,11 @@ function resizeCanvas() {
     let newWidth, newHeight;
     
     if (windowRatio > gameRatio) {
-        // Ventana más ancha que el juego - ajustar por altura
+        // Ventana m?s ancha que el juego - ajustar por altura
         newHeight = availableHeight;
         newWidth = newHeight * gameRatio;
     } else {
-        // Ventana más alta que el juego - ajustar por ancho
+        // Ventana m?s alta que el juego - ajustar por ancho
         newWidth = availableWidth;
         newHeight = newWidth / gameRatio;
     }
@@ -3225,7 +3430,7 @@ function resizeCanvas() {
     canvas.style.width = newWidth + 'px';
     canvas.style.height = newHeight + 'px';
     
-    // Ajustar el contenedor también
+    // Ajustar el contenedor tambi?n
     if (container) {
         container.style.width = newWidth + 'px';
         container.style.height = newHeight + 'px';
@@ -3239,13 +3444,13 @@ window.onload = () => {
 
 window.addEventListener('resize', resizeCanvas);
 window.addEventListener('orientationchange', () => {
-    // Múltiples intentos para asegurar que se redimensione correctamente
+    // M?ltiples intentos para asegurar que se redimensione correctamente
     setTimeout(resizeCanvas, 50);
     setTimeout(resizeCanvas, 150);
     setTimeout(resizeCanvas, 300);
 });
 
-// Escuchar cambios en el visualViewport (más preciso en móviles)
+// Escuchar cambios en el visualViewport (m?s preciso en m?viles)
 if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', resizeCanvas);
 }

@@ -190,15 +190,15 @@ function onPlayerReady(event) {
 }
 
 function onPlayerStateChange(event) {
-    // Cuando la playlist est芍 cargada (estado CUED = 5)
+    // Cuando la playlist esta cargada (estado CUED = 5)
     if (event.data === YT.PlayerState.CUED && !playlistLoaded) {
         playlistLoaded = true;
         // Activar shuffle
         ytPlayer.setShuffle(true);
     }
     
-    // Cuando un video termina, el loop de playlist deber赤a manejarlo autom芍ticamente
-    // pero si no, forzamos reproducci車n
+    // Cuando un video termina, el loop de playlist deberia manejarlo automaticamente
+    // pero si no, forzamos reproduccion
     if (event.data === YT.PlayerState.ENDED) {
         if (currentMusicState !== 'none') {
             ytPlayer.nextVideo();
@@ -210,14 +210,14 @@ function playRandomFromPlaylist() {
     if (!ytPlayerReady || !ytPlayer) return;
     
     try {
-        // Obtener el n迆mero total de videos en la playlist
+        // Obtener el numero total de videos en la playlist
         const playlist = ytPlayer.getPlaylist();
         if (playlist && playlist.length > 0) {
-            // Saltar a un 赤ndice aleatorio
+            // Saltar a un indice aleatorio
             const randomIndex = Math.floor(Math.random() * playlist.length);
             ytPlayer.playVideoAt(randomIndex);
         } else {
-            // Si no tenemos la playlist a迆n, cargarla y reproducir
+            // Si no tenemos la playlist aun, cargarla y reproducir
             ytPlayer.loadPlaylist({
                 listType: 'playlist',
                 list: PLAYLIST_ID,
@@ -590,7 +590,7 @@ class SynthAudio {
 }
 
 // ============================================================
-// CLASE: InputHandler - CON CONTROLES T芍CTILES Y GIROSCOPIO MEJORADO
+// CLASE: InputHandler - CON CONTROLES TACTILES Y GIROSCOPIO MEJORADO
 // ============================================================
 class InputHandler {
     constructor() {
@@ -633,7 +633,7 @@ class InputHandler {
         // Para evitar bomba en el primer toque
         this.isFirstTouch = true;
         
-        // Para entrada de iniciales t芍ctil
+        // Para entrada de iniciales tactil
         this.initialsTouchData = null;
         
         window.addEventListener('keydown', (e) => {
@@ -733,12 +733,12 @@ class InputHandler {
             const dy = this.touchCurrentY - this.touchStartY;
             const moveDistance = Math.sqrt(dx * dx + dy * dy);
             
-            // Solo activar bomba con tap r芍pido si NO es el primer toque
+            // Solo activar bomba con tap rapido si NO es el primer toque
             if (touchDuration < 200 && moveDistance < 30 && !this.isFirstTouch) {
                 this.touchBombPressed = true;
             }
             
-            // Despu谷s del primer toque, ya no es el primero
+            // Despues del primer toque, ya no es el primero
             if (this.isFirstTouch) {
                 this.isFirstTouch = false;
             }
@@ -826,8 +826,8 @@ class InputHandler {
             if (calibratedGamma > 90) calibratedGamma -= 180;
             if (calibratedGamma < -90) calibratedGamma += 180;
             
-            // Sensibilidad MUY ALTA para respuesta instant芍nea
-            const sensitivity = 4; // M芍s sensible
+            // Sensibilidad MUY ALTA para respuesta instantanea
+            const sensitivity = 4; // Mas sensible
             
             const newTiltX = Math.max(-1, Math.min(1, calibratedGamma / sensitivity));
             const newTiltY = Math.max(-1, Math.min(1, calibratedBeta / sensitivity));
@@ -856,7 +856,7 @@ class InputHandler {
     updateGamepadIndicator(status) {
         const indicator = document.getElementById('gamepadIndicator');
         if (status === 'gyro') {
-            indicator.textContent = '?? T芍ctil activo';
+            indicator.textContent = '?? Tactil activo';
             indicator.classList.add('connected');
         } else if (status === 'mobile') {
             indicator.textContent = '?? Toca para jugar';
@@ -907,7 +907,7 @@ class InputHandler {
             const gyroDeadzone = 0.01;
             
             if (Math.abs(this.tiltX) > gyroDeadzone) {
-                // Multiplicador muy alto para respuesta instant芍nea
+                // Multiplicador muy alto para respuesta instantanea
                 dx = this.tiltX * 3.5;
             }
             if (Math.abs(this.tiltY) > gyroDeadzone) {
@@ -1051,7 +1051,7 @@ class InputHandler {
             if (gp.buttons[9]?.pressed) currentState = true;
         }
         
-        // NO usar touchStartPressed aqu赤 - se maneja por separado en iniciales
+        // NO usar touchStartPressed aqui - se maneja por separado en iniciales
         
         const justPressed = currentState && !this.prevConfirmState;
         this.prevConfirmState = currentState;
@@ -1061,7 +1061,7 @@ class InputHandler {
 }
 
 // ============================================================
-// CLASES DE PART赤CULAS Y EFECTOS
+// CLASES DE PARTICULAS Y EFECTOS
 // ============================================================
 class Particle {
     constructor(x, y, color = '#fff') {
@@ -1553,7 +1553,7 @@ class Player {
         const touchTarget = input.getTouchTarget();
         
         if (touchTarget.active) {
-            // Control t芍ctil con offset para no tapar la nave
+            // Control tactil con offset para no tapar la nave
             const targetX = touchTarget.x;
             const targetY = touchTarget.y - 100; // Offset grande para que el dedo no tape la nave
             this.x = targetX;
@@ -1561,10 +1561,10 @@ class Player {
             this.vx = 0;
             this.vy = 0;
         } else if (input.isMobile && input.gyroEnabled && input.isGyroWorking()) {
-            // Giroscopio: movimiento con fricci車n reducida (mitad de la original)
+            // Giroscopio: movimiento con friccion reducida (mitad de la original)
             const move = input.getMovement();
             const speedMultiplier = Math.max(0.5, 1 - (this.evolutionLevel - 1) * 0.02);
-            const gyroFriction = 0.94; // Mitad de fricci車n (original era 0.88)
+            const gyroFriction = 0.94; // Mitad de friccion (original era 0.88)
             
             this.vx += move.dx * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
             this.vy += move.dy * CONFIG.PLAYER_ACCEL * speedMultiplier * dt;
@@ -1790,7 +1790,7 @@ class Game {
         this.victoryAnimTimer = 0;
         this.wasVictory = false;
         
-        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=??∴'.split('');
+        this.initialsChars = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=??★'.split('');
         this.initials = ['A', 'A', 'A'];
         this.initialsPosition = 0;
         this.initialsBlinkTimer = 0;
@@ -1800,7 +1800,7 @@ class Game {
         this.initialsTouchStart = null;
         this.initialsTouchLetter = -1;
         
-        // Para input de teclado nativo en m車vil
+        // Para input de teclado nativo en movil
         this.mobileInputElement = null;
         this.pendingInitialsConfirm = false;
         
@@ -1823,7 +1823,7 @@ class Game {
         this.demoPowerUpTimer = 0;
         this.demoTargetX = CONFIG.WIDTH / 2;
         this.demoTargetY = CONFIG.HEIGHT - 100;
-        this.demoPendingAction = null; // Acci車n pendiente despu谷s de recoger power up
+        this.demoPendingAction = null; // Accion pendiente despues de recoger power up
         this.demoPendingTimer = 0;
         
         this.setupInitialsTouch();
@@ -1834,7 +1834,7 @@ class Game {
     }
 
     setupMobileKeyboardInput() {
-        // Crear input oculto para teclado nativo en m車vil
+        // Crear input oculto para teclado nativo en movil
         const input = document.createElement('input');
         input.type = 'text';
         input.id = 'mobileInitialsInput';
@@ -1891,7 +1891,7 @@ class Game {
             this.mobileInputElement.style.display = 'block';
             this.mobileInputElement.style.pointerEvents = 'auto';
             this.pendingInitialsConfirm = true;
-            // Peque?o delay para asegurar que el elemento es visible
+            // Pequeno delay para asegurar que el elemento es visible
             setTimeout(() => {
                 this.mobileInputElement.focus();
                 this.mobileInputElement.select();
@@ -1943,7 +1943,7 @@ class Game {
             const touch = e.touches[0];
             const coords = getCanvasCoords(touch);
             
-            // Detectar si toc車 el bot車n de confirmar (parte inferior - bot車n verde grande)
+            // Detectar si toco el boton de confirmar (parte inferior - boton verde grande)
             if (coords.y > 530 && coords.y < 610 && coords.x > CONFIG.WIDTH / 2 - 110 && coords.x < CONFIG.WIDTH / 2 + 110) {
                 e.preventDefault();
                 setTimeout(() => {
@@ -1952,14 +1952,14 @@ class Game {
                 return;
             }
             
-            // Detectar si toc車 el 芍rea del teclado (bot車n para abrir teclado)
+            // Detectar si toco el area del teclado (boton para abrir teclado)
             if (coords.y > 460 && coords.y < 520 && coords.x > CONFIG.WIDTH / 2 - 100 && coords.x < CONFIG.WIDTH / 2 + 100) {
                 e.preventDefault();
                 self.openMobileKeyboard();
                 return;
             }
             
-            // Detectar qu谷 letra se toc車 (芍rea central de las letras)
+            // Detectar que letra se toco (area central de las letras)
             const letterSpacing = 60;
             const startX = CONFIG.WIDTH / 2 - letterSpacing;
             const letterY = 360;
@@ -2006,7 +2006,7 @@ class Game {
     }
 
     // ============================================================
-    // SISTEMA DE ESTAD赤STICAS
+    // SISTEMA DE ESTADISTICAS
     // ============================================================
     loadStats() {
         const saved = localStorage.getItem('gallegherStats');
@@ -2146,7 +2146,7 @@ class Game {
                         this.demoEnemies = [];
                         
                         this.demoTexts.push({
-                            text: '?DESTRUYE TODO EN PANTALLA!',
+                            text: 'DESTRUYE TODO EN PANTALLA!',
                             x: CONFIG.WIDTH / 2,
                             y: CONFIG.HEIGHT / 2,
                             color: '#f80',
@@ -2167,7 +2167,7 @@ class Game {
                         this.audio.playMissile();
                         
                         this.demoTexts.push({
-                            text: '?PERSIGUEN ENEMIGOS!',
+                            text: 'PERSIGUEN ENEMIGOS!',
                             x: CONFIG.WIDTH / 2,
                             y: this.demoPlayer.y - 80,
                             color: '#0af',
@@ -2177,7 +2177,7 @@ class Game {
                         
                     } else if (this.demoPendingAction === 'cannon') {
                         this.demoTexts.push({
-                            text: '?M芍S POTENCIA DE FUEGO!',
+                            text: 'MAS POTENCIA DE FUEGO!',
                             x: CONFIG.WIDTH / 2,
                             y: this.demoPlayer.y - 60,
                             color: '#0f0',
@@ -2193,7 +2193,7 @@ class Game {
             }
         }
         
-        // Movimiento de la nave demo - buscar power ups o patr車n serpenteante
+        // Movimiento de la nave demo - buscar power ups o patron serpenteante
         let foundPowerUp = false;
         for (let i = 0; i < this.demoPowerUps.length; i++) {
             const pu = this.demoPowerUps[i];
@@ -2216,12 +2216,12 @@ class Game {
         this.demoPlayer.x += dxMove * dt * 3;
         this.demoPlayer.y += dyMove * dt * 3;
         
-        // Mantener dentro de l赤mites
+        // Mantener dentro de limites
         const halfWidth = this.demoPlayer.getFullWidth() / 2;
         this.demoPlayer.x = Math.max(halfWidth, Math.min(CONFIG.WIDTH - halfWidth, this.demoPlayer.x));
         this.demoPlayer.y = Math.max(50, Math.min(CONFIG.HEIGHT - 50, this.demoPlayer.y));
         
-        // Disparar autom芍ticamente
+        // Disparar automaticamente
         if (this.demoPlayer.fireTimer > 0) this.demoPlayer.fireTimer -= dt * 1000;
         if (this.demoPlayer.fireTimer <= 0) {
             this.demoPlayer.fireTimer = CONFIG.FIRE_RATE;
@@ -2244,7 +2244,7 @@ class Game {
             });
         }
         
-        // Spawn enemigos (menos frecuente para evitar acumulaci車n)
+        // Spawn enemigos (menos frecuente para evitar acumulacion)
         this.demoSpawnTimer += dt * 1000;
         if (this.demoSpawnTimer >= 1200 && this.demoEnemies.length < 10) {
             this.demoSpawnTimer = 0;
@@ -2254,7 +2254,7 @@ class Game {
             this.demoEnemies.push(new Enemy(x, -30, type));
         }
         
-        // Spawn power ups peri車dicamente
+        // Spawn power ups periodicamente
         this.demoPowerUpTimer += dt;
         if (this.demoPowerUpTimer >= 4 && !this.demoPendingAction && this.demoPowerUps.length < 3) {
             this.demoPowerUpTimer = 0;
@@ -2290,7 +2290,7 @@ class Game {
                 
                 if (pu.type === 'power') {
                     this.demoPlayer.evolve();
-                    text = '?CA?車N EXTRA!';
+                    text = 'CANON EXTRA!';
                     color = '#0f0';
                     for (let j = 0; j < 10; j++) {
                         this.demoParticles.push(new Particle(this.demoPlayer.x, this.demoPlayer.y));
@@ -2300,14 +2300,14 @@ class Game {
                     
                 } else if (pu.type === 'missile') {
                     this.demoPlayer.addMissiles(3);
-                    text = '?MISILES RASTREADORES!';
+                    text = 'MISILES RASTREADORES!';
                     color = '#0af';
                     this.demoPendingAction = 'missile';
                     this.demoPendingTimer = 0.5;
                     
                 } else if (pu.type === 'bomb') {
                     this.demoPlayer.addBombs(1);
-                    text = '?BOMBA!';
+                    text = 'BOMBA!';
                     color = '#f80';
                     this.demoPendingAction = 'bomb';
                     this.demoPendingTimer = 0.8;
@@ -2349,7 +2349,7 @@ class Game {
             }
         }
         
-        // Reiniciar demo despu谷s de evoluci車n m芍xima o tiempo excesivo
+        // Reiniciar demo despues de evolucion maxima o tiempo excesivo
         if (this.demoPlayer.evolutionLevel >= CONFIG.MAX_EVOLUTION || this.demoTime > 60) {
             this.demoPowerUpTimer = -10;
             if (this.demoTime > 35) {
@@ -2399,7 +2399,7 @@ class Game {
             }
         }
         
-        // Actualizar part赤culas
+        // Actualizar particulas
         for (let i = this.demoParticles.length - 1; i >= 0; i--) {
             const p = this.demoParticles[i];
             if (p) {
@@ -2485,7 +2485,7 @@ class Game {
         // BombWaves
         this.demoBombWaves.forEach(w => w.draw(ctx));
         
-        // Part赤culas
+        // Particulas
         this.demoParticles.forEach(p => p.draw(ctx));
         
         // Power ups
@@ -2518,12 +2518,12 @@ class Game {
             ctx.restore();
         });
         
-        // Overlay con informaci車n
+        // Overlay con informacion
         ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
         ctx.fillRect(0, 0, CONFIG.WIDTH, 70);
         ctx.fillRect(0, CONFIG.HEIGHT - 50, CONFIG.WIDTH, 50);
         
-        // T赤tulo
+        // Titulo
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.shadowColor = '#fff';
@@ -2534,9 +2534,9 @@ class Game {
         
         ctx.font = '12px Courier New';
         ctx.fillStyle = '#ff0';
-        ctx.fillText('岸岸岸 DEMO 岸岸岸', CONFIG.WIDTH / 2, 55);
+        ctx.fillText('─── DEMO ───', CONFIG.WIDTH / 2, 55);
         
-        // Mostrar nivel de evoluci車n y stats
+        // Mostrar nivel de evolucion y stats
         ctx.fillStyle = '#fff';
         ctx.font = '14px Courier New';
         const cannons = this.demoPlayer ? this.demoPlayer.countCannonsPerSide() : { left: 0, right: 0 };
@@ -2544,7 +2544,7 @@ class Game {
         const bombs = this.demoPlayer ? this.demoPlayer.bombs : 0;
         ctx.fillText(`LV.${this.demoPlayer ? this.demoPlayer.evolutionLevel : 1} | ${cannons.left}L/${cannons.right}R | M:${missiles} | B:${bombs}`, CONFIG.WIDTH / 2, CONFIG.HEIGHT - 30);
         
-        // Instrucci車n para salir
+        // Instruccion para salir
         const blink = Math.sin(Date.now() / 400) > 0;
         if (blink) {
             ctx.fillStyle = '#0f0';
@@ -2585,7 +2585,7 @@ class Game {
         // Resetear el primer toque para la nueva partida
         this.input.isFirstTouch = true;
         
-        // Reproducir m迆sica de gameplay
+        // Reproducir musica de gameplay
         playGameplayMusic();
     }
 
@@ -2676,7 +2676,7 @@ class Game {
     }
 
     transitionToScoreEntry() {
-        // Resetear TODOS los estados de touch para evitar confirmaci車n accidental
+        // Resetear TODOS los estados de touch para evitar confirmacion accidental
         this.input.touchStartPressed = false;
         this.input.touchBombPressed = false;
         this.input.touchActive = false;
@@ -2690,7 +2690,7 @@ class Game {
             this.initialsPosition = 0;
             this.scoreRank = this.getScoreRank(this.score);
             this.startDebounce = true;
-            // Debounce MUY largo para evitar confirmaci車n accidental en m車vil
+            // Debounce MUY largo para evitar confirmacion accidental en movil
             setTimeout(() => this.startDebounce = false, 1500);
         } else {
             this.state = GameState.SHOW_SCORES;
@@ -2713,7 +2713,7 @@ class Game {
                 this.menuIdleTimer = 0;
             }
             
-            // Iniciar demo despu谷s de 10 segundos
+            // Iniciar demo despues de 10 segundos
             if (this.menuIdleTimer >= this.demoModeDelay) {
                 this.startDemo();
                 return;
@@ -2737,10 +2737,10 @@ class Game {
         }
         
         if (this.state === GameState.SHOW_SCORES) {
-            // La m迆sica sigue sonando en la pantalla de scores
+            // La musica sigue sonando en la pantalla de scores
             if (this.input.isStartPressed() && !this.startDebounce) {
                 this.state = GameState.MENU;
-                stopAllMusic(); // Detener m迆sica al volver al men迆
+                stopAllMusic(); // Detener musica al volver al menu
                 this.startDebounce = true;
                 setTimeout(() => this.startDebounce = false, 500);
             }
@@ -2916,11 +2916,11 @@ class Game {
     }
 
     updateInitialsInput() {
-        // Solo procesar input de teclado/gamepad si no estamos usando el teclado m車vil
+        // Solo procesar input de teclado/gamepad si no estamos usando el teclado movil
         if (this.pendingInitialsConfirm) return;
         
-        // En m車vil, no procesar input de teclado/gamepad para confirmar
-        // La confirmaci車n se hace tocando el bot車n en pantalla
+        // En movil, no procesar input de teclado/gamepad para confirmar
+        // La confirmacion se hace tocando el boton en pantalla
         if (this.input.isMobile) return;
         
         if (this.input.isUpPressed()) {
@@ -2991,7 +2991,7 @@ class Game {
         // Incrementar contador de game overs
         this.incrementGameOvers();
         
-        // Reproducir m迆sica aleatoria para game over
+        // Reproducir musica aleatoria para game over
         playGameOverMusic();
     }
 
@@ -3050,10 +3050,10 @@ class Game {
         if (this.input.isMobile) {
             ctx.fillText('?? ARRASTRA = MOVER (nave arriba del dedo)', CONFIG.WIDTH / 2, 425);
             ctx.fillText('?? INCLINA = MOVER DIRECTO', CONFIG.WIDTH / 2, 442);
-            ctx.fillText('?? DISPARO AUTOM芍TICO', CONFIG.WIDTH / 2, 459);
-            ctx.fillText('?? TAP R芍PIDO = BOMBA', CONFIG.WIDTH / 2, 476);
+            ctx.fillText('?? DISPARO AUTOMATICO', CONFIG.WIDTH / 2, 459);
+            ctx.fillText('?? TAP RAPIDO = BOMBA', CONFIG.WIDTH / 2, 476);
         } else {
-            ctx.fillText('↘ ↙ ∥ ∣  MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('← → ↑ ↓  MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('A  DISPARAR', CONFIG.WIDTH / 2, 447);
             ctx.fillText('S  BOMBA', CONFIG.WIDTH / 2, 464);
             ctx.fillText('D  INICIAR / REINICIAR', CONFIG.WIDTH / 2, 481);
@@ -3061,24 +3061,24 @@ class Game {
         
         ctx.fillStyle = '#fff';
         ctx.font = '12px Courier New';
-        ctx.fillText('岸岸岸 HIGH SCORES 岸岸岸', CONFIG.WIDTH / 2, 515);
+        ctx.fillText('─── HIGH SCORES ───', CONFIG.WIDTH / 2, 515);
         ctx.font = '11px Courier New';
         const topScores = this.highScores.slice(0, 3);
         topScores.forEach((entry, i) => {
-            const victoryMark = entry.victory ? '∴' : ' ';
+            const victoryMark = entry.victory ? '★' : ' ';
             ctx.fillText(`${i + 1}. ${entry.initials} ${victoryMark} ${entry.score.toString().padStart(6, ' ')}`, CONFIG.WIDTH / 2, 535 + i * 16);
         });
         
         ctx.fillStyle = '#666';
         ctx.font = '10px Courier New';
-        ctx.fillText('CONSIGUE 7 CA?ONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
+        ctx.fillText('CONSIGUE 7 CANONES POR LADO PARA GANAR', CONFIG.WIDTH / 2, 600);
         
-        // Mostrar estad赤sticas de partidas
+        // Mostrar estadisticas de partidas
         ctx.fillStyle = '#555';
         ctx.font = '9px Courier New';
         ctx.fillText(`PARTIDAS: ${this.stats.totalPlays} | VICTORIAS: ${this.stats.victories} | DERROTAS: ${this.stats.gameOvers}`, CONFIG.WIDTH / 2, 618);
         
-        // Indicador de demo pr車ximo
+        // Indicador de demo proximo
         if (this.menuIdleTimer > 5) {
             const remaining = Math.ceil(this.demoModeDelay - this.menuIdleTimer);
             ctx.fillStyle = '#555';
@@ -3140,7 +3140,7 @@ class Game {
         ctx.textAlign = 'center';
         ctx.shadowColor = '#ff0';
         ctx.shadowBlur = 10;
-        ctx.fillText('?FASE FINAL!', CONFIG.WIDTH / 2, 80);
+        ctx.fillText('FASE FINAL!', CONFIG.WIDTH / 2, 80);
         ctx.font = '14px Courier New';
         ctx.fillText(`${Math.max(0, this.finalPhasePointsRemaining)} PUNTOS`, CONFIG.WIDTH / 2, 100);
         ctx.restore();
@@ -3200,7 +3200,7 @@ class Game {
         ctx.fillText(`SCORE: ${this.score}`, 15, 25);
         ctx.textAlign = 'right';
         let livesText = '';
-        for (let i = 0; i < this.player.lives; i++) livesText += '↖ ';
+        for (let i = 0; i < this.player.lives; i++) livesText += '▲ ';
         ctx.fillText(livesText, CONFIG.WIDTH - 15, 25);
         ctx.textAlign = 'left';
         ctx.font = '12px Courier New';
@@ -3210,7 +3210,7 @@ class Game {
         if (this.player.missiles > 0) ctx.fillText(`M:${this.player.missiles}`, 140, 48);
         ctx.textAlign = 'right';
         let bombText = '';
-        for (let i = 0; i < this.player.bombs; i++) bombText += '♂ ';
+        for (let i = 0; i < this.player.bombs; i++) bombText += '● ';
         if (this.player.bombs === 0) bombText = '---';
         ctx.fillText(bombText, CONFIG.WIDTH - 15, 48);
     }
@@ -3233,7 +3233,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '20px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('∴ NEW HIGH SCORE ∴', CONFIG.WIDTH / 2, 410);
+            if (blink) ctx.fillText('★ NEW HIGH SCORE ★', CONFIG.WIDTH / 2, 410);
         }
         ctx.fillStyle = '#fff';
         ctx.font = '16px Courier New';
@@ -3259,7 +3259,7 @@ class Game {
         ctx.translate(CONFIG.WIDTH / 2, 130);
         ctx.scale(scale, scale);
         ctx.font = 'bold 42px Courier New';
-        ctx.fillText('?VICTORIA!', 0, 0);
+        ctx.fillText('VICTORIA!', 0, 0);
         ctx.restore();
         ctx.font = 'bold 24px Courier New';
         ctx.fillText('VIAJE COMPLETADO', CONFIG.WIDTH / 2, 180);
@@ -3272,7 +3272,7 @@ class Game {
             ctx.fillStyle = '#ff0';
             ctx.font = '22px Courier New';
             const blink = Math.sin(Date.now() / 200) > 0;
-            if (blink) ctx.fillText('∴ NUEVO R谷CORD ∴', CONFIG.WIDTH / 2, 380);
+            if (blink) ctx.fillText('* NUEVO RECORD *', CONFIG.WIDTH / 2, 380);
         }
         if (this.player) {
             ctx.save();
@@ -3297,7 +3297,7 @@ class Game {
         ctx.shadowBlur = 15;
         if (this.wasVictory) {
             ctx.font = 'bold 32px Courier New';
-            ctx.fillText('?VICTORIA!', CONFIG.WIDTH / 2, 80);
+            ctx.fillText('VICTORIA!', CONFIG.WIDTH / 2, 80);
         }
         ctx.font = 'bold 28px Courier New';
         ctx.fillText('NEW HIGH SCORE!', CONFIG.WIDTH / 2, 140);
@@ -3359,9 +3359,9 @@ class Game {
         ctx.font = '12px Courier New';
         if (this.input.isMobile) {
             ctx.fillText('?? DESLIZA ARRIBA/ABAJO EN CADA LETRA', CONFIG.WIDTH / 2, 420);
-            ctx.fillText('O TOCA EL BOT車N PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
+            ctx.fillText('O TOCA EL BOTON PARA USAR TECLADO', CONFIG.WIDTH / 2, 438);
             
-            // Bot車n para abrir teclado
+            // Boton para abrir teclado
             const btnY = 485;
             ctx.fillStyle = '#fff';
             ctx.strokeStyle = '#fff';
@@ -3370,7 +3370,7 @@ class Game {
             ctx.font = '14px Courier New';
             ctx.fillText('?? ESCRIBIR CON TECLADO', CONFIG.WIDTH / 2, btnY + 5);
             
-            // Bot車n de confirmar grande y visible
+            // Boton de confirmar grande y visible
             const confirmY = 560;
             const confirmBlink = Math.sin(Date.now() / 400) > 0;
             ctx.fillStyle = confirmBlink ? '#0f0' : '#0a0';
@@ -3379,7 +3379,7 @@ class Game {
             ctx.font = 'bold 18px Courier New';
             ctx.fillText('? CONFIRMAR', CONFIG.WIDTH / 2, confirmY + 7);
         } else {
-            ctx.fillText('∥∣ CAMBIAR    ↘↙ MOVER', CONFIG.WIDTH / 2, 430);
+            ctx.fillText('↑↓ CAMBIAR    ←→ MOVER', CONFIG.WIDTH / 2, 430);
             ctx.fillText('ENTER CONFIRMAR', CONFIG.WIDTH / 2, 450);
             
             const confirmBlink = Math.sin(Date.now() / 300) > 0;
@@ -3433,13 +3433,13 @@ class Game {
             ctx.fillText(entry.initials, 130, y);
             ctx.fillText(entry.score.toString().padStart(8, ' '), 210, y);
             ctx.textAlign = 'center';
-            if (entry.victory) ctx.fillText('∴', 370, y);
+            if (entry.victory) ctx.fillText('★', 370, y);
             else {
                 ctx.fillStyle = isNewScore ? ctx.fillStyle : '#444';
                 ctx.fillText('-', 370, y);
             }
         });
-        // Mostrar estad赤sticas
+        // Mostrar estadisticas
         ctx.fillStyle = '#666';
         ctx.font = '10px Courier New';
         ctx.fillText(`PARTIDAS: ${this.stats.totalPlays} | VICTORIAS: ${this.stats.victories} | DERROTAS: ${this.stats.gameOvers}`, CONFIG.WIDTH / 2, CONFIG.HEIGHT - 60);
@@ -3460,13 +3460,13 @@ class Game {
 }
 
 // ============================================================
-// RESPONSIVE CANVAS - ADAPTATIVO PARA M車VILES 1080x1920
+// RESPONSIVE CANVAS - ADAPTATIVO PARA MOVILES 1080x1920
 // ============================================================
 function resizeCanvas() {
     const canvas = document.getElementById('gameCanvas');
     const container = document.querySelector('.game-container');
     
-    // Usar visualViewport si est芍 disponible (m芍s preciso en m車viles)
+    // Usar visualViewport si esta disponible (mas preciso en moviles)
     const windowWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
     const windowHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
     
@@ -3481,11 +3481,11 @@ function resizeCanvas() {
     let newWidth, newHeight;
     
     if (windowRatio > gameRatio) {
-        // Ventana m芍s ancha que el juego - ajustar por altura
+        // Ventana mas ancha que el juego - ajustar por altura
         newHeight = availableHeight;
         newWidth = newHeight * gameRatio;
     } else {
-        // Ventana m芍s alta que el juego - ajustar por ancho
+        // Ventana mas alta que el juego - ajustar por ancho
         newWidth = availableWidth;
         newHeight = newWidth / gameRatio;
     }
@@ -3497,7 +3497,7 @@ function resizeCanvas() {
     canvas.style.width = newWidth + 'px';
     canvas.style.height = newHeight + 'px';
     
-    // Ajustar el contenedor tambi谷n
+    // Ajustar el contenedor tambien
     if (container) {
         container.style.width = newWidth + 'px';
         container.style.height = newHeight + 'px';
@@ -3511,13 +3511,13 @@ window.onload = () => {
 
 window.addEventListener('resize', resizeCanvas);
 window.addEventListener('orientationchange', () => {
-    // M迆ltiples intentos para asegurar que se redimensione correctamente
+    // Multiples intentos para asegurar que se redimensione correctamente
     setTimeout(resizeCanvas, 50);
     setTimeout(resizeCanvas, 150);
     setTimeout(resizeCanvas, 300);
 });
 
-// Escuchar cambios en el visualViewport (m芍s preciso en m車viles)
+// Escuchar cambios en el visualViewport (mas preciso en moviles)
 if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', resizeCanvas);
 }

@@ -368,9 +368,67 @@
         #confirmInitialsBtn:active {
             background: linear-gradient(145deg, #4a9a4a, #2a6a2a);
         }
+        
+        /* Botón de pantalla completa */
+        #fullscreenBtn {
+            display: none;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 10001;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            background: linear-gradient(145deg, #2a4a6a, #1a2a4a);
+            border: 2px solid #4a8aaa;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 100, 150, 0.4);
+            transition: all 0.2s;
+        }
+        
+        #fullscreenBtn:hover {
+            background: linear-gradient(145deg, #3a5a7a, #2a4a6a);
+            border-color: #6aaacc;
+        }
+        
+        #fullscreenBtn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0, 100, 150, 0.6);
+        }
+        
+        #fullscreenBtn.is-fullscreen {
+            background: linear-gradient(145deg, #4a2a2a, #3a1a1a);
+            border-color: #aa4a4a;
+        }
+        
+        /* Mostrar en móvil */
+        @media (max-width: 1000px) {
+            #fullscreenBtn {
+                display: block;
+            }
+        }
+        
+        /* Ocultar en pantalla completa si está activo */
+        .fullscreen-active #fullscreenBtn {
+            top: 5px;
+            right: 5px;
+            padding: 8px 12px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .fullscreen-active #fullscreenBtn:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
+    <!-- Botón de pantalla completa para móvil -->
+    <button id="fullscreenBtn" onclick="toggleFullscreen()">⛶ PANTALLA COMPLETA</button>
+    
     <!-- Mensaje para girar el teléfono -->
     <div id="rotateMessage">
         <div class="rotate-icon">📱</div>
@@ -433,6 +491,65 @@
 // RÍO SALVAJE - JUEGO DE CARRERAS EN EL RÍO
 // Tema: Litoral Argentino con Jacarandás, Ceibos y Estrellas Federales
 // =============================================================================
+
+// =============================================================================
+// FUNCIÓN DE PANTALLA COMPLETA
+// =============================================================================
+function toggleFullscreen() {
+    const elem = document.documentElement;
+    const btn = document.getElementById('fullscreenBtn');
+    
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+        // Entrar en pantalla completa
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { // Safari/iOS
+            elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) { // Firefox
+            elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) { // IE/Edge
+            elem.msRequestFullscreen();
+        }
+        btn.textContent = '✕ SALIR PANTALLA COMPLETA';
+        btn.classList.add('is-fullscreen');
+        document.body.classList.add('fullscreen-active');
+    } else {
+        // Salir de pantalla completa
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        btn.textContent = '⛶ PANTALLA COMPLETA';
+        btn.classList.remove('is-fullscreen');
+        document.body.classList.remove('fullscreen-active');
+    }
+}
+
+// Escuchar cambios de pantalla completa (por si se sale con ESC u otro método)
+document.addEventListener('fullscreenchange', updateFullscreenButton);
+document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+
+function updateFullscreenButton() {
+    const btn = document.getElementById('fullscreenBtn');
+    const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    
+    if (isFullscreen) {
+        btn.textContent = '✕ SALIR';
+        btn.classList.add('is-fullscreen');
+        document.body.classList.add('fullscreen-active');
+    } else {
+        btn.textContent = '⛶ PANTALLA COMPLETA';
+        btn.classList.remove('is-fullscreen');
+        document.body.classList.remove('fullscreen-active');
+    }
+}
 
 // Detectar si es dispositivo móvil
 const isMobileDevice = () => {

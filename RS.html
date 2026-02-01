@@ -186,6 +186,28 @@
             display: none;
         }
         
+        /* En PC: ocultar controles en pantalla, mostrar solo instrucciones de teclado */
+        .pc-mode #controls {
+            display: none;
+        }
+        
+        .pc-mode #mobileIndicator {
+            display: none;
+        }
+        
+        .pc-mode #instructions {
+            display: block;
+        }
+        
+        .pc-mode #gamepadStatus {
+            display: block;
+        }
+        
+        .pc-mode canvas {
+            margin-bottom: 10px;
+        }
+        
+        /* En móvil: ocultar todo excepto indicador móvil */
         .mobile-mode #controls {
             display: none;
         }
@@ -200,6 +222,29 @@
         
         .mobile-mode #mobileIndicator {
             display: block;
+        }
+        
+        /* PC: Canvas centrado con más espacio */
+        .pc-mode #gameContainer {
+            padding: 20px;
+        }
+        
+        .pc-mode canvas {
+            box-shadow: 0 0 50px rgba(0,150,200,0.5), inset 0 0 30px rgba(0,0,0,0.4);
+        }
+        
+        .pc-mode #instructions {
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .pc-mode #gamepadStatus {
+            background: rgba(0,0,0,0.4);
+            padding: 8px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
         }
         
         @media (max-width: 1000px) {
@@ -476,13 +521,14 @@
         </div>
         
         <div id="instructions">
-            <span class="key-hint">A</span> o <span class="key-hint">Botón 1</span> o <span class="key-hint">→</span> = Acelerar | 
-            <span class="key-hint">←</span> = Frenar |
-            <span class="key-hint">S</span> o <span class="key-hint">Botón 2</span> = Saltar | 
-            <span class="key-hint">D</span> o <span class="key-hint">Botón 3</span> = Iniciar/Reiniciar | 
-            <span class="key-hint">↑↓</span> = Inclinar en el aire
+            🎮 <span class="key-hint">A</span> o <span class="key-hint">→</span> Acelerar | 
+            <span class="key-hint">←</span> Frenar |
+            <span class="key-hint">S</span> Saltar | 
+            <span class="key-hint">D</span> Iniciar/Reiniciar | 
+            <span class="key-hint">↑↓</span> Inclinar en el aire |
+            <span class="key-hint">1</span> Ver Records
         </div>
-        <div id="gamepadStatus">🎮 Conecta un joystick USB para jugar</div>
+        <div id="gamepadStatus">🎮 Conecta un joystick USB para jugar con palanca y botones</div>
         <div id="mobileIndicator">📱 TOCA LA PANTALLA PARA SALTAR • Aceleración automática</div>
     </div>
 
@@ -561,9 +607,11 @@ const isMobileDevice = () => {
 
 const IS_MOBILE = isMobileDevice();
 
-// Aplicar clase de móvil al body si es necesario
+// Aplicar clase de móvil o PC al body según corresponda
 if (IS_MOBILE) {
     document.body.classList.add('mobile-mode');
+} else {
+    document.body.classList.add('pc-mode');
 }
 
 const CONFIG = {

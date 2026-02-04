@@ -155,7 +155,7 @@
         <div class="scanlines"></div>
     </div>
     <div id="controls">
-        <span>← →</span> Mover | <span>S</span> Saltar | <span>A</span> Atacar | <span>ENTER</span> Confirmar | <span>4-6</span> Ir a Jefe | <span>🎮 Gamepad</span> Soportado
+        <span>← →</span> Mover | <span>S</span> Saltar | <span>A</span> Atacar | <span>D</span> Confirmar | <span>4-6</span> Ir a Jefe | <span>🎮 Gamepad</span> Soportado
     </div>
     
     <!-- Controles táctiles para móvil -->
@@ -435,51 +435,75 @@ class AudioSystem {
     playChamameMelody() {
         if (!this.menuMusicPlaying || !this.enabled) return;
 
+        // Melodía original estilo chamamé litoraleño
+        // Inspirada en el ritmo y sentimiento del río Paraná
         const melody = [
-            { note: 'E4', duration: 0.4 },
-            { note: 'G4', duration: 0.2 },
-            { note: 'A4', duration: 0.4 },
-            { note: 'G4', duration: 0.2 },
-            { note: 'E4', duration: 0.6 },
+            // Frase 1 - Tema principal (compás 6/8)
+            { note: 'G4', duration: 0.25 },
+            { note: 'A4', duration: 0.25 },
+            { note: 'B4', duration: 0.5 },
+            { note: 'D5', duration: 0.25 },
+            { note: 'B4', duration: 0.25 },
+            { note: 'A4', duration: 0.5 },
+            { note: null, duration: 0.15 },
+            
+            // Frase 2 - Respuesta melancólica
+            { note: 'G4', duration: 0.25 },
+            { note: 'F#4', duration: 0.25 },
+            { note: 'E4', duration: 0.5 },
+            { note: 'D4', duration: 0.25 },
+            { note: 'E4', duration: 0.25 },
+            { note: 'G4', duration: 0.6 },
             { note: null, duration: 0.2 },
-            { note: 'D4', duration: 0.4 },
-            { note: 'E4', duration: 0.2 },
-            { note: 'G4', duration: 0.4 },
-            { note: 'E4', duration: 0.2 },
-            { note: 'D4', duration: 0.6 },
-            { note: null, duration: 0.2 },
-            { note: 'E4', duration: 0.3 },
+            
+            // Frase 3 - Subida esperanzadora
+            { note: 'B4', duration: 0.2 },
+            { note: 'A4', duration: 0.2 },
+            { note: 'B4', duration: 0.2 },
+            { note: 'D5', duration: 0.4 },
+            { note: 'E5', duration: 0.25 },
+            { note: 'D5', duration: 0.25 },
+            { note: 'B4', duration: 0.5 },
+            { note: null, duration: 0.15 },
+            
+            // Frase 4 - Cadencia descendente
+            { note: 'A4', duration: 0.3 },
             { note: 'G4', duration: 0.3 },
+            { note: 'F#4', duration: 0.3 },
+            { note: 'E4', duration: 0.4 },
+            { note: 'D4', duration: 0.5 },
+            { note: null, duration: 0.25 },
+            
+            // Frase 5 - Variación con bordón
+            { note: 'G4', duration: 0.2 },
+            { note: 'G4', duration: 0.2 },
             { note: 'A4', duration: 0.3 },
             { note: 'B4', duration: 0.3 },
-            { note: 'A4', duration: 0.6 },
-            { note: null, duration: 0.2 },
-            { note: 'G4', duration: 0.4 },
-            { note: 'E4', duration: 0.2 },
-            { note: 'D4', duration: 0.4 },
-            { note: 'E4', duration: 0.8 },
-            { note: null, duration: 0.4 },
-            { note: 'A4', duration: 0.3 },
-            { note: 'G4', duration: 0.3 },
-            { note: 'E4', duration: 0.3 },
-            { note: 'D4', duration: 0.3 },
-            { note: 'E4', duration: 0.6 },
-            { note: null, duration: 0.2 },
-            { note: 'D4', duration: 0.4 },
-            { note: 'C4', duration: 0.2 },
-            { note: 'D4', duration: 0.4 },
-            { note: 'E4', duration: 0.6 },
-            { note: null, duration: 0.4 },
-            { note: 'G4', duration: 0.5 },
+            { note: 'A4', duration: 0.25 },
+            { note: 'G4', duration: 0.25 },
             { note: 'E4', duration: 0.5 },
-            { note: 'D4', duration: 0.5 },
-            { note: 'E4', duration: 1.0 },
-            { note: null, duration: 0.8 },
+            { note: null, duration: 0.15 },
+            
+            // Frase 6 - Final expresivo
+            { note: 'D4', duration: 0.3 },
+            { note: 'E4', duration: 0.3 },
+            { note: 'G4', duration: 0.4 },
+            { note: 'A4', duration: 0.3 },
+            { note: 'G4', duration: 0.8 },
+            { note: null, duration: 0.3 },
+            
+            // Cierre melódico
+            { note: 'E4', duration: 0.25 },
+            { note: 'F#4', duration: 0.25 },
+            { note: 'G4', duration: 0.5 },
+            { note: 'D4', duration: 0.8 },
+            { note: null, duration: 0.5 },
         ];
 
         const noteFreqs = {
             'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
-            'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25
+            'F#4': 369.99, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 
+            'C5': 523.25, 'D5': 587.33, 'E5': 659.25
         };
 
         let time = 0;
@@ -811,7 +835,7 @@ const Input = {
     get right() { return this.keys['ArrowRight'] || this.touch.right || (this.gamepad && this.gamepad.axes[0] > 0.3); },
     get jump() { return this.keys['KeyS'] || this.touch.jump || (this.gamepad && this.gamepad.buttons[1]?.pressed); },
     get attack() { return this.keys['KeyA'] || this.touch.attack || (this.gamepad && this.gamepad.buttons[0]?.pressed); },
-    get confirm() { return this.keys['Enter'] || this.touch.confirm || (this.gamepad && (this.gamepad.buttons[2]?.pressed || this.gamepad.buttons[9]?.pressed)); },
+    get confirm() { return this.keys['KeyD'] || this.touch.confirm || (this.gamepad && (this.gamepad.buttons[2]?.pressed || this.gamepad.buttons[9]?.pressed)); },
     get menuUp() { return this.keys['ArrowUp'] || this.stickJustMoved.up; },
     get menuDown() { return this.keys['ArrowDown'] || this.stickJustMoved.down; },
     get menuLeft() { return this.keys['ArrowLeft'] || this.stickJustMoved.left || this.touch.left; },
@@ -824,8 +848,8 @@ const Input = {
     },
 
     isConfirmJustPressed() {
-        if (this.keys['Enter']) {
-            this.keys['Enter'] = false;
+        if (this.keys['KeyD']) {
+            this.keys['KeyD'] = false;
             return true;
         }
         // Check touch confirm
@@ -1253,6 +1277,8 @@ class Enemy extends Entity {
         this.behavior = 'walk';
         this.direction = Math.random() > 0.5 ? 1 : -1;
         this.jumpTimer = 0;
+        this.originalY = y; // Guardar posición Y original
+        this.falling = false; // Estado de caída después de liberarse
         this.setupByType();
     }
 
@@ -1328,6 +1354,51 @@ class Enemy extends Entity {
             this.trapped--;
             this.y += this.vy;
             if (this.y < 40) this.y = 40;
+            
+            // Cuando se libera de la burbuja, iniciar caída
+            if (this.trapped === 0) {
+                this.vy = 0;
+                this.falling = true;
+            }
+            return;
+        }
+        
+        // Si está cayendo después de liberarse de la burbuja
+        if (this.falling) {
+            this.vy += GRAVITY;
+            if (this.vy > 8) this.vy = 8;
+            this.y += this.vy;
+            
+            // Verificar colisión con plataformas
+            for (const p of platforms) {
+                if (this.x < p.x + p.width &&
+                    this.x + this.width > p.x &&
+                    this.y + this.height > p.y &&
+                    this.y + this.height < p.y + p.height + this.vy) {
+                    this.y = p.y - this.height;
+                    this.vy = 0;
+                    this.falling = false;
+                    this.onGround = true;
+                    // Actualizar posición original a la nueva plataforma
+                    this.originalY = this.y;
+                    if (this.behavior === 'fly') {
+                        this.flyHeight = this.y;
+                    }
+                    break;
+                }
+            }
+            
+            // Verificar colisión con el suelo
+            if (this.y + this.height > HEIGHT - 32) {
+                this.y = HEIGHT - 32 - this.height;
+                this.vy = 0;
+                this.falling = false;
+                this.onGround = true;
+                this.originalY = this.y;
+                if (this.behavior === 'fly') {
+                    this.flyHeight = this.y;
+                }
+            }
             return;
         }
 
@@ -3002,7 +3073,7 @@ class Game {
         ctx.fillStyle = '#fff';
         const blink = Math.floor(Date.now() / 500) % 2;
         if (blink) {
-            ctx.fillText('>>> PRESIONÁ ENTER O BOTÓN 3 <<<', WIDTH/2, 295);
+            ctx.fillText('>>> PRESIONÁ D O BOTÓN 3 <<<', WIDTH/2, 295);
         }
 
         ctx.font = '14px Courier New';
@@ -3016,7 +3087,7 @@ class Game {
 
         ctx.font = '12px Courier New';
         ctx.fillStyle = '#7f8c8d';
-        ctx.fillText('← → Mover | S Saltar | A Atacar | 🎮 Stick + Botones 1,2,3', WIDTH/2, 420);
+        ctx.fillText('← → Mover | S Saltar | A Atacar | D Confirmar', WIDTH/2, 420);
 
         ctx.font = '11px Courier New';
         ctx.fillStyle = '#555';
@@ -3188,7 +3259,7 @@ class Game {
 
         ctx.font = '18px Courier New';
         ctx.fillStyle = '#bdc3c7';
-        ctx.fillText('Presioná ENTER o BOTÓN 3...', WIDTH/2, HEIGHT/2 + 60);
+        ctx.fillText('Presioná D o BOTÓN 3...', WIDTH/2, HEIGHT/2 + 60);
     }
 
     drawGameOver() {
@@ -3209,7 +3280,7 @@ class Game {
             ctx.fillStyle = '#fff';
             const blink = Math.floor(Date.now() / 500) % 2;
             if (blink) {
-                ctx.fillText('Presioná ENTER o BOTÓN 3', WIDTH/2, HEIGHT/2 + 80);
+                ctx.fillText('Presioná D o BOTÓN 3', WIDTH/2, HEIGHT/2 + 80);
             }
         }
     }
@@ -3258,7 +3329,7 @@ class Game {
             ctx.fillStyle = '#bdc3c7';
             const blink = Math.floor(Date.now() / 500) % 2;
             if (blink) {
-                ctx.fillText('Presioná ENTER o BOTÓN 3', WIDTH/2, 420);
+                ctx.fillText('Presioná D o BOTÓN 3', WIDTH/2, 420);
             }
         }
     }

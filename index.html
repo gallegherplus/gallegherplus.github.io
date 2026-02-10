@@ -5,7 +5,543 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ariel Dutria aka Gallegher Plus</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --glow-green: #39ff14;
+            --glow-amber: #ffbf00;
+            --glow-cyan: #00e5ff;
+            --metal-dark: #1a1a1a;
+            --metal-mid: #2a2a2a;
+            --lab-bg: #0d0f0e;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--lab-bg);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* === LABORATORY BACKGROUND === */
+        .lab-background {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Grid pattern on walls */
+        .lab-background::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Vignette */
+        .lab-background::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+        }
+
+        /* === TEST TUBES === */
+        .test-tube-rack {
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .test-tube-rack.left {
+            left: 10px;
+            bottom: 50px;
+        }
+        .test-tube-rack.right {
+            right: 10px;
+            bottom: 80px;
+        }
+
+        .test-tube {
+            position: relative;
+            display: inline-block;
+            width: 22px;
+            margin: 0 4px;
+            vertical-align: bottom;
+        }
+        .test-tube .glass {
+            width: 22px;
+            border: 2px solid rgba(150,200,180,0.4);
+            border-top: none;
+            border-radius: 0 0 11px 11px;
+            background: rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .test-tube .liquid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0 0 9px 9px;
+            animation: liquidPulse 3s ease-in-out infinite;
+        }
+        @keyframes liquidPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .test-tube .rim {
+            width: 28px;
+            height: 6px;
+            background: rgba(150,200,180,0.5);
+            border-radius: 3px;
+            margin: 0 auto;
+            margin-left: -3px;
+        }
+
+        /* Bubbles inside tubes */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            animation: bubbleUp linear infinite;
+        }
+        @keyframes bubbleUp {
+            0% { bottom: 5%; opacity: 0.8; transform: translateX(0); }
+            50% { opacity: 0.5; transform: translateX(3px); }
+            100% { bottom: 95%; opacity: 0; transform: translateX(-2px); }
+        }
+
+        /* === GEARS === */
+        .gear {
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+            border-radius: 50%;
+            border: 3px solid rgba(120,100,60,0.4);
+        }
+        .gear::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            border: 2px solid rgba(120,100,60,0.4);
+            background: rgba(30,30,20,0.8);
+        }
+        .gear::after {
+            content: '⚙';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: inherit;
+            color: rgba(120,100,60,0.25);
+        }
+
+        .gear-1 {
+            width: 80px; height: 80px;
+            top: 15%;
+            left: 2%;
+            animation: rotateCW 15s linear infinite;
+            font-size: 80px;
+            border: none;
+        }
+        .gear-1::before { display: none; }
+
+        .gear-2 {
+            width: 55px; height: 55px;
+            top: 22%;
+            left: calc(2% + 65px);
+            animation: rotateCCW 10s linear infinite;
+            font-size: 55px;
+            border: none;
+        }
+        .gear-2::before { display: none; }
+
+        .gear-3 {
+            width: 100px; height: 100px;
+            bottom: 20%;
+            right: 3%;
+            animation: rotateCW 20s linear infinite;
+            font-size: 100px;
+            border: none;
+        }
+        .gear-3::before { display: none; }
+
+        .gear-4 {
+            width: 60px; height: 60px;
+            bottom: 32%;
+            right: calc(3% + 80px);
+            animation: rotateCCW 13s linear infinite;
+            font-size: 60px;
+            border: none;
+        }
+        .gear-4::before { display: none; }
+
+        @keyframes rotateCW {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes rotateCCW {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        /* === PIPES === */
+        .pipe-horizontal {
+            position: fixed;
+            height: 8px;
+            background: linear-gradient(180deg, #555 0%, #333 40%, #222 60%, #444 100%);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .pipe-vertical {
+            position: fixed;
+            width: 8px;
+            background: linear-gradient(90deg, #555 0%, #333 40%, #222 60%, #444 100%);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .pipe-joint {
+            position: fixed;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #555, #333);
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .pipe-flow {
+            position: absolute;
+            background: var(--glow-green);
+            opacity: 0.6;
+            filter: blur(2px);
+            animation: pipeFlowAnim 3s linear infinite;
+        }
+        .pipe-horizontal .pipe-flow {
+            height: 3px; width: 30px; top: 2px;
+        }
+        .pipe-vertical .pipe-flow {
+            width: 3px; height: 30px; left: 2px;
+        }
+        @keyframes pipeFlowAnim {
+            0% { transform: translateX(-30px); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateX(200px); opacity: 0; }
+        }
+        @keyframes pipeFlowVertical {
+            0% { transform: translateY(-30px); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(200px); opacity: 0; }
+        }
+
+        /* === OSCILLOSCOPE === */
+        .oscilloscope {
+            position: fixed;
+            top: 5%;
+            right: 3%;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #444;
+            background: radial-gradient(circle, #0a150a, #000);
+            box-shadow: inset 0 0 20px rgba(57,255,20,0.1), 0 0 10px rgba(0,0,0,0.5);
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .oscilloscope::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                linear-gradient(rgba(57,255,20,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57,255,20,0.05) 1px, transparent 1px);
+            background-size: 15px 15px;
+        }
+
+        .scope-line {
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            width: 90%;
+            height: 2px;
+            overflow: visible;
+        }
+
+        .scope-wave {
+            fill: none;
+            stroke: var(--glow-green);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 4px var(--glow-green));
+            animation: scopeSweep 2s linear infinite;
+        }
+        @keyframes scopeSweep {
+            0% { stroke-dashoffset: 200; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        /* === VACUUM TUBES === */
+        .vacuum-tube {
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .vacuum-tube .tube-body {
+            width: 30px;
+            height: 50px;
+            border: 2px solid rgba(200,180,120,0.3);
+            border-radius: 15px 15px 5px 5px;
+            background: radial-gradient(ellipse at center, rgba(255,200,50,0.08), transparent);
+            position: relative;
+        }
+        .vacuum-tube .tube-glow {
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 60%;
+            height: 50%;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(255,165,0,0.4), transparent);
+            animation: tubeFlicker 1.5s ease-in-out infinite alternate;
+        }
+        .vacuum-tube .tube-base {
+            width: 36px;
+            height: 12px;
+            background: linear-gradient(180deg, #555, #333);
+            border-radius: 3px;
+            margin-left: -3px;
+        }
+        .vacuum-tube .tube-pins {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 6px;
+        }
+        .vacuum-tube .pin {
+            width: 2px;
+            height: 8px;
+            background: #888;
+        }
+        @keyframes tubeFlicker {
+            0% { opacity: 0.5; }
+            30% { opacity: 0.9; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* === BIOMECHANICAL TENDRILS === */
+        .tendril-container {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+        .tendril {
+            fill: none;
+            stroke: rgba(100,180,100,0.5);
+            stroke-width: 3;
+            stroke-linecap: round;
+            animation: tendrilPulse 4s ease-in-out infinite;
+        }
+        .tendril-node {
+            fill: rgba(57,255,20,0.3);
+            animation: nodePulse 2s ease-in-out infinite;
+        }
+        @keyframes tendrilPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        @keyframes nodePulse {
+            0%, 100% { r: 3; opacity: 0.3; }
+            50% { r: 5; opacity: 0.8; }
+        }
+
+        /* === ELECTRICITY/SPARKS === */
+        .spark {
+            position: fixed;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .spark-path {
+            fill: none;
+            stroke: var(--glow-cyan);
+            stroke-width: 1.5;
+            opacity: 0;
+            animation: sparkFlash 4s linear infinite;
+            filter: drop-shadow(0 0 3px var(--glow-cyan));
+        }
+        @keyframes sparkFlash {
+            0%, 45%, 55%, 100% { opacity: 0; }
+            47%, 53% { opacity: 1; }
+            48% { opacity: 0.3; }
+            50% { opacity: 0.9; }
+        }
+
+        /* === INDICATOR LIGHTS === */
+        .indicator-panel {
+            position: fixed;
+            z-index: 2;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .indicator-light {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+        }
+        .indicator-light.red {
+            background: #ff3333;
+            box-shadow: 0 0 6px #ff3333, inset 0 0 3px rgba(255,255,255,0.3);
+            animation: blinkSlow 2s infinite;
+        }
+        .indicator-light.green {
+            background: var(--glow-green);
+            box-shadow: 0 0 6px var(--glow-green), inset 0 0 3px rgba(255,255,255,0.3);
+        }
+        .indicator-light.amber {
+            background: var(--glow-amber);
+            box-shadow: 0 0 6px var(--glow-amber), inset 0 0 3px rgba(255,255,255,0.3);
+            animation: blinkFast 0.8s infinite;
+        }
+        .indicator-light.off {
+            background: #333;
+        }
+        @keyframes blinkSlow {
+            0%, 40% { opacity: 1; }
+            50%, 90% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+        @keyframes blinkFast {
+            0%, 45% { opacity: 1; }
+            50%, 95% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* === DIAL/GAUGE === */
+        .gauge {
+            position: fixed;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .gauge-body {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #555;
+            background: radial-gradient(circle, #222, #111);
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.5);
+        }
+        .gauge-marks {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+        .gauge-needle {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            width: 2px;
+            height: 28px;
+            background: linear-gradient(to top, #ff3333, #ff6666);
+            transform-origin: bottom center;
+            animation: needleSwing 3s ease-in-out infinite alternate;
+            border-radius: 1px;
+            box-shadow: 0 0 4px rgba(255,50,50,0.5);
+        }
+        .gauge-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #888;
+            border: 1px solid #aaa;
+            z-index: 3;
+        }
+        @keyframes needleSwing {
+            0% { transform: rotate(-40deg); }
+            100% { transform: rotate(40deg); }
+        }
+
+        /* === MAIN CONTENT STYLING === */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Metal panel style for sections */
+        .metal-panel {
+            background: linear-gradient(135deg, #1a1e1a 0%, #0f120f 50%, #1a1e1a 100%);
+            border: 2px solid #3a3a3a;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.05),
+                inset 0 -1px 0 rgba(0,0,0,0.3),
+                0 0 20px rgba(0,0,0,0.5),
+                0 0 60px rgba(57,255,20,0.03);
+            position: relative;
+        }
+        .metal-panel::before {
+            content: '';
+            position: absolute;
+            top: 6px; left: 6px; right: 6px; bottom: 6px;
+            border: 1px solid rgba(57,255,20,0.08);
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        /* Rivet decorations */
+        .rivet {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #666, #333);
+            border: 1px solid #222;
+            position: absolute;
+        }
+
+        /* Retro screen glow */
+        .screen-glow {
+            box-shadow: 0 0 15px rgba(57,255,20,0.15), inset 0 0 30px rgba(57,255,20,0.05);
+            border: 2px solid rgba(57,255,20,0.2);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border: 1px solid #555;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* === ANIMATIONS === */
         @keyframes flow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -15,6 +551,7 @@
             background-size: 200% auto;
             animation: flow 3s linear infinite;
         }
+
         @keyframes equalizer {
             0% { height: 10%; }
             50% { height: 100%; }
@@ -23,79 +560,471 @@
         .eq-bar {
             animation: equalizer 0.5s ease-in-out infinite alternate;
         }
+
+        @keyframes scanline {
+            0% { top: -5%; }
+            100% { top: 105%; }
+        }
+        .scanline-effect::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0;
+            height: 3px;
+            background: rgba(57,255,20,0.08);
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Flicker for the title */
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(57,255,20,0.5), 0 0 30px rgba(57,255,20,0.2); }
+            50% { text-shadow: 0 0 20px rgba(57,255,20,0.8), 0 0 50px rgba(57,255,20,0.3), 0 0 80px rgba(57,255,20,0.1); }
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Ambient floating particles */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: var(--glow-green);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatParticle linear infinite;
+        }
+        @keyframes floatParticle {
+            0% { opacity: 0; transform: translateY(0) translateX(0); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-100vh) translateX(20px); }
+        }
+
+        /* === SECTION HEADERS === */
+        .section-header {
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.3em;
+            padding: 8px 24px;
+            background: linear-gradient(90deg, transparent, rgba(57,255,20,0.05), transparent);
+        }
+        .section-header::before,
+        .section-header::after {
+            content: '◆';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(57,255,20,0.3);
+            font-size: 8px;
+        }
+        .section-header::before { left: 5px; }
+        .section-header::after { right: 5px; }
+
+        /* Button/Link retro style */
+        .retro-btn {
+            background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+            border: 1px solid #555;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .retro-btn:hover {
+            border-color: var(--glow-green);
+            box-shadow: 0 0 10px rgba(57,255,20,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .retro-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(57,255,20,0.1), transparent);
+            transition: left 0.5s;
+        }
+        .retro-btn:hover::after {
+            left: 100%;
+        }
+
+        /* Responsive: hide complex decorations on mobile */
+        @media (max-width: 768px) {
+            .gear, .test-tube-rack, .oscilloscope, .gauge,
+            .indicator-panel, .vacuum-tube, .tendril-container,
+            .spark, .pipe-horizontal, .pipe-vertical, .pipe-joint {
+                display: none;
+            }
+        }
+
+        /* Large screens: show everything */
+        @media (min-width: 1200px) {
+            .test-tube-rack.left { left: 5%; }
+            .test-tube-rack.right { right: 5%; }
+        }
+
+        /* Beaker/flask SVG decoration */
+        .flask-decoration {
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.25;
+        }
+
+        /* Bio-mechanical spine */
+        .bio-spine {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .spine-segment {
+            fill: none;
+            stroke: rgba(100,120,80,0.2);
+            stroke-width: 2;
+        }
+        .spine-joint {
+            fill: rgba(120,150,80,0.15);
+            stroke: rgba(100,120,80,0.3);
+            stroke-width: 1;
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-black flex items-center justify-center">
-    <div class="text-center p-8 w-full max-w-lg">
-        <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 animate-pulse">
-            Ariel Dutria
-        </h1>
-        <p class="text-2xl md:text-4xl text-purple-300 font-light tracking-widest">
-            aka
-        </p>
-        <h2 class="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent mt-4 animate-flow">
-            Gallegher Plus
-        </h2>
-        
-        <!-- Synth/Equalizer Visual -->
-        <div class="mt-8 h-12 flex justify-center items-end space-x-1.5 p-2 bg-black/30 rounded-lg border border-purple-500/20 backdrop-blur-sm">
-            <div class="w-2 bg-cyan-400 rounded-t eq-bar" style="animation-duration: 0.4s"></div>
-            <div class="w-2 bg-purple-500 rounded-t eq-bar" style="animation-duration: 0.7s"></div>
-            <div class="w-2 bg-pink-500 rounded-t eq-bar" style="animation-duration: 0.5s"></div>
-            <div class="w-2 bg-yellow-400 rounded-t eq-bar" style="animation-duration: 0.6s"></div>
-            <div class="w-2 bg-green-400 rounded-t eq-bar" style="animation-duration: 0.3s"></div>
-            <div class="w-2 bg-red-500 rounded-t eq-bar" style="animation-duration: 0.8s"></div>
+<body class="min-h-screen flex items-center justify-center">
+
+    <!-- ===================== BACKGROUND DECORATIONS ===================== -->
+    <div class="lab-background"></div>
+
+    <!-- Floating Particles -->
+    <div class="particle" style="left:10%; animation-duration:8s; animation-delay:0s;"></div>
+    <div class="particle" style="left:25%; animation-duration:12s; animation-delay:2s;"></div>
+    <div class="particle" style="left:40%; animation-duration:10s; animation-delay:1s;"></div>
+    <div class="particle" style="left:55%; animation-duration:9s; animation-delay:3s;"></div>
+    <div class="particle" style="left:70%; animation-duration:11s; animation-delay:0.5s;"></div>
+    <div class="particle" style="left:85%; animation-duration:7s; animation-delay:4s;"></div>
+    <div class="particle" style="left:15%; animation-duration:13s; animation-delay:6s;"></div>
+    <div class="particle" style="left:60%; animation-duration:8s; animation-delay:5s;"></div>
+    <div class="particle" style="left:90%; animation-duration:14s; animation-delay:1s;"></div>
+    <div class="particle" style="left:35%; animation-duration:10s; animation-delay:7s;"></div>
+
+    <!-- GEARS -->
+    <div class="gear gear-1">⚙</div>
+    <div class="gear gear-2">⚙</div>
+    <div class="gear gear-3">⚙</div>
+    <div class="gear gear-4">⚙</div>
+
+    <!-- PIPES -->
+    <div class="pipe-horizontal" style="top: 8%; left: 0; width: 25%;">
+        <div class="pipe-flow"></div>
+    </div>
+    <div class="pipe-vertical" style="top: 8%; left: 25%; height: 15%;">
+        <div class="pipe-flow" style="animation: pipeFlowVertical 3s linear infinite 1s;"></div>
+    </div>
+    <div class="pipe-joint" style="top: calc(8% - 4px); left: calc(25% - 4px);"></div>
+    <div class="pipe-horizontal" style="top: 23%; left: 25%; width: 10%;">
+        <div class="pipe-flow" style="animation-delay: 2s;"></div>
+    </div>
+    <div class="pipe-joint" style="top: calc(23% - 4px); left: calc(25% - 4px);"></div>
+
+    <div class="pipe-horizontal" style="bottom: 12%; right: 0; width: 20%;">
+        <div class="pipe-flow"></div>
+    </div>
+    <div class="pipe-vertical" style="bottom: 12%; right: 20%; height: 18%;">
+        <div class="pipe-flow" style="animation: pipeFlowVertical 4s linear infinite 0.5s;"></div>
+    </div>
+    <div class="pipe-joint" style="bottom: calc(12% - 4px); right: calc(20% - 4px);"></div>
+
+    <!-- OSCILLOSCOPE -->
+    <div class="oscilloscope">
+        <svg class="scope-line" viewBox="0 0 100 30" preserveAspectRatio="none">
+            <path class="scope-wave" d="M0,15 Q5,5 10,15 Q15,25 20,15 Q25,5 30,15 Q35,25 40,15 Q45,5 50,15 Q55,25 60,15 Q65,5 70,15 Q75,25 80,15 Q85,5 90,15 Q95,25 100,15"
+                stroke-dasharray="200"
+                stroke-dashoffset="200"/>
+        </svg>
+    </div>
+
+    <!-- GAUGE -->
+    <div class="gauge" style="bottom: 8%; left: 4%;">
+        <div class="gauge-body">
+            <svg class="gauge-marks" viewBox="0 0 70 70">
+                <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4 8"/>
+                <text x="35" y="58" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="6" font-family="Orbitron">PSI</text>
+            </svg>
+            <div class="gauge-needle"></div>
+            <div class="gauge-center"></div>
+        </div>
+    </div>
+
+    <!-- INDICATOR LIGHTS -->
+    <div class="indicator-panel" style="top: 40%; left: 2%;">
+        <div class="indicator-light green"></div>
+        <div class="indicator-light red"></div>
+        <div class="indicator-light off"></div>
+        <div class="indicator-light amber"></div>
+        <div class="indicator-light green"></div>
+    </div>
+    <div class="indicator-panel" style="top: 55%; right: 2%;">
+        <div class="indicator-light amber"></div>
+        <div class="indicator-light green"></div>
+        <div class="indicator-light red"></div>
+        <div class="indicator-light off"></div>
+    </div>
+
+    <!-- VACUUM TUBES -->
+    <div class="vacuum-tube" style="top: 35%; right: 4%;">
+        <div class="tube-body">
+            <div class="tube-glow"></div>
+        </div>
+        <div class="tube-base"></div>
+        <div class="tube-pins">
+            <div class="pin"></div>
+            <div class="pin"></div>
+            <div class="pin"></div>
+            <div class="pin"></div>
+        </div>
+    </div>
+    <div class="vacuum-tube" style="top: 35%; right: calc(4% + 45px);">
+        <div class="tube-body">
+            <div class="tube-glow" style="animation-delay: 0.7s;"></div>
+        </div>
+        <div class="tube-base"></div>
+        <div class="tube-pins">
+            <div class="pin"></div>
+            <div class="pin"></div>
+            <div class="pin"></div>
+            <div class="pin"></div>
+        </div>
+    </div>
+
+    <!-- TEST TUBE RACK LEFT -->
+    <div class="test-tube-rack left">
+        <div class="test-tube">
+            <div class="rim"></div>
+            <div class="glass" style="height: 80px;">
+                <div class="liquid" style="height: 60%; background: rgba(57,255,20,0.4);">
+                    <div class="bubble" style="width:3px; height:3px; left:5px; animation-duration: 2s;"></div>
+                    <div class="bubble" style="width:2px; height:2px; left:10px; animation-duration: 1.5s; animation-delay: 0.5s;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="test-tube">
+            <div class="rim"></div>
+            <div class="glass" style="height: 90px;">
+                <div class="liquid" style="height: 45%; background: rgba(0,229,255,0.4);">
+                    <div class="bubble" style="width:2px; height:2px; left:7px; animation-duration: 1.8s; animation-delay: 0.3s;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="test-tube">
+            <div class="rim"></div>
+            <div class="glass" style="height: 70px;">
+                <div class="liquid" style="height: 75%; background: rgba(255,191,0,0.4);">
+                    <div class="bubble" style="width:3px; height:3px; left:4px; animation-duration: 2.2s;"></div>
+                    <div class="bubble" style="width:2px; height:2px; left:12px; animation-duration: 1.6s; animation-delay: 1s;"></div>
+                    <div class="bubble" style="width:2px; height:2px; left:8px; animation-duration: 1.3s; animation-delay: 0.7s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEST TUBE RACK RIGHT -->
+    <div class="test-tube-rack right">
+        <div class="test-tube">
+            <div class="rim"></div>
+            <div class="glass" style="height: 85px;">
+                <div class="liquid" style="height: 55%; background: rgba(255,50,50,0.35);">
+                    <div class="bubble" style="width:2px; height:2px; left:6px; animation-duration: 1.9s;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="test-tube">
+            <div class="rim"></div>
+            <div class="glass" style="height: 75px;">
+                <div class="liquid" style="height: 80%; background: rgba(180,50,255,0.35);">
+                    <div class="bubble" style="width:3px; height:3px; left:5px; animation-duration: 1.4s; animation-delay: 0.2s;"></div>
+                    <div class="bubble" style="width:2px; height:2px; left:11px; animation-duration: 2.1s; animation-delay: 0.8s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BIOMECHANICAL TENDRILS (LEFT) -->
+    <div class="tendril-container" style="left: 0; top: 50%; transform: translateY(-50%);">
+        <svg width="80" height="400" viewBox="0 0 80 400">
+            <path class="tendril" d="M0,50 Q30,80 20,120 Q10,160 25,200 Q40,240 15,280 Q-5,320 20,360" style="animation-delay:0s;"/>
+            <path class="tendril" d="M0,30 Q40,60 30,100 Q20,140 35,180 Q50,220 25,260 Q0,300 30,340 Q60,380 20,400" style="animation-delay:1.5s; stroke-width:2;"/>
+            <circle class="tendril-node" cx="20" cy="120" r="4" style="animation-delay:0.5s;"/>
+            <circle class="tendril-node" cx="25" cy="200" r="3" style="animation-delay:1s;"/>
+            <circle class="tendril-node" cx="15" cy="280" r="5" style="animation-delay:1.5s;"/>
+            <circle class="tendril-node" cx="30" cy="340" r="3" style="animation-delay:2s;"/>
+        </svg>
+    </div>
+
+    <!-- BIOMECHANICAL TENDRILS (RIGHT) -->
+    <div class="tendril-container" style="right: 0; top: 30%;">
+        <svg width="80" height="500" viewBox="0 0 80 500">
+            <path class="tendril" d="M80,20 Q50,60 60,100 Q70,140 45,180 Q20,220 55,260 Q80,300 50,340 Q20,380 60,420 Q80,460 50,500" style="animation-delay:2s;"/>
+            <path class="tendril" d="M80,60 Q40,90 55,130 Q70,170 40,210 Q10,250 50,290 Q80,330 45,370" style="animation-delay:0.5s; stroke-width:2;"/>
+            <circle class="tendril-node" cx="60" cy="100" r="4" style="animation-delay:0.3s;"/>
+            <circle class="tendril-node" cx="45" cy="180" r="5" style="animation-delay:1.2s;"/>
+            <circle class="tendril-node" cx="55" cy="260" r="3" style="animation-delay:2.5s;"/>
+            <circle class="tendril-node" cx="50" cy="340" r="4" style="animation-delay:0.8s;"/>
+            <circle class="tendril-node" cx="45" cy="370" r="3" style="animation-delay:1.8s;"/>
+        </svg>
+    </div>
+
+    <!-- BIO-MECHANICAL SPINE (LEFT) -->
+    <div class="bio-spine" style="left: 0; top: 0; height: 100vh;">
+        <svg width="30" height="100%" viewBox="0 0 30 800" preserveAspectRatio="none">
+            <!-- Spine column -->
+            <path class="spine-segment" d="M15,0 L15,800" stroke-width="3"/>
+            <!-- Vertebrae -->
+            <ellipse class="spine-joint" cx="15" cy="80" rx="10" ry="6"/>
+            <ellipse class="spine-joint" cx="15" cy="160" rx="12" ry="5"/>
+            <ellipse class="spine-joint" cx="15" cy="240" rx="10" ry="7"/>
+            <ellipse class="spine-joint" cx="15" cy="320" rx="11" ry="5"/>
+            <ellipse class="spine-joint" cx="15" cy="400" rx="13" ry="6"/>
+            <ellipse class="spine-joint" cx="15" cy="480" rx="10" ry="5"/>
+            <ellipse class="spine-joint" cx="15" cy="560" rx="12" ry="7"/>
+            <ellipse class="spine-joint" cx="15" cy="640" rx="10" ry="5"/>
+            <ellipse class="spine-joint" cx="15" cy="720" rx="11" ry="6"/>
+            <!-- Ribs -->
+            <path class="spine-segment" d="M15,80 Q25,90 28,85" stroke-width="1.5"/>
+            <path class="spine-segment" d="M15,160 Q25,170 28,165" stroke-width="1.5"/>
+            <path class="spine-segment" d="M15,240 Q25,250 28,245" stroke-width="1.5"/>
+            <path class="spine-segment" d="M15,320 Q25,330 28,325" stroke-width="1.5"/>
+            <path class="spine-segment" d="M15,400 Q25,410 28,405" stroke-width="1.5"/>
+            <path class="spine-segment" d="M15,480 Q25,490 28,485" stroke-width="1.5"/>
+            <path class="spine-segment" d="M15,560 Q25,570 28,565" stroke-width="1.5"/>
+        </svg>
+    </div>
+
+    <!-- ELECTRICITY SPARKS -->
+    <div class="spark" style="top: 15%; left: 20%;">
+        <svg width="60" height="40" viewBox="0 0 60 40">
+            <path class="spark-path" d="M0,20 L15,10 L20,18 L35,5 L40,15 L55,0" style="animation-delay: 0s;"/>
+        </svg>
+    </div>
+    <div class="spark" style="top: 60%; right: 15%;">
+        <svg width="50" height="35" viewBox="0 0 50 35">
+            <path class="spark-path" d="M0,15 L12,25 L18,12 L30,30 L38,8 L50,20" style="animation-delay: 2s;"/>
+        </svg>
+    </div>
+    <div class="spark" style="bottom: 25%; left: 12%;">
+        <svg width="45" height="30" viewBox="0 0 45 30">
+            <path class="spark-path" d="M0,25 L10,5 L15,20 L25,0 L35,18 L45,3" style="animation-delay: 3.5s;"/>
+        </svg>
+    </div>
+
+    <!-- ERLENMEYER FLASK DECORATION -->
+    <div class="flask-decoration" style="bottom: 15%; left: 8%;">
+        <svg width="60" height="90" viewBox="0 0 60 90">
+            <!-- Neck -->
+            <rect x="22" y="0" width="16" height="30" fill="none" stroke="rgba(150,200,180,0.4)" stroke-width="2" rx="2"/>
+            <!-- Body -->
+            <path d="M22,30 L5,80 Q5,88 15,88 L45,88 Q55,88 55,80 L38,30" fill="none" stroke="rgba(150,200,180,0.4)" stroke-width="2"/>
+            <!-- Liquid -->
+            <path d="M12,65 L48,65 Q53,80 48,85 L12,85 Q7,80 12,65" fill="rgba(57,255,20,0.15)" stroke="none">
+                <animate attributeName="d" dur="3s" repeatCount="indefinite"
+                    values="M12,65 L48,65 Q53,80 48,85 L12,85 Q7,80 12,65;
+                            M14,63 L46,67 Q53,80 48,85 L12,85 Q7,80 14,63;
+                            M12,65 L48,65 Q53,80 48,85 L12,85 Q7,80 12,65"/>
+            </path>
+            <!-- Rim -->
+            <rect x="18" y="0" width="24" height="4" fill="rgba(150,200,180,0.3)" rx="2"/>
+        </svg>
+    </div>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <div class="content-wrapper text-center p-4 md:p-8 w-full max-w-lg scanline-effect">
+
+        <!-- HEADER PANEL -->
+        <div class="metal-panel rounded-2xl p-8 mb-8 relative">
+            <!-- Rivets -->
+            <div class="rivet" style="top:8px; left:8px;"></div>
+            <div class="rivet" style="top:8px; right:8px;"></div>
+            <div class="rivet" style="bottom:8px; left:8px;"></div>
+            <div class="rivet" style="bottom:8px; right:8px;"></div>
+
+            <h1 class="text-4xl md:text-6xl font-bold mb-4" style="color: var(--glow-green); text-shadow: 0 0 10px rgba(57,255,20,0.5), 0 0 30px rgba(57,255,20,0.2); animation: titleGlow 3s ease-in-out infinite; font-family: 'Orbitron', sans-serif;">
+                Ariel Dutria
+            </h1>
+            <p class="text-xl md:text-3xl font-light tracking-[0.5em] uppercase" style="color: rgba(255,191,0,0.7); font-family: 'Share Tech Mono', monospace;">
+                aka
+            </p>
+            <h2 class="text-3xl md:text-5xl font-extrabold mt-4 animate-flow bg-clip-text text-transparent" style="background-image: linear-gradient(90deg, #39ff14, #ffbf00, #00e5ff, #39ff14); background-size: 200% auto; font-family: 'Orbitron', sans-serif;">
+                Gallegher Plus
+            </h2>
+
+            <!-- Equalizer -->
+            <div class="mt-8 h-12 flex justify-center items-end space-x-1.5 p-2 rounded-lg relative" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(57,255,20,0.15);">
+                <div class="w-2 rounded-t eq-bar" style="background: #39ff14; animation-duration: 0.4s; box-shadow: 0 0 4px #39ff14;"></div>
+                <div class="w-2 rounded-t eq-bar" style="background: #ffbf00; animation-duration: 0.7s; box-shadow: 0 0 4px #ffbf00;"></div>
+                <div class="w-2 rounded-t eq-bar" style="background: #00e5ff; animation-duration: 0.5s; box-shadow: 0 0 4px #00e5ff;"></div>
+                <div class="w-2 rounded-t eq-bar" style="background: #ff3333; animation-duration: 0.6s; box-shadow: 0 0 4px #ff3333;"></div>
+                <div class="w-2 rounded-t eq-bar" style="background: #39ff14; animation-duration: 0.3s; box-shadow: 0 0 4px #39ff14;"></div>
+                <div class="w-2 rounded-t eq-bar" style="background: #ffbf00; animation-duration: 0.8s; box-shadow: 0 0 4px #ffbf00;"></div>
+            </div>
         </div>
 
-        <div class="mt-12 w-full flex flex-col items-center">
-            
-            <!-- SECCIÓN JUEGOS -->
+        <div class="w-full flex flex-col items-center">
+
+            <!-- ============ SECCIÓN JUEGOS ============ -->
             <div class="w-full max-w-sm mb-12 space-y-4">
-                <h3 class="text-center text-cyan-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-cyan-500/30 pb-2">Juegos / Games</h3>
-                
+                <h3 class="section-header text-center font-bold mb-6 uppercase text-sm border-b pb-2" style="color: var(--glow-green); border-color: rgba(57,255,20,0.2);">
+                    ▸ Juegos / Games ◂
+                </h3>
+
                 <!-- Gallegher Starship Game -->
-                <a href="ship.html" class="group relative flex flex-col items-center justify-center p-2 border border-purple-500/30 rounded-2xl bg-black/40 hover:bg-purple-900/40 transition-all duration-300 hover:scale-[1.02] hover:border-cyan-400/50 backdrop-blur-sm overflow-hidden shadow-lg shadow-purple-900/20">
+                <a href="ship.html" class="group relative flex flex-col items-center justify-center p-2 rounded-2xl metal-panel overflow-hidden transition-all duration-300 hover:scale-[1.02]" style="border-color: rgba(57,255,20,0.2);">
+                    <div class="rivet" style="top:6px; left:6px;"></div>
+                    <div class="rivet" style="top:6px; right:6px;"></div>
                     <div class="w-full relative">
-                        <img src="https://images4.imagebam.com/03/7e/4f/ME1A2UIG_o.png" alt="Gallegher Starship" class="w-full h-auto rounded-xl opacity-90 group-hover:opacity-100 transition-opacity duration-300 border border-white/10">
+                        <img src="https://images4.imagebam.com/03/7e/4f/ME1A2UIG_o.png" alt="Gallegher Starship" class="w-full h-auto rounded-xl opacity-90 group-hover:opacity-100 transition-opacity duration-300" style="border: 1px solid rgba(57,255,20,0.15);">
                     </div>
-                    <span class="py-3 text-lg font-bold text-gray-200 group-hover:text-cyan-300 tracking-widest uppercase transition-colors duration-300">
+                    <span class="py-3 text-lg font-bold tracking-widest uppercase transition-colors duration-300" style="color: var(--glow-green); font-family: 'Orbitron', sans-serif;">
                         Gallegher Starship Game
                     </span>
                 </a>
 
                 <!-- Instrucciones Starship -->
-                <div class="w-full p-4 rounded-xl bg-purple-900/30 border border-cyan-500/20 backdrop-blur-sm text-gray-300 text-xs md:text-sm shadow-inner">
-                    <h4 class="text-cyan-400 font-bold mb-3 uppercase tracking-wider text-center border-b border-white/10 pb-2">Controles / Controls</h4>
+                <div class="w-full p-4 rounded-xl metal-panel text-xs md:text-sm relative" style="color: rgba(200,220,200,0.8);">
+                    <div class="rivet" style="top:6px; left:6px;"></div>
+                    <div class="rivet" style="top:6px; right:6px;"></div>
+                    <div class="rivet" style="bottom:6px; left:6px;"></div>
+                    <div class="rivet" style="bottom:6px; right:6px;"></div>
+                    <h4 class="font-bold mb-3 uppercase tracking-wider text-center border-b pb-2" style="color: var(--glow-amber); border-color: rgba(255,191,0,0.2); font-family: 'Orbitron', sans-serif;">Controles / Controls</h4>
                     <div class="grid grid-cols-1 gap-4 text-center md:text-left">
                         <div class="flex items-start space-x-2">
                             <span class="text-lg">⌨️</span>
                             <div>
-                                <strong class="text-pink-400 block text-xs uppercase mb-1">PC (Teclado)</strong>
+                                <strong class="block text-xs uppercase mb-1" style="color: var(--glow-green);">PC (Teclado)</strong>
                                 <p class="opacity-90 leading-relaxed">
-                                    <span class="text-white font-mono bg-white/10 px-1 rounded">A</span> Disparo &nbsp;|&nbsp; 
-                                    <span class="text-white font-mono bg-white/10 px-1 rounded">S</span> Bomba &nbsp;|&nbsp; 
-                                    <span class="text-white font-mono bg-white/10 px-1 rounded">D</span> Inicia juego
+                                    <span class="font-mono px-1 rounded" style="background: rgba(57,255,20,0.1); color: var(--glow-green);">A</span> Disparo &nbsp;|&nbsp;
+                                    <span class="font-mono px-1 rounded" style="background: rgba(57,255,20,0.1); color: var(--glow-green);">S</span> Bomba &nbsp;|&nbsp;
+                                    <span class="font-mono px-1 rounded" style="background: rgba(57,255,20,0.1); color: var(--glow-green);">D</span> Inicia juego
                                 </p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-2">
                             <span class="text-lg">🎮</span>
                             <div>
-                                <strong class="text-purple-400 block text-xs uppercase mb-1">Joystick USB</strong>
+                                <strong class="block text-xs uppercase mb-1" style="color: var(--glow-amber);">Joystick USB</strong>
                                 <p class="opacity-90 leading-relaxed">
-                                    <span class="text-white font-mono bg-white/10 px-1 rounded">D-Pad/Stick</span> Mover &nbsp;|&nbsp; 
-                                    <span class="text-white font-mono bg-white/10 px-1 rounded">1</span> Inicio - Disparo &nbsp;|&nbsp; 
-                                    <span class="text-white font-mono bg-white/10 px-1 rounded">2</span> Bomba &nbsp;|&nbsp;
+                                    <span class="font-mono px-1 rounded" style="background: rgba(255,191,0,0.1); color: var(--glow-amber);">D-Pad/Stick</span> Mover &nbsp;|&nbsp;
+                                    <span class="font-mono px-1 rounded" style="background: rgba(255,191,0,0.1); color: var(--glow-amber);">1</span> Inicio - Disparo &nbsp;|&nbsp;
+                                    <span class="font-mono px-1 rounded" style="background: rgba(255,191,0,0.1); color: var(--glow-amber);">2</span> Bomba
                                 </p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-2">
                             <span class="text-lg">📱</span>
                             <div>
-                                <strong class="text-cyan-400 block text-xs uppercase mb-1">Mobile / Touch</strong>
+                                <strong class="block text-xs uppercase mb-1" style="color: var(--glow-cyan);">Mobile / Touch</strong>
                                 <p class="opacity-90 leading-relaxed">
-                                    <span class="text-white">Dedo</span> para Mover la nave.<br>
-                                    <span class="text-white">Tocar pantalla</span> para tirar Bomba.
+                                    <span style="color: var(--glow-cyan);">Dedo</span> para Mover la nave.<br>
+                                    <span style="color: var(--glow-cyan);">Tocar pantalla</span> para tirar Bomba.
                                 </p>
                             </div>
                         </div>
@@ -103,26 +1032,28 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN MÚSICA (Players) -->
+            <!-- ============ SECCIÓN MÚSICA ============ -->
             <div class="w-full max-w-md space-y-8 flex flex-col items-center">
-                <h3 class="text-center text-green-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-green-500/30 pb-2 w-full">Música / Music</h3>
+                <h3 class="section-header text-center font-bold mb-6 uppercase text-sm border-b pb-2 w-full" style="color: var(--glow-amber); border-color: rgba(255,191,0,0.2);">
+                    ▸ Música / Music ◂
+                </h3>
 
                 <!-- 1. Bandcamp Album (Ciberdelia) -->
-                <div class="rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1">
                     <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=1489493561/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/track=4237668646/transparent=true/" seamless><a href="https://cphnkx.bandcamp.com/album/ciberdelia-volumen-1">Ciberdelia - Volumen 1 by Gallegher Plus &amp; Tavo Pez</a></iframe>
                 </div>
 
                 <!-- 2. Primer contacto (2004) -->
                 <div class="flex flex-col items-center space-y-3 w-full">
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-orange-900/20 border border-orange-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1" style="border-color: rgba(255,191,0,0.2); box-shadow: 0 0 15px rgba(255,191,0,0.1);">
                         <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=4057325407/size=large/bgcol=333333/linkcol=e99708/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/primer-contacto-2004">Primer contacto (2004) by Gallegher Plus</a></iframe>
                     </div>
                     <div class="flex space-x-4">
-                        <a href="https://youtube.com/playlist?list=OLAK5uy_nrEjrRcBOILy38SARUEDkCd9nv5VgrSn4&si=NnfcsC-kusukIrRx" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-red-600/20 border border-red-500/50 rounded-full hover:bg-red-600/40 transition-colors text-white text-sm backdrop-blur-sm">
+                        <a href="https://youtube.com/playlist?list=OLAK5uy_nrEjrRcBOILy38SARUEDkCd9nv5VgrSn4&si=NnfcsC-kusukIrRx" target="_blank" class="retro-btn flex items-center space-x-2 px-4 py-2 rounded-full text-sm" style="color: #ff3333;">
                             <span class="text-lg">▶</span>
                             <span>YouTube</span>
                         </a>
-                        <a href="https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=acc2ae090d0a4f9b" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-green-600/20 border border-green-500/50 rounded-full hover:bg-green-600/40 transition-colors text-white text-sm backdrop-blur-sm">
+                        <a href="https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=acc2ae090d0a4f9b" target="_blank" class="retro-btn flex items-center space-x-2 px-4 py-2 rounded-full text-sm" style="color: var(--glow-green);">
                             <span class="text-lg">🟢</span>
                             <span>Spotify</span>
                         </a>
@@ -131,15 +1062,15 @@
 
                 <!-- 3. Star ship (2006) -->
                 <div class="flex flex-col items-center space-y-3 w-full pt-4">
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-green-900/20 border border-green-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1">
                         <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3420605549/size=large/bgcol=333333/linkcol=2ebd35/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/star-ship-2006">Star ship (2006) by Gallegher Plus</a></iframe>
                     </div>
                     <div class="flex space-x-4">
-                        <a href="https://www.youtube.com/watch?v=Xzj6FCUvNvQ&list=OLAK5uy_kWYNbMMdMSJtbek_C_rsr42WxI2VwOjXk" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-red-600/20 border border-red-500/50 rounded-full hover:bg-red-600/40 transition-colors text-white text-sm backdrop-blur-sm">
+                        <a href="https://www.youtube.com/watch?v=Xzj6FCUvNvQ&list=OLAK5uy_kWYNbMMdMSJtbek_C_rsr42WxI2VwOjXk" target="_blank" class="retro-btn flex items-center space-x-2 px-4 py-2 rounded-full text-sm" style="color: #ff3333;">
                             <span class="text-lg">▶</span>
                             <span>YouTube</span>
                         </a>
-                        <a href="https://open.spotify.com/intl-es/album/30VWqubwOLIcyitfQQKfPO?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=651b05e04b0b4078" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-green-600/20 border border-green-500/50 rounded-full hover:bg-green-600/40 transition-colors text-white text-sm backdrop-blur-sm">
+                        <a href="https://open.spotify.com/intl-es/album/30VWqubwOLIcyitfQQKfPO?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=651b05e04b0b4078" target="_blank" class="retro-btn flex items-center space-x-2 px-4 py-2 rounded-full text-sm" style="color: var(--glow-green);">
                             <span class="text-lg">🟢</span>
                             <span>Spotify</span>
                         </a>
@@ -148,11 +1079,11 @@
 
                 <!-- 4. I will leave them the new habits (2007) -->
                 <div class="flex flex-col items-center space-y-3 w-full pt-4">
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-cyan-900/20 border border-cyan-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1" style="border-color: rgba(0,229,255,0.2); box-shadow: 0 0 15px rgba(0,229,255,0.1);">
                         <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2744310584/size=large/bgcol=333333/linkcol=4ec5ec/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/i-will-leave-them-the-new-habits-2007">I will leave them the new habits (2007) by Gallegher Plus</a></iframe>
                     </div>
                     <div class="flex space-x-4">
-                        <a href="https://open.spotify.com/intl-es/album/6cD6wQLYulaEasUkPTJqOj?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=bc6701d02e2f4a08" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-green-600/20 border border-green-500/50 rounded-full hover:bg-green-600/40 transition-colors text-white text-sm backdrop-blur-sm">
+                        <a href="https://open.spotify.com/intl-es/album/6cD6wQLYulaEasUkPTJqOj?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=bc6701d02e2f4a08" target="_blank" class="retro-btn flex items-center space-x-2 px-4 py-2 rounded-full text-sm" style="color: var(--glow-green);">
                             <span class="text-lg">🟢</span>
                             <span>Spotify</span>
                         </a>
@@ -160,76 +1091,84 @@
                 </div>
 
                 <!-- 5. SoundCloud Embed -->
-                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-orange-900/20 border border-orange-500/20 hover:border-orange-400/50 transition-all duration-300">
+                <div class="w-full rounded-2xl overflow-hidden screen-glow transition-all duration-300 metal-panel p-1" style="border-color: rgba(255,85,0,0.2); box-shadow: 0 0 15px rgba(255,85,0,0.1);">
                     <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gallegherplus&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
                 </div>
 
                 <!-- 6. YouTube Embed -->
-                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 hover:border-red-400/50 transition-all duration-300 aspect-video">
+                <div class="w-full rounded-2xl overflow-hidden screen-glow transition-all duration-300 metal-panel p-1 aspect-video" style="border-color: rgba(255,50,50,0.2); box-shadow: 0 0 15px rgba(255,50,50,0.1);">
                     <iframe width="100%" height="100%" src="https://www.youtube.com/embed/87Pg9DTzjpc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
 
-
-
                 <!-- 9. Bandcamp Album (Artificial Intelligence) -->
-                <div class="rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1">
                     <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=479373965/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008">Artificial intelligence (2008) by Gallegher Plus</a></iframe>
                 </div>
-                
+
                 <!-- 10. Bandcamp (40 Años - Small) -->
-                <div class="w-full rounded-xl overflow-hidden shadow-lg shadow-teal-900/20 border border-teal-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                <div class="w-full rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1">
                     <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3486002417/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/track=1055934601/transparent=true/" seamless><a href="https://cosmocumples.bandcamp.com/album/40-a-os-en-el-mismo-sistema-solar">40 años en el mismo Sistema Solar by Gallegher Plus</a></iframe>
                 </div>
 
                 <!-- 11. ReverbNation Embed -->
-                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 bg-black/40 transition-transform hover:scale-[1.01] duration-300">
+                <div class="w-full rounded-2xl overflow-hidden screen-glow transition-transform hover:scale-[1.01] duration-300 metal-panel p-1">
                     <iframe width="100%" height="520" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_840307?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_840307" style="width:0px;min-width:100%;max-width:100%;"></iframe>
                 </div>
             </div>
 
-            <!-- SECCIÓN GRABACIONES EN VIVO -->
+            <!-- ============ SECCIÓN GRABACIONES EN VIVO ============ -->
             <div class="w-full max-w-md space-y-6 mt-16 mb-4 flex flex-col items-center">
-                <h3 class="text-center text-red-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-red-500/30 pb-2 w-full">Grabaciones en vivo</h3>
-                
+                <h3 class="section-header text-center font-bold mb-6 uppercase text-sm border-b pb-2 w-full" style="color: #ff3333; border-color: rgba(255,50,50,0.2);">
+                    ▸ Grabaciones en vivo ◂
+                </h3>
+
                 <!-- Bandcamp Album (El Acustico) -->
-                <div class="rounded-xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1" style="border-color: rgba(255,50,50,0.2); box-shadow: 0 0 15px rgba(255,50,50,0.1);">
                     <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=421278355/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://elacustico.bandcamp.com/album/gallegher-plus">Gallegher Plus by Gallegher Plus</a></iframe>
                 </div>
 
                 <!-- Bandcamp Album (Loser Party) -->
-                <div class="rounded-xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1" style="border-color: rgba(255,50,50,0.2); box-shadow: 0 0 15px rgba(255,50,50,0.1);">
                     <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2308284593/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011">Live in Loser Party (2011) by Gallegher Plus</a></iframe>
                 </div>
 
                 <!-- YouTube Live Video -->
-                <div class="w-full rounded-2xl overflow-hidden shadow-lg shadow-red-900/20 border border-red-500/20 hover:border-red-400/50 transition-all duration-300 aspect-video">
+                <div class="w-full rounded-2xl overflow-hidden screen-glow transition-all duration-300 metal-panel p-1 aspect-video" style="border-color: rgba(255,50,50,0.2); box-shadow: 0 0 15px rgba(255,50,50,0.1);">
                     <iframe width="100%" height="100%" src="https://www.youtube.com/embed/cCBDiIYllNw?si=p-v78oMuZ8os93xp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <!-- SECCIÓN COSMOMEDIA COLECTIVO -->
+            <!-- ============ SECCIÓN COSMOMEDIA COLECTIVO ============ -->
             <div class="w-full max-w-md space-y-6 mt-16 mb-16">
-                <h3 class="text-center text-yellow-400 font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-yellow-500/30 pb-2">CosmoMedia Colectivo</h3>
-                
+                <h3 class="section-header text-center font-bold mb-6 uppercase text-sm border-b pb-2" style="color: var(--glow-amber); border-color: rgba(255,191,0,0.2);">
+                    ▸ CosmoMedia Colectivo ◂
+                </h3>
+
                 <div class="flex flex-col items-center space-y-8 w-full">
                     <!-- Vol 1 -->
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-yellow-900/20 border border-yellow-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1" style="border-color: rgba(255,191,0,0.2); box-shadow: 0 0 15px rgba(255,191,0,0.1);">
                         <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3756104505/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-1">VA - CosmoMedia Vol. 1 by CosmoMedia</a></iframe>
                     </div>
 
                     <!-- Vol 2 -->
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-yellow-900/20 border border-yellow-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1" style="border-color: rgba(255,191,0,0.2); box-shadow: 0 0 15px rgba(255,191,0,0.1);">
                         <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=15350491/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-2">VA - CosmoMedia Vol. 2 by CosmoMedia Colectivo</a></iframe>
                     </div>
 
                     <!-- Intervención -->
-                    <div class="rounded-xl overflow-hidden shadow-lg shadow-yellow-900/20 border border-yellow-500/20 bg-white/5 transition-transform hover:scale-[1.02] duration-300">
+                    <div class="rounded-xl overflow-hidden screen-glow transition-transform hover:scale-[1.02] duration-300 metal-panel p-1" style="border-color: rgba(255,191,0,0.2); box-shadow: 0 0 15px rgba(255,191,0,0.1);">
                         <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=134645260/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/intervenci-n-audiovisual-en-vivo">Intervención Audiovisual en vivo by CosmoMedia Colectivo</a></iframe>
                     </div>
                 </div>
             </div>
 
+            <!-- FOOTER LAB LABEL -->
+            <div class="w-full text-center py-8 opacity-30" style="font-family: 'Orbitron', sans-serif; color: var(--glow-green); font-size: 9px; letter-spacing: 0.4em;">
+                ◈ LABORATORIO GALLEGHER — SECTOR 7G — CLASIFICADO ◈
+            </div>
+
         </div>
     </div>
+
 </body>
 </html>

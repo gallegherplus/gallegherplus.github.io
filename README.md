@@ -1,0 +1,2 @@
+index.html = https://gallegherplus.github.io/ (musica en spotify - youtube - soundcloud - bandcamp, video juego Gallegher Starship en el primer link de la pagina).
+Extra https://gallegherplus.github.io/RS.html es un juego inspirado en el litoral Argentino se trata de un carpincho o un yacare en una lancha que recoje puntos y otras recompenzas y salta por rampas, opcion de entrariniciales de record.

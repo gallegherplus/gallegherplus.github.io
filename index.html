@@ -61,8 +61,8 @@
             pointer-events: none;
         }
         .test-tube-rack.left {
-            left: 40px;
-            bottom: 50px;
+            left: 1%;
+            bottom: 30%;
         }
         .test-tube-rack.right {
             right: 10px;
@@ -131,8 +131,8 @@
         .gear::before {
             content: '';
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%,-50%);
+            top: 400%; left: 1000%;
+            transform: translate(-25%,-25%);
             width: 30%;
             height: 30%;
             border-radius: 50%;
@@ -170,8 +170,8 @@
 
         .gear-3 {
             width: 100px; height: 100px;
-            bottom: 20%;
-            right: 3%;
+            bottom: 25%;
+            right: 1%;
             animation: rotateCW 20s linear infinite;
             font-size: 100px;
             border: none;
@@ -180,8 +180,8 @@
 
         .gear-4 {
             width: 60px; height: 60px;
-            bottom: 32%;
-            right: calc(3% + 80px);
+            bottom: 37%;
+            right: calc(1% + 80px);
             animation: rotateCCW 13s linear infinite;
             font-size: 60px;
             border: none;
@@ -254,7 +254,7 @@
         /* === OSCILLOSCOPE === */
         .oscilloscope {
             position: fixed;
-            top: 5%;
+            top: 2%;
             right: 3%;
             width: 120px;
             height: 120px;
@@ -715,25 +715,25 @@
     <div class="gear gear-4">⚙</div>
 
     <!-- PIPES -->
-    <div class="pipe-horizontal" style="top: 8%; left: 0; width: 25%;">
+    <div class="pipe-horizontal" style="top: 8%; left: 0; width: 20%;">
         <div class="pipe-flow"></div>
     </div>
-    <div class="pipe-vertical" style="top: 8%; left: 25%; height: 15%;">
+    <div class="pipe-vertical" style="top: 8%; left: 20%; height: 15%;">
         <div class="pipe-flow" style="animation: pipeFlowVertical 3s linear infinite 1s;"></div>
     </div>
-    <div class="pipe-joint" style="top: calc(8% - 4px); left: calc(25% - 4px);"></div>
-    <div class="pipe-horizontal" style="top: 23%; left: 25%; width: 10%;">
+    <div class="pipe-joint" style="top: calc(8% - 4px); left: calc(20% - 4px);"></div>
+    <div class="pipe-horizontal" style="top: 23%; left: 20%; width: 10%;">
         <div class="pipe-flow" style="animation-delay: 2s;"></div>
     </div>
-    <div class="pipe-joint" style="top: calc(23% - 4px); left: calc(25% - 4px);"></div>
+    <div class="pipe-joint" style="top: calc(23% - 4px); left: calc(20% - 4px);"></div>
 
-    <div class="pipe-horizontal" style="bottom: 12%; right: 0; width: 20%;">
+    <div class="pipe-horizontal" style="bottom: 12%; right: 0; width: 18%;">
         <div class="pipe-flow"></div>
     </div>
-    <div class="pipe-vertical" style="bottom: 12%; right: 20%; height: 18%;">
+    <div class="pipe-vertical" style="bottom: 12%; right: 18%; height: 18%;">
         <div class="pipe-flow" style="animation: pipeFlowVertical 4s linear infinite 0.5s;"></div>
     </div>
-    <div class="pipe-joint" style="bottom: calc(12% - 4px); right: calc(20% - 4px);"></div>
+    <div class="pipe-joint" style="bottom: calc(12% - 4px); right: calc(18% - 4px);"></div>
 
     <!-- OSCILLOSCOPE -->
     <div class="oscilloscope">
@@ -757,7 +757,7 @@
     </div>
 
     <!-- INDICATOR LIGHTS -->
-    <div class="indicator-panel" style="top: 40%; left: 2%;">
+    <div class="indicator-panel" style="top: 40%; left: 1%;">
         <div class="indicator-light green"></div>
         <div class="indicator-light red"></div>
         <div class="indicator-light off"></div>
@@ -772,7 +772,7 @@
     </div>
 
     <!-- VACUUM TUBES -->
-    <div class="vacuum-tube" style="top: 35%; right: 4%;">
+    <div class="vacuum-tube" style="top: 18%; right: 15%;">
         <div class="tube-body">
             <div class="tube-glow"></div>
         </div>
@@ -784,7 +784,7 @@
             <div class="pin"></div>
         </div>
     </div>
-    <div class="vacuum-tube" style="top: 35%; right: calc(4% + 45px);">
+    <div class="vacuum-tube" style="top: 18%; right: calc(15% + 45px);">
         <div class="tube-body">
             <div class="tube-glow" style="animation-delay: 0.7s;"></div>
         </div>
@@ -901,7 +901,7 @@
     </div>
 
     <!-- ELECTRICITY SPARKS -->
-    <div class="spark" style="top: 15%; left: 20%;">
+    <div class="spark" style="top: 15%; left: 30%;">
         <svg width="60" height="40" viewBox="0 0 60 40">
             <path class="spark-path" d="M0,20 L15,10 L20,18 L35,5 L40,15 L55,0" style="animation-delay: 0s;"/>
         </svg>
@@ -918,7 +918,7 @@
     </div>
 
     <!-- ERLENMEYER FLASK DECORATION -->
-    <div class="flask-decoration" style="bottom: 15%; left: 8%;">
+    <div class="flask-decoration" style="bottom: 5%; left: 15%;">
         <svg width="60" height="90" viewBox="0 0 60 90">
             <!-- Neck -->
             <rect x="22" y="0" width="16" height="30" fill="none" stroke="rgba(150,200,180,0.4)" stroke-width="2" rx="2"/>

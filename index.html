@@ -35,48 +35,316 @@
         @keyframes padFlash {
             0%,60%,100% { opacity: .3; } 70% { opacity: 1; }
         }
+        @keyframes scrollStrip {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
         .knob-t  { animation: knobTurn 5s ease-in-out infinite; }
         .fader-s { animation: faderSlide 2.5s ease-in-out infinite; }
         .led-p   { animation: ledPulse 1.4s ease-in-out infinite; }
         .spk-p   { animation: speakerPump .55s ease-in-out infinite; }
         .vu-b    { animation: vuBounce 2.2s ease-in-out infinite; transform-origin: bottom; }
         .pad-f   { animation: padFlash 1.8s ease-in-out infinite; }
+        .scroll-strip { animation: scrollStrip 30s linear infinite; }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-[#0d0f14] via-[#0a0c10] to-[#07080c] relative">
+<body class="min-h-screen bg-gradient-to-b from-[#0d0f14] via-[#0a0c10] to-[#07080c]">
 
-<!-- ========== LEFT EQUIPMENT RACK (fixed) ========== -->
+<!-- ========== MOBILE: TOP SCROLLING STRIP ========== -->
+<div class="lg:hidden w-full overflow-hidden border-b-2 border-[#1a1c28] bg-[#0c0e14] py-3">
+    <div class="flex items-center gap-6 scroll-strip w-max">
+        <!-- set 1 -->
+        <!-- Speaker -->
+        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
+            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
+            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p"/>
+            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
+            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
+            <circle cx="65" cy="178" r="4" fill="#00ff80" class="led-p"/>
+        </svg>
+        <!-- Knobs -->
+        <svg viewBox="0 0 130 95" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="89" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="28" cy="38" r="16" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
+            <line x1="28" y1="24" x2="28" y2="38" stroke="#ff8c00" stroke-width="2.5" class="knob-t" style="transform-origin:28px 38px"/>
+            <circle cx="65" cy="38" r="16" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
+            <line x1="65" y1="24" x2="65" y2="38" stroke="#00c9a0" stroke-width="2.5" class="knob-t" style="transform-origin:65px 38px;animation-delay:.7s"/>
+            <circle cx="102" cy="38" r="16" fill="#1a1c26" stroke="#ff3050" stroke-width="2"/>
+            <line x1="102" y1="24" x2="102" y2="38" stroke="#ff3050" stroke-width="2.5" class="knob-t" style="transform-origin:102px 38px;animation-delay:1.4s"/>
+            <text x="28" y="68" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">LOW</text>
+            <text x="65" y="68" fill="#00c9a0" font-size="7" text-anchor="middle" font-family="monospace">MID</text>
+            <text x="102" y="68" fill="#ff3050" font-size="7" text-anchor="middle" font-family="monospace">HI</text>
+        </svg>
+        <!-- VU -->
+        <svg viewBox="0 0 100 150" class="w-20 shrink-0">
+            <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
+            <rect x="14" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b"/>
+            <rect x="14" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.1s"/>
+            <rect x="14" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.2s"/>
+            <rect x="14" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.3s"/>
+            <rect x="14" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.4s"/>
+            <rect x="72" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.15s"/>
+            <rect x="72" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.25s"/>
+            <rect x="72" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.35s"/>
+            <rect x="72" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.45s"/>
+            <rect x="72" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.55s"/>
+            <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle">L</text>
+            <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle">R</text>
+        </svg>
+        <!-- Groovebox -->
+        <svg viewBox="0 0 130 130" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="124" rx="10" fill="#13151e" stroke="#ff3050" stroke-width="2"/>
+            <rect x="14" y="12" width="72" height="22" rx="4" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
+            <text x="50" y="27" fill="#00c9a0" font-size="10" text-anchor="middle" font-family="monospace">MPC</text>
+            <circle cx="102" cy="18" r="8" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
+            <circle cx="102" cy="18" r="2" fill="#ff3050"/>
+            <rect x="12" y="42" width="24" height="24" rx="4" fill="#ff3050" class="pad-f"/>
+            <rect x="40" y="42" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:.2s"/>
+            <rect x="68" y="42" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:.4s"/>
+            <rect x="96" y="42" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.6s"/>
+            <rect x="12" y="72" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.8s"/>
+            <rect x="40" y="72" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:1s"/>
+            <rect x="68" y="72" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:1.2s"/>
+            <rect x="96" y="72" width="24" height="24" rx="4" fill="#ff3050" class="pad-f" style="animation-delay:1.4s"/>
+            <circle cx="30" cy="110" r="9" fill="#1a1c26" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="65" cy="110" r="9" fill="#1a1c26" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="100" cy="110" r="9" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
+        </svg>
+        <!-- Faders -->
+        <svg viewBox="0 0 130 125" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="119" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <text x="65" y="16" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">MIXER</text>
+            <rect x="12" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="9" y="48" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s"/>
+            <rect x="32" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="29" y="38" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s" style="animation-delay:.3s"/>
+            <rect x="52" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="49" y="56" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.6s"/>
+            <rect x="72" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="69" y="42" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.9s"/>
+            <rect x="96" y="22" width="14" height="70" rx="3" fill="#0c0e16" stroke="#ff3050" stroke-width="1"/>
+            <rect x="93" y="35" width="20" height="16" rx="3" fill="#ff3050" class="fader-s" style="animation-delay:1.2s"/>
+            <text x="17" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">1</text>
+            <text x="37" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">2</text>
+            <text x="57" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">3</text>
+            <text x="77" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">4</text>
+            <text x="103" y="107" fill="#ff3050" font-size="7" text-anchor="middle" font-weight="bold">M</text>
+        </svg>
+        <!-- Synth Module -->
+        <svg viewBox="0 0 130 170" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="164" rx="8" fill="#13151e" stroke="#ff8c00" stroke-width="2"/>
+            <text x="65" y="18" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">SYNTH</text>
+            <circle cx="25" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="50" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="75" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="100" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="25" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="50" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="75" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="100" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <path d="M25,35 Q45,70 75,58" stroke="#ff3050" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M50,35 Q80,68 100,58" stroke="#ffb830" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="35" cy="95" r="14" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
+            <line x1="35" y1="83" x2="35" y2="95" stroke="#ff8c00" stroke-width="2" class="knob-t" style="transform-origin:35px 95px;animation-delay:1s"/>
+            <circle cx="95" cy="95" r="14" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
+            <line x1="95" y1="83" x2="95" y2="95" stroke="#00c9a0" stroke-width="2" class="knob-t" style="transform-origin:95px 95px;animation-delay:2s"/>
+            <rect x="20" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
+            <rect x="18" y="130" width="16" height="12" rx="2" fill="#ff8c00" class="fader-s"/>
+            <rect x="55" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
+            <rect x="53" y="138" width="16" height="12" rx="2" fill="#00c9a0" class="fader-s" style="animation-delay:.5s"/>
+            <rect x="90" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
+            <rect x="88" y="125" width="16" height="12" rx="2" fill="#ff3050" class="fader-s" style="animation-delay:1s"/>
+        </svg>
+        <!-- Mic -->
+        <svg viewBox="0 0 70 120" class="w-14 shrink-0">
+            <rect x="20" y="8" width="30" height="55" rx="15" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
+            <line x1="24" y1="18" x2="46" y2="18" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="24" x2="46" y2="24" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="30" x2="46" y2="30" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="36" x2="46" y2="36" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="42" x2="46" y2="42" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="48" x2="46" y2="48" stroke="#2a2c3a" stroke-width="1.2"/>
+            <circle cx="35" cy="58" r="4" fill="#ff3050" class="led-p"/>
+            <path d="M14,45 Q14,72 35,72 Q56,72 56,45" fill="none" stroke="#2a2c3a" stroke-width="2.5"/>
+            <line x1="35" y1="72" x2="35" y2="100" stroke="#2a2c3a" stroke-width="3"/>
+            <line x1="18" y1="100" x2="52" y2="100" stroke="#2a2c3a" stroke-width="4" stroke-linecap="round"/>
+            <ellipse cx="35" cy="108" rx="18" ry="6" fill="#13151e" stroke="#2a2c3a" stroke-width="1.5"/>
+        </svg>
+        <!-- Headphones -->
+        <svg viewBox="0 0 100 80" class="w-16 shrink-0">
+            <path d="M15,50 Q15,15 50,15 Q85,15 85,50" fill="none" stroke="#3a3c4a" stroke-width="7" stroke-linecap="round"/>
+            <rect x="5" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
+            <rect x="9" y="47" width="14" height="22" rx="5" fill="#13151e"/>
+            <rect x="73" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#00c9a0" stroke-width="2.5"/>
+            <rect x="77" y="47" width="14" height="22" rx="5" fill="#13151e"/>
+        </svg>
+        <!-- Speaker 2 -->
+        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
+            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
+            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p" style="animation-delay:.2s"/>
+            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
+            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
+            <circle cx="65" cy="178" r="4" fill="#ff3050" class="led-p" style="animation-delay:.5s"/>
+        </svg>
+
+        <!-- DUPLICATE set for seamless loop -->
+        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
+            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
+            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p"/>
+            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
+            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
+            <circle cx="65" cy="178" r="4" fill="#00ff80" class="led-p"/>
+        </svg>
+        <svg viewBox="0 0 130 95" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="89" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="28" cy="38" r="16" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
+            <line x1="28" y1="24" x2="28" y2="38" stroke="#ff8c00" stroke-width="2.5" class="knob-t" style="transform-origin:28px 38px"/>
+            <circle cx="65" cy="38" r="16" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
+            <line x1="65" y1="24" x2="65" y2="38" stroke="#00c9a0" stroke-width="2.5" class="knob-t" style="transform-origin:65px 38px;animation-delay:.7s"/>
+            <circle cx="102" cy="38" r="16" fill="#1a1c26" stroke="#ff3050" stroke-width="2"/>
+            <line x1="102" y1="24" x2="102" y2="38" stroke="#ff3050" stroke-width="2.5" class="knob-t" style="transform-origin:102px 38px;animation-delay:1.4s"/>
+            <text x="28" y="68" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">LOW</text>
+            <text x="65" y="68" fill="#00c9a0" font-size="7" text-anchor="middle" font-family="monospace">MID</text>
+            <text x="102" y="68" fill="#ff3050" font-size="7" text-anchor="middle" font-family="monospace">HI</text>
+        </svg>
+        <svg viewBox="0 0 100 150" class="w-20 shrink-0">
+            <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
+            <rect x="14" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b"/>
+            <rect x="14" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.1s"/>
+            <rect x="14" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.2s"/>
+            <rect x="14" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.3s"/>
+            <rect x="14" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.4s"/>
+            <rect x="72" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.15s"/>
+            <rect x="72" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.25s"/>
+            <rect x="72" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.35s"/>
+            <rect x="72" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.45s"/>
+            <rect x="72" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.55s"/>
+            <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle">L</text>
+            <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle">R</text>
+        </svg>
+        <svg viewBox="0 0 130 130" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="124" rx="10" fill="#13151e" stroke="#ff3050" stroke-width="2"/>
+            <rect x="14" y="12" width="72" height="22" rx="4" fill="#0c0e16"/>
+            <text x="50" y="27" fill="#00c9a0" font-size="10" text-anchor="middle" font-family="monospace">MPC</text>
+            <circle cx="102" cy="18" r="8" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
+            <rect x="12" y="42" width="24" height="24" rx="4" fill="#ff3050" class="pad-f"/>
+            <rect x="40" y="42" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:.2s"/>
+            <rect x="68" y="42" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:.4s"/>
+            <rect x="96" y="42" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.6s"/>
+            <rect x="12" y="72" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.8s"/>
+            <rect x="40" y="72" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:1s"/>
+            <rect x="68" y="72" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:1.2s"/>
+            <rect x="96" y="72" width="24" height="24" rx="4" fill="#ff3050" class="pad-f" style="animation-delay:1.4s"/>
+            <circle cx="30" cy="110" r="9" fill="#1a1c26" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="65" cy="110" r="9" fill="#1a1c26" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="100" cy="110" r="9" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
+        </svg>
+        <svg viewBox="0 0 130 125" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="119" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <text x="65" y="16" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">MIXER</text>
+            <rect x="12" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="9" y="48" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s"/>
+            <rect x="32" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="29" y="38" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s" style="animation-delay:.3s"/>
+            <rect x="52" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="49" y="56" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.6s"/>
+            <rect x="72" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
+            <rect x="69" y="42" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.9s"/>
+            <rect x="96" y="22" width="14" height="70" rx="3" fill="#0c0e16" stroke="#ff3050" stroke-width="1"/>
+            <rect x="93" y="35" width="20" height="16" rx="3" fill="#ff3050" class="fader-s" style="animation-delay:1.2s"/>
+        </svg>
+        <svg viewBox="0 0 130 170" class="w-24 shrink-0">
+            <rect x="3" y="3" width="124" height="164" rx="8" fill="#13151e" stroke="#ff8c00" stroke-width="2"/>
+            <text x="65" y="18" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">SYNTH</text>
+            <circle cx="25" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="50" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="75" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="100" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
+            <circle cx="25" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="50" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="75" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <circle cx="100" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
+            <path d="M25,35 Q45,70 75,58" stroke="#ff3050" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M50,35 Q80,68 100,58" stroke="#ffb830" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="35" cy="95" r="14" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
+            <circle cx="95" cy="95" r="14" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
+            <rect x="20" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
+            <rect x="18" y="130" width="16" height="12" rx="2" fill="#ff8c00" class="fader-s"/>
+            <rect x="55" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
+            <rect x="53" y="138" width="16" height="12" rx="2" fill="#00c9a0" class="fader-s" style="animation-delay:.5s"/>
+            <rect x="90" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
+            <rect x="88" y="125" width="16" height="12" rx="2" fill="#ff3050" class="fader-s" style="animation-delay:1s"/>
+        </svg>
+        <svg viewBox="0 0 70 120" class="w-14 shrink-0">
+            <rect x="20" y="8" width="30" height="55" rx="15" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
+            <line x1="24" y1="18" x2="46" y2="18" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="24" x2="46" y2="24" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="30" x2="46" y2="30" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="36" x2="46" y2="36" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="42" x2="46" y2="42" stroke="#2a2c3a" stroke-width="1.2"/>
+            <line x1="24" y1="48" x2="46" y2="48" stroke="#2a2c3a" stroke-width="1.2"/>
+            <circle cx="35" cy="58" r="4" fill="#ff3050" class="led-p"/>
+            <path d="M14,45 Q14,72 35,72 Q56,72 56,45" fill="none" stroke="#2a2c3a" stroke-width="2.5"/>
+            <line x1="35" y1="72" x2="35" y2="100" stroke="#2a2c3a" stroke-width="3"/>
+            <line x1="18" y1="100" x2="52" y2="100" stroke="#2a2c3a" stroke-width="4" stroke-linecap="round"/>
+            <ellipse cx="35" cy="108" rx="18" ry="6" fill="#13151e" stroke="#2a2c3a" stroke-width="1.5"/>
+        </svg>
+        <svg viewBox="0 0 100 80" class="w-16 shrink-0">
+            <path d="M15,50 Q15,15 50,15 Q85,15 85,50" fill="none" stroke="#3a3c4a" stroke-width="7" stroke-linecap="round"/>
+            <rect x="5" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
+            <rect x="9" y="47" width="14" height="22" rx="5" fill="#13151e"/>
+            <rect x="73" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#00c9a0" stroke-width="2.5"/>
+            <rect x="77" y="47" width="14" height="22" rx="5" fill="#13151e"/>
+        </svg>
+        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
+            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
+            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
+            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p" style="animation-delay:.2s"/>
+            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
+            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
+            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
+            <circle cx="65" cy="178" r="4" fill="#ff3050" class="led-p" style="animation-delay:.5s"/>
+        </svg>
+    </div>
+</div>
+
+
+<!-- ========== DESKTOP: LEFT RACK (fixed) ========== -->
 <div class="fixed left-0 top-0 bottom-0 w-36 xl:w-44 hidden lg:flex flex-col items-center justify-evenly py-6 bg-[#0c0e14] border-r-2 border-[#1a1c28] z-0 pointer-events-none">
-
-    <!-- SPEAKER MONITOR -->
     <svg viewBox="0 0 130 190" class="w-28 xl:w-32">
         <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <!-- tweeter -->
         <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
         <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
-        <!-- woofer -->
         <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
         <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p"/>
         <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
         <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
-        <!-- port -->
         <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
-        <!-- power LED -->
         <circle cx="65" cy="178" r="4" fill="#00ff80" class="led-p"/>
-        <!-- label -->
         <text x="65" y="148" fill="#3a3c4a" font-size="8" text-anchor="middle" font-family="monospace">STUDIO</text>
     </svg>
-
-    <!-- 3-BAND EQ KNOBS -->
     <svg viewBox="0 0 130 95" class="w-28 xl:w-32">
         <rect x="3" y="3" width="124" height="89" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <!-- knob 1 LOW -->
         <circle cx="28" cy="38" r="16" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
         <line x1="28" y1="24" x2="28" y2="38" stroke="#ff8c00" stroke-width="2.5" class="knob-t" style="transform-origin:28px 38px"/>
-        <!-- knob 2 MID -->
         <circle cx="65" cy="38" r="16" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
         <line x1="65" y1="24" x2="65" y2="38" stroke="#00c9a0" stroke-width="2.5" class="knob-t" style="transform-origin:65px 38px;animation-delay:.7s"/>
-        <!-- knob 3 HIGH -->
         <circle cx="102" cy="38" r="16" fill="#1a1c26" stroke="#ff3050" stroke-width="2"/>
         <line x1="102" y1="24" x2="102" y2="38" stroke="#ff3050" stroke-width="2.5" class="knob-t" style="transform-origin:102px 38px;animation-delay:1.4s"/>
         <text x="28" y="68" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">LOW</text>
@@ -84,18 +352,14 @@
         <text x="102" y="68" fill="#ff3050" font-size="7" text-anchor="middle" font-family="monospace">HIGH</text>
         <text x="65" y="84" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">EQUALIZER</text>
     </svg>
-
-    <!-- DUAL VU METER -->
     <svg viewBox="0 0 100 150" class="w-24 xl:w-28">
         <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
         <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
-        <!-- L channel bars -->
         <rect x="14" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b"/>
         <rect x="14" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.1s"/>
         <rect x="14" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.2s"/>
         <rect x="14" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.3s"/>
         <rect x="14" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.4s"/>
-        <!-- R channel bars -->
         <rect x="72" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.15s"/>
         <rect x="72" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.25s"/>
         <rect x="72" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.35s"/>
@@ -104,39 +368,30 @@
         <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle" font-family="monospace">L</text>
         <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle" font-family="monospace">R</text>
     </svg>
-
-    <!-- MODULAR SYNTH PANEL -->
     <svg viewBox="0 0 130 170" class="w-28 xl:w-32">
         <rect x="3" y="3" width="124" height="164" rx="8" fill="#13151e" stroke="#ff8c00" stroke-width="2"/>
         <text x="65" y="18" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">SYNTH MOD</text>
-        <!-- patch points row 1 -->
         <circle cx="25" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
         <circle cx="50" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
         <circle cx="75" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
         <circle cx="100" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-        <!-- patch points row 2 -->
         <circle cx="25" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
         <circle cx="50" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
         <circle cx="75" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
         <circle cx="100" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-        <!-- patch cables -->
         <path d="M25,35 Q45,70 75,58" stroke="#ff3050" stroke-width="3" fill="none" stroke-linecap="round"/>
         <path d="M50,35 Q80,68 100,58" stroke="#ffb830" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <!-- knobs -->
         <circle cx="35" cy="95" r="14" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
         <line x1="35" y1="83" x2="35" y2="95" stroke="#ff8c00" stroke-width="2" class="knob-t" style="transform-origin:35px 95px;animation-delay:1s"/>
         <circle cx="95" cy="95" r="14" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
         <line x1="95" y1="83" x2="95" y2="95" stroke="#00c9a0" stroke-width="2" class="knob-t" style="transform-origin:95px 95px;animation-delay:2s"/>
-        <!-- sliders -->
-        <rect x="20" y="120" width="12" height="35" rx="3" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1"/>
+        <rect x="20" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
         <rect x="18" y="130" width="16" height="12" rx="2" fill="#ff8c00" class="fader-s"/>
-        <rect x="55" y="120" width="12" height="35" rx="3" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1"/>
+        <rect x="55" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
         <rect x="53" y="138" width="16" height="12" rx="2" fill="#00c9a0" class="fader-s" style="animation-delay:.5s"/>
-        <rect x="90" y="120" width="12" height="35" rx="3" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1"/>
+        <rect x="90" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
         <rect x="88" y="125" width="16" height="12" rx="2" fill="#ff3050" class="fader-s" style="animation-delay:1s"/>
     </svg>
-
-    <!-- HEADPHONES -->
     <svg viewBox="0 0 100 80" class="w-24 xl:w-28">
         <path d="M15,50 Q15,15 50,15 Q85,15 85,50" fill="none" stroke="#3a3c4a" stroke-width="7" stroke-linecap="round"/>
         <rect x="5" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
@@ -146,10 +401,8 @@
     </svg>
 </div>
 
-<!-- ========== RIGHT EQUIPMENT RACK (fixed) ========== -->
+<!-- ========== DESKTOP: RIGHT RACK (fixed) ========== -->
 <div class="fixed right-0 top-0 bottom-0 w-36 xl:w-44 hidden lg:flex flex-col items-center justify-evenly py-6 bg-[#0c0e14] border-l-2 border-[#1a1c28] z-0 pointer-events-none">
-
-    <!-- SPEAKER MONITOR -->
     <svg viewBox="0 0 130 190" class="w-28 xl:w-32">
         <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
         <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
@@ -162,35 +415,25 @@
         <circle cx="65" cy="178" r="4" fill="#ff3050" class="led-p" style="animation-delay:.5s"/>
         <text x="65" y="148" fill="#3a3c4a" font-size="8" text-anchor="middle" font-family="monospace">STUDIO</text>
     </svg>
-
-    <!-- 5-CHANNEL FADER BANK -->
     <svg viewBox="0 0 130 125" class="w-28 xl:w-32">
         <rect x="3" y="3" width="124" height="119" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
         <text x="65" y="16" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">MIXER</text>
-        <!-- ch1 -->
-        <rect x="12" y="22" width="10" height="70" rx="3" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
+        <rect x="12" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
         <rect x="9" y="48" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s"/>
-        <!-- ch2 -->
-        <rect x="32" y="22" width="10" height="70" rx="3" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
+        <rect x="32" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
         <rect x="29" y="38" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s" style="animation-delay:.3s"/>
-        <!-- ch3 -->
-        <rect x="52" y="22" width="10" height="70" rx="3" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
+        <rect x="52" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
         <rect x="49" y="56" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.6s"/>
-        <!-- ch4 -->
-        <rect x="72" y="22" width="10" height="70" rx="3" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
+        <rect x="72" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
         <rect x="69" y="42" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.9s"/>
-        <!-- master -->
         <rect x="96" y="22" width="14" height="70" rx="3" fill="#0c0e16" stroke="#ff3050" stroke-width="1.5"/>
         <rect x="93" y="35" width="20" height="16" rx="3" fill="#ff3050" class="fader-s" style="animation-delay:1.2s"/>
-        <!-- labels -->
         <text x="17" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">1</text>
         <text x="37" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">2</text>
         <text x="57" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">3</text>
         <text x="77" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">4</text>
         <text x="103" y="107" fill="#ff3050" font-size="7" text-anchor="middle" font-weight="bold">M</text>
     </svg>
-
-    <!-- DUAL VU METER -->
     <svg viewBox="0 0 100 150" class="w-24 xl:w-28">
         <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
         <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
@@ -207,44 +450,33 @@
         <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle" font-family="monospace">L</text>
         <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle" font-family="monospace">R</text>
     </svg>
-
-    <!-- GROOVEBOX / MPC -->
     <svg viewBox="0 0 130 130" class="w-28 xl:w-32">
         <rect x="3" y="3" width="124" height="124" rx="10" fill="#13151e" stroke="#ff3050" stroke-width="2"/>
-        <!-- display -->
         <rect x="14" y="12" width="72" height="22" rx="4" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
         <text x="50" y="27" fill="#00c9a0" font-size="10" text-anchor="middle" font-family="monospace">MPC-3000</text>
-        <!-- encoders -->
         <circle cx="102" cy="18" r="8" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
         <circle cx="102" cy="18" r="2" fill="#ff3050"/>
-        <!-- pads 2x4 -->
-        <rect x="12" y="42" width="24" height="24" rx="4" fill="#ff3050" opacity=".8" class="pad-f"/>
-        <rect x="40" y="42" width="24" height="24" rx="4" fill="#ff8c00" opacity=".8" class="pad-f" style="animation-delay:.2s"/>
-        <rect x="68" y="42" width="24" height="24" rx="4" fill="#ffb830" opacity=".8" class="pad-f" style="animation-delay:.4s"/>
-        <rect x="96" y="42" width="24" height="24" rx="4" fill="#00c9a0" opacity=".8" class="pad-f" style="animation-delay:.6s"/>
-        <rect x="12" y="72" width="24" height="24" rx="4" fill="#00c9a0" opacity=".8" class="pad-f" style="animation-delay:.8s"/>
-        <rect x="40" y="72" width="24" height="24" rx="4" fill="#ffb830" opacity=".8" class="pad-f" style="animation-delay:1s"/>
-        <rect x="68" y="72" width="24" height="24" rx="4" fill="#ff8c00" opacity=".8" class="pad-f" style="animation-delay:1.2s"/>
-        <rect x="96" y="72" width="24" height="24" rx="4" fill="#ff3050" opacity=".8" class="pad-f" style="animation-delay:1.4s"/>
-        <!-- knobs bottom -->
+        <rect x="12" y="42" width="24" height="24" rx="4" fill="#ff3050" class="pad-f"/>
+        <rect x="40" y="42" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:.2s"/>
+        <rect x="68" y="42" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:.4s"/>
+        <rect x="96" y="42" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.6s"/>
+        <rect x="12" y="72" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.8s"/>
+        <rect x="40" y="72" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:1s"/>
+        <rect x="68" y="72" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:1.2s"/>
+        <rect x="96" y="72" width="24" height="24" rx="4" fill="#ff3050" class="pad-f" style="animation-delay:1.4s"/>
         <circle cx="30" cy="110" r="9" fill="#1a1c26" stroke="#ff8c00" stroke-width="1.5"/>
         <circle cx="65" cy="110" r="9" fill="#1a1c26" stroke="#00c9a0" stroke-width="1.5"/>
         <circle cx="100" cy="110" r="9" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
     </svg>
-
-    <!-- CONDENSER MICROPHONE -->
     <svg viewBox="0 0 70 120" class="w-16 xl:w-20">
         <rect x="20" y="8" width="30" height="55" rx="15" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
-        <!-- grille -->
         <line x1="24" y1="18" x2="46" y2="18" stroke="#2a2c3a" stroke-width="1.2"/>
         <line x1="24" y1="24" x2="46" y2="24" stroke="#2a2c3a" stroke-width="1.2"/>
         <line x1="24" y1="30" x2="46" y2="30" stroke="#2a2c3a" stroke-width="1.2"/>
         <line x1="24" y1="36" x2="46" y2="36" stroke="#2a2c3a" stroke-width="1.2"/>
         <line x1="24" y1="42" x2="46" y2="42" stroke="#2a2c3a" stroke-width="1.2"/>
         <line x1="24" y1="48" x2="46" y2="48" stroke="#2a2c3a" stroke-width="1.2"/>
-        <!-- LED -->
         <circle cx="35" cy="58" r="4" fill="#ff3050" class="led-p"/>
-        <!-- mount -->
         <path d="M14,45 Q14,72 35,72 Q56,72 56,45" fill="none" stroke="#2a2c3a" stroke-width="2.5"/>
         <line x1="35" y1="72" x2="35" y2="100" stroke="#2a2c3a" stroke-width="3"/>
         <line x1="18" y1="100" x2="52" y2="100" stroke="#2a2c3a" stroke-width="4" stroke-linecap="round"/>
@@ -252,9 +484,10 @@
     </svg>
 </div>
 
+
 <!-- ========== MAIN CONTENT ========== -->
 <div class="flex justify-center">
-<div class="text-center p-8 w-full max-w-lg relative z-10 pt-12">
+<div class="text-center p-8 w-full max-w-lg relative z-10 pt-6 lg:pt-12">
 
     <h1 class="text-5xl md:text-7xl font-bold text-[#e8e0d0] mb-4 animate-pulse">
         Ariel Dutria
@@ -266,19 +499,19 @@
         Gallegher Plus
     </h2>
 
-    <!-- Equalizer Visual -->
+    <!-- Equalizer -->
     <div class="mt-8 h-12 flex justify-center items-end space-x-1.5 p-2 bg-[#0c0e14] rounded-lg border border-[#2a2c3a]">
-        <div class="w-2 bg-[#00c9a0] rounded-t eq-bar" style="animation-duration: 0.4s"></div>
-        <div class="w-2 bg-[#00c9a0] rounded-t eq-bar" style="animation-duration: 0.7s"></div>
-        <div class="w-2 bg-[#ffb830] rounded-t eq-bar" style="animation-duration: 0.5s"></div>
-        <div class="w-2 bg-[#ff8c00] rounded-t eq-bar" style="animation-duration: 0.6s"></div>
-        <div class="w-2 bg-[#ff3050] rounded-t eq-bar" style="animation-duration: 0.3s"></div>
-        <div class="w-2 bg-[#ff3050] rounded-t eq-bar" style="animation-duration: 0.8s"></div>
+        <div class="w-2 bg-[#00c9a0] rounded-t eq-bar" style="animation-duration:.4s"></div>
+        <div class="w-2 bg-[#00c9a0] rounded-t eq-bar" style="animation-duration:.7s"></div>
+        <div class="w-2 bg-[#ffb830] rounded-t eq-bar" style="animation-duration:.5s"></div>
+        <div class="w-2 bg-[#ff8c00] rounded-t eq-bar" style="animation-duration:.6s"></div>
+        <div class="w-2 bg-[#ff3050] rounded-t eq-bar" style="animation-duration:.3s"></div>
+        <div class="w-2 bg-[#ff3050] rounded-t eq-bar" style="animation-duration:.8s"></div>
     </div>
 
     <div class="mt-12 w-full flex flex-col items-center">
         
-        <!-- SECCIÓN JUEGOS -->
+        <!-- JUEGOS -->
         <div class="w-full max-w-sm mb-12 space-y-4">
             <h3 class="text-center text-[#00c9a0] font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-[#00c9a0]/30 pb-2">Juegos / Games</h3>
             
@@ -330,23 +563,23 @@
             </div>
         </div>
 
-        <!-- SECCIÓN MÚSICA -->
+        <!-- MÚSICA -->
         <div class="w-full max-w-md space-y-8 flex flex-col items-center">
             <h3 class="text-center text-[#ff8c00] font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-[#ff8c00]/30 pb-2 w-full">Música / Music</h3>
 
             <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=1489493561/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/track=4237668646/transparent=true/" seamless><a href="https://cphnkx.bandcamp.com/album/ciberdelia-volumen-1">Ciberdelia - Volumen 1 by Gallegher Plus &amp; Tavo Pez</a></iframe>
+                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=1489493561/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/track=4237668646/transparent=true/" seamless><a href="https://cphnkx.bandcamp.com/album/ciberdelia-volumen-1">Ciberdelia</a></iframe>
             </div>
 
             <div class="flex flex-col items-center space-y-3 w-full">
                 <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=4057325407/size=large/bgcol=333333/linkcol=e99708/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/primer-contacto-2004">Primer contacto (2004) by Gallegher Plus</a></iframe>
+                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=4057325407/size=large/bgcol=333333/linkcol=e99708/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/primer-contacto-2004">Primer contacto (2004)</a></iframe>
                 </div>
                 <div class="flex space-x-4">
                     <a href="https://youtube.com/playlist?list=OLAK5uy_nrEjrRcBOILy38SARUEDkCd9nv5VgrSn4&si=NnfcsC-kusukIrRx" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#ff3050]/50 rounded-full hover:bg-[#ff3050]/20 transition-colors text-[#e8e0d0] text-sm">
                         <span class="text-lg">▶</span><span>YouTube</span>
                     </a>
-                    <a href="https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=acc2ae090d0a4f9b" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
+                    <a href="https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
                         <span class="text-lg">●</span><span>Spotify</span>
                     </a>
                 </div>
@@ -354,13 +587,13 @@
 
             <div class="flex flex-col items-center space-y-3 w-full pt-4">
                 <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3420605549/size=large/bgcol=333333/linkcol=2ebd35/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/star-ship-2006">Star ship (2006) by Gallegher Plus</a></iframe>
+                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3420605549/size=large/bgcol=333333/linkcol=2ebd35/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/star-ship-2006">Star ship (2006)</a></iframe>
                 </div>
                 <div class="flex space-x-4">
                     <a href="https://www.youtube.com/watch?v=Xzj6FCUvNvQ&list=OLAK5uy_kWYNbMMdMSJtbek_C_rsr42WxI2VwOjXk" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#ff3050]/50 rounded-full hover:bg-[#ff3050]/20 transition-colors text-[#e8e0d0] text-sm">
                         <span class="text-lg">▶</span><span>YouTube</span>
                     </a>
-                    <a href="https://open.spotify.com/intl-es/album/30VWqubwOLIcyitfQQKfPO?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=651b05e04b0b4078" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
+                    <a href="https://open.spotify.com/intl-es/album/30VWqubwOLIcyitfQQKfPO" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
                         <span class="text-lg">●</span><span>Spotify</span>
                     </a>
                 </div>
@@ -368,10 +601,10 @@
 
             <div class="flex flex-col items-center space-y-3 w-full pt-4">
                 <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2744310584/size=large/bgcol=333333/linkcol=4ec5ec/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/i-will-leave-them-the-new-habits-2007">I will leave them the new habits (2007) by Gallegher Plus</a></iframe>
+                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2744310584/size=large/bgcol=333333/linkcol=4ec5ec/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/i-will-leave-them-the-new-habits-2007">I will leave them the new habits (2007)</a></iframe>
                 </div>
                 <div class="flex space-x-4">
-                    <a href="https://open.spotify.com/intl-es/album/6cD6wQLYulaEasUkPTJqOj?go=1&sp_cid=627f21fc-fbb8-483d-98a8-c6984bd3c71d&utm_source=embed_player_p&utm_medium=desktop&nd=1&dlsi=bc6701d02e2f4a08" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
+                    <a href="https://open.spotify.com/intl-es/album/6cD6wQLYulaEasUkPTJqOj" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
                         <span class="text-lg">●</span><span>Spotify</span>
                     </a>
                 </div>
@@ -382,15 +615,15 @@
             </div>
 
             <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff3050]/30 hover:border-[#ff3050]/60 transition-all duration-300 aspect-video">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/87Pg9DTzjpc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/87Pg9DTzjpc" title="YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
 
             <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=479373965/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008">Artificial intelligence (2008) by Gallegher Plus</a></iframe>
+                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=479373965/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008">Artificial intelligence (2008)</a></iframe>
             </div>
             
             <div class="w-full rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3486002417/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/track=1055934601/transparent=true/" seamless><a href="https://cosmocumples.bandcamp.com/album/40-a-os-en-el-mismo-sistema-solar">40 años en el mismo Sistema Solar by Gallegher Plus</a></iframe>
+                <iframe style="border:0;width:100%;height:120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3486002417/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/track=1055934601/transparent=true/" seamless><a href="https://cosmocumples.bandcamp.com/album/40-a-os-en-el-mismo-sistema-solar">40 años en el mismo Sistema Solar</a></iframe>
             </div>
 
             <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff3050]/30 bg-[#0c0e14] transition-transform hover:scale-[1.01] duration-300">
@@ -403,15 +636,15 @@
             <h3 class="text-center text-[#ff3050] font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-[#ff3050]/30 pb-2 w-full">Grabaciones en vivo</h3>
             
             <div class="rounded-xl overflow-hidden shadow-lg border border-[#ff3050]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=421278355/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://elacustico.bandcamp.com/album/gallegher-plus">Gallegher Plus by Gallegher Plus</a></iframe>
+                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=421278355/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://elacustico.bandcamp.com/album/gallegher-plus">El Acústico</a></iframe>
             </div>
 
             <div class="rounded-xl overflow-hidden shadow-lg border border-[#ff3050]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2308284593/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011">Live in Loser Party (2011) by Gallegher Plus</a></iframe>
+                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2308284593/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011">Live in Loser Party (2011)</a></iframe>
             </div>
 
             <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff3050]/30 hover:border-[#ff3050]/60 transition-all duration-300 aspect-video">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/cCBDiIYllNw?si=p-v78oMuZ8os93xp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/cCBDiIYllNw?si=p-v78oMuZ8os93xp" title="YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -421,15 +654,15 @@
             
             <div class="flex flex-col items-center space-y-8 w-full">
                 <div class="rounded-xl overflow-hidden shadow-lg border border-[#ffb830]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3756104505/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-1">VA - CosmoMedia Vol. 1 by CosmoMedia</a></iframe>
+                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3756104505/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-1">CosmoMedia Vol. 1</a></iframe>
                 </div>
 
                 <div class="rounded-xl overflow-hidden shadow-lg border border-[#ffb830]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=15350491/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-2">VA - CosmoMedia Vol. 2 by CosmoMedia Colectivo</a></iframe>
+                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=15350491/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-2">CosmoMedia Vol. 2</a></iframe>
                 </div>
 
                 <div class="rounded-xl overflow-hidden shadow-lg border border-[#ffb830]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border: 0; width: 350px; height: 470px;" src="https://bandcamp.com/EmbeddedPlayer/album=134645260/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/intervenci-n-audiovisual-en-vivo">Intervención Audiovisual en vivo by CosmoMedia Colectivo</a></iframe>
+                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=134645260/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/intervenci-n-audiovisual-en-vivo">Intervención Audiovisual en vivo</a></iframe>
                 </div>
             </div>
         </div>

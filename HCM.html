@@ -861,6 +861,7 @@ function init() {
   initLFOLoop();
   document.addEventListener('click', initMIDIOnce, {once: true});
   document.addEventListener('keydown', initMIDIOnce, {once: true});
+  document.addEventListener('touchstart', initMIDIOnce, {once: true});
 
   // Preset panel
   document.getElementById('btnOpenPresets').onclick = openPresetPanel;
@@ -891,6 +892,7 @@ function initMIDIOnce() {
 
 // ==================== MIDI ====================
 let midiAccess = null;
+let midiPollTimer = null;
 
 async function initMIDI() {
   const debugEl = document.getElementById('midiDebug');
@@ -905,30 +907,42 @@ async function initMIDI() {
     debugEl.textContent = 'MIDI OK - scanning...';
     enumerateDevices(midiAccess);
     midiAccess.onstatechange = () => {
-      // Debounce: don't reconnect more than once per second
-      if (midiAccess._stateTimer) return;
-      midiAccess._stateTimer = setTimeout(() => { midiAccess._stateTimer = null; }, 1000);
       console.log('MIDI state changed');
       enumerateDevices(midiAccess);
     };
+    startMidiPoll();
   } catch(e) {
     console.error('MIDI access error:', e);
     debugEl.textContent = 'SysEx failed, retrying...';
-    // Retry without SysEx as fallback
     try {
       midiAccess = await navigator.requestMIDIAccess({sysex: false});
       debugEl.textContent = 'MIDI OK (no SysEx) - scanning...';
       enumerateDevices(midiAccess);
       midiAccess.onstatechange = () => {
-        if (midiAccess._stateTimer) return;
-        midiAccess._stateTimer = setTimeout(() => { midiAccess._stateTimer = null; }, 1000);
+        console.log('MIDI state changed');
         enumerateDevices(midiAccess);
       };
+      startMidiPoll();
     } catch(e2) {
       debugEl.textContent = 'MIDI failed: ' + e2.message;
       console.error('MIDI fallback error:', e2);
     }
   }
+}
+
+function startMidiPoll() {
+  if (midiPollTimer) clearInterval(midiPollTimer);
+  let lastCount = 0;
+  midiPollTimer = setInterval(() => {
+    if (!midiAccess) return;
+    let count = 0;
+    for (const id of midiAccess.outputs) count++;
+    for (const id of midiAccess.inputs) count++;
+    if (count !== lastCount) {
+      lastCount = count;
+      enumerateDevices(midiAccess);
+    }
+  }, 3000);
 }
 
 // Also allow manual MIDI init by clicking the status dot
@@ -1026,9 +1040,11 @@ function enumerateDevices(access) {
 
   const outName = outSel.value ? access.outputs.get(outSel.value)?.name : 'none';
   const inName = inSel.value ? access.inputs.get(inSel.value)?.name : 'none';
-  const outState = outSel.value ? access.outputs.get(outSel.value)?.state : '';
-  const inState = inSel.value ? access.inputs.get(inSel.value)?.state : '';
-  debugEl.textContent = `Out: ${outName}(${outState}) | In: ${inName}(${inState})`;
+  if (outDevices.length === 0 && inDevices.length === 0) {
+    debugEl.textContent = 'No devices found - plug OTG + USB';
+  } else {
+    debugEl.textContent = `Out: ${outName} | In: ${inName} (${outDevices.length + inDevices.length} dev)`;
+  }
   debugEl.title = `Outputs: ${outDevices.length}, Inputs: ${inDevices.length}`;
   console.log(`MIDI devices: ${outDevices.length} out, ${inDevices.length} in`);
 

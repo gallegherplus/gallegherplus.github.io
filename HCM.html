@@ -3,12 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#1a1a2e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="HackTribe">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
 <title>HackTribe Controller</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -32,6 +26,8 @@ select,button{background:var(--surface2);color:var(--text);border:1px solid var(
 select:hover,button:hover{border-color:var(--accent)}
 button:active{background:var(--accent);color:#000}
 button.active{background:var(--accent);color:#000}
+#btnArp{font-size:10px}
+#btnArp.active{background:var(--accent2);color:#000;border-color:var(--accent2)}
 #btnRefreshMidi{font-size:14px;padding:2px 6px;line-height:1}
 #btnRefreshMidi:hover{background:var(--accent);color:#000;transform:rotate(180deg);transition:transform .3s}
 #btnTestMidi{font-size:12px;padding:2px 6px;line-height:1}
@@ -134,27 +130,28 @@ button.active{background:var(--accent);color:#000}
 /* Preset Panel */
 .preset-panel{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:150;display:none;flex-direction:column;overflow:hidden}
 .preset-panel.open{display:flex}
-.preset-panel-header{background:var(--surface);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
-.preset-action-btn{background:var(--surface2);color:var(--accent);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:9px;font-weight:bold;cursor:pointer;min-height:24px;white-space:nowrap}
-.preset-action-btn:active{background:var(--accent);color:#000}
-.preset-close-btn{background:none;color:var(--text-dim);border:none;font-size:16px;cursor:pointer;padding:2px 6px;min-height:24px}
-.preset-autosave{background:var(--surface2);padding:6px 12px;font-size:10px;color:var(--text-dim);border-bottom:1px solid var(--border);flex-shrink:0}
-.preset-list{flex:1;overflow-y:auto;padding:4px}
-.preset-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.preset-item-name{flex:1;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.preset-item-date{font-size:8px;color:var(--text-dim);white-space:nowrap}
-.preset-item-btn{background:var(--surface2);color:var(--accent);border:1px solid var(--border);border-radius:3px;padding:3px 6px;font-size:9px;cursor:pointer;min-height:22px;white-space:nowrap}
-.preset-item-btn:active{background:var(--accent);color:#000}
+.preset-panel-header{background:var(--surface);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.preset-action-btn{background:var(--surface2);color:var(--accent);border:1px solid var(--border);border-radius:4px;padding:6px 12px;font-size:11px;font-weight:bold;cursor:pointer;min-height:28px;white-space:nowrap}
+.preset-action-btn:hover{background:var(--accent);color:#000}
+.preset-close-btn{background:none;color:var(--text-dim);border:none;font-size:18px;cursor:pointer;padding:4px 8px;min-height:28px}
+.preset-autosave{background:var(--surface2);padding:8px 16px;font-size:11px;color:var(--text-dim);border-bottom:1px solid var(--border);flex-shrink:0}
+.preset-list{flex:1;overflow-y:auto;padding:8px}
+.preset-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.preset-item-name{flex:1;font-size:12px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.preset-item-date{font-size:9px;color:var(--text-dim);white-space:nowrap}
+.preset-item-btn{background:var(--surface2);color:var(--accent);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:10px;cursor:pointer;min-height:24px;white-space:nowrap}
+.preset-item-btn:hover{background:var(--accent);color:#000}
 .preset-item-btn.delete{color:var(--accent2)}
-.preset-item-btn.delete:active{background:var(--accent2);color:#fff}
-.preset-empty{padding:40px 20px;text-align:center;color:var(--text-dim);font-size:11px}
+.preset-item-btn.delete:hover{background:var(--accent2);color:#fff}
+.preset-empty{padding:60px 40px;text-align:center;color:var(--text-dim);font-size:12px}
 
-/* ==================== MOBILE — TCL 50 5G Landscape (806×360) ==================== */
+/* Mobile panel toggle */
+.mobile-panel-toggle{display:none;position:fixed;bottom:80px;right:12px;width:48px;height:48px;border-radius:50%;background:var(--accent2);color:#000;border:none;font-size:20px;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,0.5);cursor:pointer}
+
+/* ==================== MOBILE — Landscape (compact) ==================== */
 @media (max-height:400px) and (orientation:landscape) {
   body{font-size:11px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;overflow:hidden}
   .app{grid-template-rows:28px 1fr 30px;grid-template-columns:1fr;height:100vh;height:100dvh;gap:0}
-
-  /* Header - single compact row */
   .header{padding:2px 6px;gap:6px;min-height:28px;max-height:28px}
   .header h1{font-size:10px;letter-spacing:1px}
   .midi-status{gap:3px;margin-left:auto;align-items:center}
@@ -162,11 +159,7 @@ button.active{background:var(--accent);color:#000}
   .midi-status select{font-size:10px;padding:2px 4px;min-height:22px;max-width:110px}
   #btnRefreshMidi,#btnTestMidi{font-size:11px;padding:1px 4px;min-height:22px;min-width:22px}
   #midiDebug{display:none}
-
-  /* Main - 3 columns: parts | piano | cc/lfo */
   .main{grid-template-columns:48px 1fr 150px;grid-template-rows:1fr;overflow:hidden;gap:0}
-
-  /* Sidebar - narrow vertical strip */
   .sidebar{border-right:1px solid var(--border);border-bottom:none;overflow-y:auto;overflow-x:hidden;padding:2px}
   .sidebar h3{display:none}
   .part-list{display:flex;flex-direction:column;gap:1px}
@@ -176,8 +169,6 @@ button.active{background:var(--accent);color:#000}
   .part-name{display:none}
   .part-mute{width:14px;height:14px;font-size:7px;border-width:1px}
   .midi-dot{display:none}
-
-  /* Piano Roll Toolbar - single compact row */
   .pianoroll-container{min-height:0;min-width:0}
   .pianoroll-toolbar{padding:1px 4px;gap:3px;overflow-x:auto;flex-wrap:nowrap;min-height:22px;align-items:center;-webkit-overflow-scrolling:touch}
   .pianoroll-toolbar label{font-size:8px;color:var(--text-dim)}
@@ -187,12 +178,9 @@ button.active{background:var(--accent);color:#000}
   .pianoroll-toolbar button{font-size:8px;padding:2px 4px;min-height:18px;min-width:24px;white-space:nowrap}
   .piano-keys{width:28px}
   .grid-area{left:28px}
-
-  /* Right Panel - CC/LFO */
   .right-panel{border-left:1px solid var(--border);border-top:none;padding:2px;overflow-y:auto;overflow-x:hidden}
   .panel-tabs{position:sticky;top:0;z-index:5;background:var(--surface);margin:0 -2px;padding:2px;gap:1px}
   .panel-tabs .tab{padding:3px 4px;font-size:9px;min-height:20px;letter-spacing:0}
-  .panel-tabs .panel-close-btn{padding:2px 6px;font-size:10px;min-height:20px}
   .right-panel h3{font-size:8px;padding:2px 0;margin-bottom:3px}
   .cc-row{padding:2px 0;gap:3px}
   .cc-row label{font-size:8px;flex:1}
@@ -211,8 +199,6 @@ button.active{background:var(--accent);color:#000}
   .lfo-row input[type=range]{height:3px}
   .lfo-row input[type=range]::-webkit-slider-thumb{width:8px;height:8px}
   .lfo-row span{font-size:7px}
-
-  /* Transport - compact bottom bar */
   .transport{padding:2px 8px;gap:6px;min-height:30px;align-items:center;flex-wrap:nowrap;overflow-x:auto}
   .transport-btn{width:30px;height:24px;font-size:12px;border-radius:3px;min-height:24px}
   .transport-btn.playing{background:var(--accent);color:#000}
@@ -222,17 +208,10 @@ button.active{background:var(--accent);color:#000}
   .transport input[type=range]{height:3px;width:50px}
   .transport input[type=range]::-webkit-slider-thumb{width:10px;height:10px}
   .note-info{font-size:8px;margin-left:auto;white-space:nowrap}
-  #presetGroup{gap:2px}
-  #presetGroup .transport-btn{width:26px;font-size:10px}
-  #presetSelect{font-size:8px;padding:1px 3px;min-height:18px;max-width:80px}
-
-  /* Global touch targets */
   select{min-height:20px;font-size:10px}
   button{min-height:20px;font-size:10px}
   input[type=range]{height:3px}
   input[type=range]::-webkit-slider-thumb{width:12px;height:12px}
-
-  /* Context menu - compact popup */
   .context-menu{border-radius:6px;padding:2px 0;min-width:100px}
   .context-menu-item{padding:6px 10px;font-size:10px}
 }
@@ -241,18 +220,12 @@ button.active{background:var(--accent);color:#000}
 @media (max-width:768px) and (orientation:portrait) {
   body{font-size:14px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   .app{grid-template-rows:auto auto 1fr auto;grid-template-columns:1fr;height:100vh;height:100dvh}
-
-  /* Header - stacked */
   .header{padding:6px 10px;gap:8px}
   .header h1{font-size:12px}
   .midi-status{flex-wrap:wrap;gap:4px;margin-left:0;width:100%}
   .midi-status select{font-size:12px;padding:6px 8px;min-width:0;flex:1 1 45%}
   #midiDebug{display:none}
-
-  /* Main - vertical stack */
   .main{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;overflow:hidden}
-
-  /* Sidebar - horizontal scroll */
   .sidebar{border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;overflow-y:hidden;padding:4px}
   .sidebar h3{display:none}
   .part-list{display:flex;gap:2px;white-space:nowrap}
@@ -260,8 +233,6 @@ button.active{background:var(--accent);color:#000}
   .part-item.selected{border-left:none;border-bottom:3px solid var(--accent)}
   .part-name{font-size:10px}
   .part-mute{width:22px;height:22px;font-size:11px}
-
-  /* Piano Roll */
   .pianoroll-container{min-height:0}
   .pianoroll-toolbar{padding:4px 6px;gap:4px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
   .pianoroll-toolbar label{font-size:9px}
@@ -269,8 +240,6 @@ button.active{background:var(--accent);color:#000}
   .pianoroll-toolbar button{font-size:11px;padding:6px 8px;min-height:32px;white-space:nowrap}
   .piano-keys{width:40px}
   .grid-area{left:40px}
-
-  /* Right Panel */
   .right-panel{border-left:none;border-top:1px solid var(--border);max-height:45vh;overflow-y:auto;padding:6px}
   .panel-tabs{position:sticky;top:0;z-index:5;background:var(--surface);margin:0 -6px;padding:4px 6px}
   .panel-tabs .tab{padding:10px 8px;font-size:12px;min-height:40px}
@@ -281,8 +250,6 @@ button.active{background:var(--accent);color:#000}
   .cc-row .cc-val{font-size:12px;width:32px}
   .lfo-card{padding:8px;margin-bottom:8px}
   .lfo-toggle,.lfo-rate-type,.lfo-inv-btn,.lfo-mfx-btn{padding:6px 10px;font-size:11px;min-height:32px}
-
-  /* Transport */
   .transport{padding:8px 10px;gap:8px;flex-wrap:wrap}
   .transport-btn{width:44px;height:40px;font-size:18px;border-radius:6px}
   .bpm-display{font-size:16px;padding:4px 10px;min-width:50px}
@@ -290,20 +257,12 @@ button.active{background:var(--accent);color:#000}
   .transport-group select{font-size:13px;padding:6px 8px}
   .transport input[type=range]{height:6px}
   .note-info{font-size:10px;margin-left:0;width:100%;text-align:center}
-  #presetGroup{gap:4px}
-  #presetGroup .transport-btn{width:36px;font-size:14px}
-  #presetSelect{font-size:11px;padding:4px 6px;min-height:28px;max-width:120px}
-
   select{min-height:36px;font-size:13px}
   button{min-height:36px}
-
   .context-menu{position:fixed;bottom:0;left:0;right:0;border-radius:12px 12px 0 0;padding:8px 0;z-index:200;min-width:auto}
   .context-menu-item{padding:14px 20px;font-size:14px}
+  .mobile-panel-toggle{display:flex;align-items:center;justify-content:center}
 }
-
-/* Mobile panel toggle button */
-.mobile-panel-toggle{display:none;position:fixed;bottom:40px;right:8px;width:40px;height:40px;border-radius:50%;background:var(--accent2);color:#000;border:none;font-size:16px;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.5);cursor:pointer}
-@media(max-width:768px) and (orientation:portrait){.mobile-panel-toggle{display:flex;align-items:center;justify-content:center}}
 </style>
 </head>
 <body>
@@ -317,7 +276,6 @@ button.active{background:var(--accent);color:#000}
       <select id="midiIn"><option value="">-- No Input --</option></select>
       <button id="btnRefreshMidi" title="Refresh MIDI devices">↻</button>
       <button id="btnTestMidi" title="Send test note to verify output">♪</button>
-      <button id="btnInstall" title="Install as app" style="display:none;background:var(--accent3);color:#000;border-color:var(--accent3)">📱</button>
       <div class="midi-dot" id="midiDot"></div>
       <span id="midiDebug" style="color:var(--text-dim);font-size:9px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
     </div>
@@ -364,15 +322,48 @@ button.active{background:var(--accent);color:#000}
         <select id="styleSelect" title="Generate pattern by style"><option value="">-- Style --</option></select>
         <button id="btnGenerate" title="Generate pattern from style">GEN</button>
         <button id="btnMutate" title="Mutate current melody (stays in scale)">MUT</button>
-        <select id="melodyMode" title="Mono: single note | Poly: chords">
-          <option value="mono">Mono</option>
-          <option value="poly">Poly</option>
+        <select id="melodyMode" title="Generate mode">
+          <option value="melody">Melody</option>
+          <option value="rhythm">Rhythm</option>
+          <option value="both">Both</option>
+          <option value="poly">Chords</option>
         </select>
         <span style="color:var(--border);margin:0 2px">|</span>
         <button id="btnNoteSend" title="Send notes to hardware (OFF = clock + LFO only)">NOT</button>
         <button id="btnMFX" title="MFX On/Off for selected part">MFX</button>
         <button id="btnChordMode" title="Chord mode: click generates chord">CHD</button>
         <select id="chordType"></select>
+        <span style="color:var(--border);margin:0 2px">|</span>
+        <button id="btnArp" title="Arpeggiator on/off">ARP</button>
+        <select id="arpRate" title="Arp rate">
+          <option value="1/1">1/1</option>
+          <option value="1/2d">1/2d</option>
+          <option value="1/2">1/2</option>
+          <option value="1/2t">1/2t</option>
+          <option value="1/4d">1/4d</option>
+          <option value="1/4">1/4</option>
+          <option value="1/4t">1/4t</option>
+          <option value="1/8d">1/8d</option>
+          <option value="1/8" selected>1/8</option>
+          <option value="1/8t">1/8t</option>
+          <option value="1/16d">1/16d</option>
+          <option value="1/16">1/16</option>
+          <option value="1/16t">1/16t</option>
+          <option value="1/32">1/32</option>
+        </select>
+        <select id="arpMode" title="Arp pattern">
+          <option value="up">Up</option>
+          <option value="down">Down</option>
+          <option value="updown">Up/Down</option>
+          <option value="random">Random</option>
+          <option value="chord">Chord</option>
+        </select>
+        <select id="arpOctaves" title="Arp octave range">
+          <option value="1">1 Oct</option>
+          <option value="2" selected>2 Oct</option>
+          <option value="3">3 Oct</option>
+          <option value="4">4 Oct</option>
+        </select>
       </div>
       <div class="pianoroll" id="pianoroll">
         <div class="piano-keys" id="pianoKeys"><canvas id="pianoCanvas"></canvas></div>
@@ -385,7 +376,6 @@ button.active{background:var(--accent);color:#000}
       <div class="panel-tabs">
         <button class="tab active" data-tab="cc">CC</button>
         <button class="tab" data-tab="lfo">LFO</button>
-        <button class="tab panel-close-btn" id="btnClosePanel" title="Close panel" style="flex:0 0 auto;padding:6px 12px">✕</button>
       </div>
       <div class="tab-content" id="ccTab">
         <h3>Part Parameters</h3>
@@ -428,22 +418,31 @@ button.active{background:var(--accent);color:#000}
       </select>
       <span id="syncHint" style="color:var(--accent2);font-size:9px;display:none"></span>
     </div>
-    <div class="transport-group" id="presetGroup">
-      <button class="transport-btn" id="btnOpenPresets" title="Open presets panel" style="font-size:10px;width:auto;padding:0 6px">PRESETS</button>
+    <div class="transport-group">
+      <button class="transport-btn" id="btnOpenPresets" title="Save/Load presets" style="font-size:10px;width:auto;padding:0 8px">PRESETS</button>
     </div>
     <div class="note-info" id="noteInfo">--</div>
   </div>
 </div>
 
+<!-- Context Menu -->
+<div class="context-menu" id="contextMenu">
+  <div class="context-menu-item" data-action="delete">Delete Note</div>
+  <div class="context-menu-item" data-action="octup">Octave +1</div>
+  <div class="context-menu-item" data-action="octdown">Octave -1</div>
+  <div class="context-menu-item" data-action="velocity">Set Velocity...</div>
+  <div class="context-menu-item" data-action="duplicate">Duplicate</div>
+</div>
+
 <!-- Preset Panel -->
 <div class="preset-panel" id="presetPanel">
   <div class="preset-panel-header">
-    <span style="font-size:12px;font-weight:bold;color:var(--accent)">PRESETS</span>
-    <div style="display:flex;gap:4px">
+    <span style="font-size:14px;font-weight:bold;color:var(--accent)">PRESETS</span>
+    <div style="display:flex;gap:6px">
       <button class="preset-action-btn" id="btnSavePreset" title="Save current state">+ SAVE</button>
       <button class="preset-action-btn" id="btnExportAll" title="Export all presets as file">EXPORT</button>
       <button class="preset-action-btn" id="btnImportFile" title="Import presets from file">IMPORT</button>
-      <button class="preset-close-btn" id="btnClosePresets">✕</button>
+      <button class="preset-close-btn" id="btnClosePresets">X</button>
     </div>
   </div>
   <div class="preset-autosave" id="presetAutosave"></div>
@@ -452,11 +451,7 @@ button.active{background:var(--accent);color:#000}
 </div>
 
 <!-- Mobile panel toggle -->
-<button id="btnTogglePanel" class="mobile-panel-toggle" title="Toggle CC/LFO panel">🎛️</button>
-<style>
-.mobile-panel-toggle{display:none;position:fixed;bottom:80px;right:12px;width:48px;height:48px;border-radius:50%;background:var(--accent2);color:#000;border:none;font-size:20px;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,0.5);cursor:pointer}
-@media(max-width:768px){.mobile-panel-toggle{display:flex;align-items:center;justify-content:center}}
-</style>
+<button id="btnTogglePanel" class="mobile-panel-toggle" title="Toggle CC/LFO panel">
 
 <script>
 // ==================== DATA ====================
@@ -523,6 +518,15 @@ const STYLE_PATTERNS = {
       {step:0,degrees:[0,2,4],oct:0,vel:70,l:4},{step:4,degrees:[2,4,6],oct:0,vel:65,l:4},
       {step:8,degrees:[0,2,4],oct:0,vel:70,l:4},{step:12,degrees:[4,6,1],oct:1,vel:65,l:4},
     ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:110,l:1},{step:4,n:0,oct:0,vel:100,l:1},
+      {step:8,n:0,oct:0,vel:110,l:1},{step:12,n:0,oct:0,vel:100,l:1},
+      {step:2,n:4,oct:1,vel:90,l:1},{step:6,n:4,oct:1,vel:85,l:1},
+      {step:10,n:4,oct:1,vel:90,l:1},{step:14,n:4,oct:1,vel:85,l:1},
+      {step:0,n:6,oct:1,vel:70,l:1},{step:2,n:6,oct:1,vel:65,l:1},{step:4,n:6,oct:1,vel:70,l:1},
+      {step:6,n:6,oct:1,vel:65,l:1},{step:8,n:6,oct:1,vel:70,l:1},{step:10,n:6,oct:1,vel:65,l:1},
+      {step:12,n:6,oct:1,vel:70,l:1},{step:14,n:6,oct:1,vel:65,l:1},
+    ],
   },
   'Deep House': {
     bpm: [118, 124],
@@ -533,6 +537,12 @@ const STYLE_PATTERNS = {
     chords: [
       {step:0,degrees:[0,2,4],oct:0,vel:55,l:8},{step:8,degrees:[4,6,1],oct:1,vel:50,l:8},
     ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:110,l:1},{step:4,n:0,oct:0,vel:95,l:1},
+      {step:8,n:0,oct:0,vel:110,l:1},{step:12,n:0,oct:0,vel:95,l:1},
+      {step:6,n:4,oct:1,vel:85,l:1},{step:14,n:4,oct:1,vel:80,l:1},
+      {step:2,n:6,oct:1,vel:60,l:1},{step:10,n:6,oct:1,vel:55,l:1},
+    ],
   },
   'Techno': {
     bpm: [130, 140],
@@ -542,6 +552,16 @@ const STYLE_PATTERNS = {
     ],
     chords: [
       {step:0,degrees:[0,3,5],oct:0,vel:60,l:4},{step:8,degrees:[0,3,5],oct:0,vel:60,l:4},
+    ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:120,l:1},{step:2,n:0,oct:0,vel:100,l:1},
+      {step:4,n:0,oct:0,vel:120,l:1},{step:6,n:0,oct:0,vel:100,l:1},
+      {step:8,n:0,oct:0,vel:120,l:1},{step:10,n:0,oct:0,vel:100,l:1},
+      {step:12,n:0,oct:0,vel:120,l:1},{step:14,n:0,oct:0,vel:100,l:1},
+      {step:4,n:4,oct:1,vel:95,l:1},{step:12,n:4,oct:1,vel:95,l:1},
+      {step:0,n:6,oct:1,vel:70,l:1},{step:2,n:6,oct:1,vel:60,l:1},{step:4,n:6,oct:1,vel:70,l:1},
+      {step:6,n:6,oct:1,vel:60,l:1},{step:8,n:6,oct:1,vel:70,l:1},{step:10,n:6,oct:1,vel:60,l:1},
+      {step:12,n:6,oct:1,vel:70,l:1},{step:14,n:6,oct:1,vel:60,l:1},
     ],
   },
   'Trance': {
@@ -558,6 +578,13 @@ const STYLE_PATTERNS = {
       {step:0,degrees:[0,2,4,6],oct:0,vel:50,l:4},{step:4,degrees:[2,4,6,1],oct:1,vel:48,l:4},
       {step:8,degrees:[0,2,4,6],oct:0,vel:50,l:4},{step:12,degrees:[5,0,2,4],oct:0,vel:48,l:4},
     ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:115,l:1},{step:4,n:0,oct:0,vel:110,l:1},
+      {step:8,n:0,oct:0,vel:115,l:1},{step:12,n:0,oct:0,vel:110,l:1},
+      {step:4,n:4,oct:1,vel:95,l:1},{step:12,n:4,oct:1,vel:95,l:1},
+      {step:2,n:6,oct:1,vel:70,l:1},{step:6,n:6,oct:1,vel:65,l:1},
+      {step:10,n:6,oct:1,vel:70,l:1},{step:14,n:6,oct:1,vel:65,l:1},
+    ],
   },
   'DnB': {
     bpm: [172, 178],
@@ -567,6 +594,13 @@ const STYLE_PATTERNS = {
     ],
     chords: [
       {step:0,degrees:[0,2,4],oct:0,vel:55,l:4},{step:8,degrees:[5,0,2],oct:0,vel:55,l:4},
+    ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:120,l:1},{step:3,n:0,oct:0,vel:100,l:1},
+      {step:8,n:0,oct:0,vel:120,l:1},{step:11,n:0,oct:0,vel:100,l:1},
+      {step:4,n:4,oct:1,vel:100,l:1},{step:12,n:4,oct:1,vel:100,l:1},
+      {step:2,n:6,oct:1,vel:70,l:1},{step:6,n:6,oct:1,vel:65,l:1},
+      {step:10,n:6,oct:1,vel:70,l:1},{step:14,n:6,oct:1,vel:65,l:1},
     ],
   },
   'Dubstep': {
@@ -578,6 +612,13 @@ const STYLE_PATTERNS = {
     chords: [
       {step:0,degrees:[0,3,5],oct:0,vel:65,l:8},{step:8,degrees:[0,3,5],oct:0,vel:65,l:8},
     ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:120,l:1},{step:4,n:0,oct:0,vel:110,l:1},
+      {step:8,n:0,oct:0,vel:120,l:1},{step:12,n:0,oct:0,vel:110,l:1},
+      {step:4,n:4,oct:1,vel:100,l:1},{step:12,n:4,oct:1,vel:100,l:1},
+      {step:2,n:6,oct:1,vel:65,l:1},{step:6,n:6,oct:1,vel:60,l:1},
+      {step:10,n:6,oct:1,vel:65,l:1},{step:14,n:6,oct:1,vel:60,l:1},
+    ],
   },
   'Electro': {
     bpm: [126, 135],
@@ -587,6 +628,14 @@ const STYLE_PATTERNS = {
     ],
     chords: [
       {step:0,degrees:[0,3,5],oct:0,vel:60,l:4},{step:8,degrees:[0,3,5],oct:0,vel:60,l:4},
+    ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:115,l:1},{step:4,n:0,oct:0,vel:105,l:1},
+      {step:8,n:0,oct:0,vel:115,l:1},{step:12,n:0,oct:0,vel:105,l:1},
+      {step:4,n:4,oct:1,vel:95,l:1},{step:12,n:4,oct:1,vel:95,l:1},
+      {step:0,n:6,oct:1,vel:70,l:1},{step:2,n:6,oct:1,vel:60,l:1},{step:4,n:6,oct:1,vel:70,l:1},
+      {step:6,n:6,oct:1,vel:60,l:1},{step:8,n:6,oct:1,vel:70,l:1},{step:10,n:6,oct:1,vel:60,l:1},
+      {step:12,n:6,oct:1,vel:70,l:1},{step:14,n:6,oct:1,vel:60,l:1},
     ],
   },
   'Acid': {
@@ -602,6 +651,14 @@ const STYLE_PATTERNS = {
     chords: [
       {step:0,degrees:[0,3,5,6],oct:0,vel:55,l:8},
     ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:115,l:1},{step:4,n:0,oct:0,vel:110,l:1},
+      {step:8,n:0,oct:0,vel:115,l:1},{step:12,n:0,oct:0,vel:110,l:1},
+      {step:4,n:4,oct:1,vel:90,l:1},{step:12,n:4,oct:1,vel:90,l:1},
+      {step:0,n:6,oct:1,vel:65,l:1},{step:2,n:6,oct:1,vel:60,l:1},{step:4,n:6,oct:1,vel:65,l:1},
+      {step:6,n:6,oct:1,vel:60,l:1},{step:8,n:6,oct:1,vel:65,l:1},{step:10,n:6,oct:1,vel:60,l:1},
+      {step:12,n:6,oct:1,vel:65,l:1},{step:14,n:6,oct:1,vel:60,l:1},
+    ],
   },
   'Ambient': {
     bpm: [80, 110],
@@ -610,6 +667,10 @@ const STYLE_PATTERNS = {
     ],
     chords: [
       {step:0,degrees:[0,2,4,6],oct:0,vel:40,l:8},{step:8,degrees:[5,0,2,4],oct:0,vel:38,l:8},
+    ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:80,l:1},{step:8,n:0,oct:0,vel:75,l:1},
+      {step:4,n:6,oct:1,vel:50,l:1},{step:12,n:6,oct:1,vel:45,l:1},
     ],
   },
   'Trap': {
@@ -620,6 +681,13 @@ const STYLE_PATTERNS = {
     ],
     chords: [
       {step:0,degrees:[0,3,5],oct:0,vel:60,l:4},{step:8,degrees:[0,3,5],oct:0,vel:60,l:4},
+    ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:120,l:1},{step:3,n:0,oct:0,vel:90,l:1},{step:4,n:0,oct:0,vel:110,l:1},
+      {step:8,n:0,oct:0,vel:120,l:1},{step:11,n:0,oct:0,vel:90,l:1},{step:12,n:0,oct:0,vel:110,l:1},
+      {step:4,n:4,oct:1,vel:100,l:1},{step:12,n:4,oct:1,vel:100,l:1},
+      {step:2,n:6,oct:1,vel:70,l:1},{step:6,n:6,oct:1,vel:65,l:1},
+      {step:10,n:6,oct:1,vel:70,l:1},{step:14,n:6,oct:1,vel:65,l:1},
     ],
   },
   'Eurodance': {
@@ -632,6 +700,13 @@ const STYLE_PATTERNS = {
     chords: [
       {step:0,degrees:[0,2,4],oct:0,vel:60,l:4},{step:4,degrees:[4,6,1],oct:1,vel:58,l:4},
       {step:8,degrees:[0,2,4],oct:0,vel:60,l:4},{step:12,degrees:[5,0,2],oct:0,vel:58,l:4},
+    ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:115,l:1},{step:4,n:0,oct:0,vel:110,l:1},
+      {step:8,n:0,oct:0,vel:115,l:1},{step:12,n:0,oct:0,vel:110,l:1},
+      {step:4,n:4,oct:1,vel:95,l:1},{step:12,n:4,oct:1,vel:95,l:1},
+      {step:2,n:6,oct:1,vel:70,l:1},{step:6,n:6,oct:1,vel:65,l:1},
+      {step:10,n:6,oct:1,vel:70,l:1},{step:14,n:6,oct:1,vel:65,l:1},
     ],
   },
   'Synthwave': {
@@ -647,6 +722,13 @@ const STYLE_PATTERNS = {
     chords: [
       {step:0,degrees:[0,2,4],oct:0,vel:45,l:4},{step:4,degrees:[4,6,1],oct:1,vel:42,l:4},
       {step:8,degrees:[6,1,3],oct:0,vel:45,l:4},{step:12,degrees:[2,4,6],oct:0,vel:42,l:4},
+    ],
+    rhythm: [
+      {step:0,n:0,oct:0,vel:110,l:1},{step:4,n:0,oct:0,vel:105,l:1},
+      {step:8,n:0,oct:0,vel:110,l:1},{step:12,n:0,oct:0,vel:105,l:1},
+      {step:4,n:4,oct:1,vel:90,l:1},{step:12,n:4,oct:1,vel:90,l:1},
+      {step:2,n:6,oct:1,vel:65,l:1},{step:6,n:6,oct:1,vel:60,l:1},
+      {step:10,n:6,oct:1,vel:65,l:1},{step:14,n:6,oct:1,vel:60,l:1},
     ],
   },
 };
@@ -691,6 +773,7 @@ const state = {
   notes: [],
   // Selection
   selectedNote: null,
+  selectAll: false,
   dragging: null,
   resizing: null,
   // View
@@ -746,11 +829,21 @@ const state = {
   // Style generator
   selectedStyle: 'House',
   // Melody mode: 'mono' or 'poly'
-  melodyMode: 'mono',
+  melodyMode: 'melody',
   // Send notes to MIDI output (when OFF, only clock + CC/LFO)
   noteSendEnabled: true,
   // MFX state per part
   partMFX: new Array(16).fill(false),
+  // Per-part arpeggiator: [part] = {active, rate, mode, octaves, pattern, index, lastNote}
+  partArp: Array.from({length: 16}, () => ({
+    active: false,
+    rate: '1/8',
+    mode: 'up',
+    octaves: 2,
+    pattern: [],
+    index: 0,
+    lastNote: -1,
+  })),
 };
 
 // ==================== INIT ====================
@@ -763,36 +856,37 @@ function init() {
   buildStyleSelect();
   buildCCPanel();
   buildLFOPanel();
-  initLFOListeners();
   initPianoRoll();
   initEventListeners();
   initLFOLoop();
   document.addEventListener('click', initMIDIOnce, {once: true});
   document.addEventListener('keydown', initMIDIOnce, {once: true});
-  document.addEventListener('touchstart', initMIDIOnce, {once: true});
-  setTimeout(() => { if (!midiAccess) initMIDI(); }, 1500);
-  // PWA: register service worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(reg => console.log('Service Worker registered:', reg.scope))
-      .catch(err => console.log('SW registration failed:', err));
+
+  // Preset panel
+  document.getElementById('btnOpenPresets').onclick = openPresetPanel;
+  document.getElementById('btnClosePresets').onclick = closePresetPanel;
+  document.getElementById('btnSavePreset').onclick = () => {
+    const name = prompt('Preset name:', 'My Preset');
+    if (name) { savePreset(name); renderPresetList(); }
+  };
+  document.getElementById('btnExportAll').onclick = exportAllPresets;
+  document.getElementById('btnImportFile').onclick = () => document.getElementById('presetFileInput').click();
+  document.getElementById('presetFileInput').onchange = e => {
+    if (e.target.files[0]) importPresetsFromFile(e.target.files[0]);
+    e.target.value = '';
+  };
+  updateAutosaveInfo();
+  const presets = getSavedPresets();
+  if (presets['__autosave__'] && confirm('Restore last session?')) {
+    setPresetData(presets['__autosave__']);
   }
-  // PWA: listen for install prompt
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    state._deferredInstallPrompt = e;
-    const installBtn = document.getElementById('btnInstall');
-    if (installBtn) {
-      installBtn.style.display = 'inline-block';
-      installBtn.onclick = installPWA;
-    }
+  document.addEventListener('change', e => {
+    if (e.target.closest('.transport, .pianoroll-toolbar, .sidebar, .right-panel, .header')) triggerAutoSave();
   });
 }
 
 function initMIDIOnce() {
   if (!midiAccess) initMIDI();
-  initAudioContext();
-  resumeAudioContext();
 }
 
 // ==================== MIDI ====================
@@ -802,76 +896,49 @@ async function initMIDI() {
   const debugEl = document.getElementById('midiDebug');
   if (!navigator.requestMIDIAccess) {
     debugEl.textContent = 'Web MIDI not supported';
-    alert('Web MIDI API not supported in this browser.\nUse Chrome, Edge, or Opera.');
-    return;
-  }
-  // Check if running from file:// protocol (Web MIDI requires HTTPS or localhost)
-  if (location.protocol === 'file:') {
-    debugEl.textContent = 'Web MIDI needs HTTP server';
-    alert('Web MIDI no funciona con archivos locales (file://).\n\n' +
-      'Solucion rapida en Android:\n' +
-      '1. Instalar Termux desde F-Droid\n' +
-      '2. Ejecutar: pkg install python\n' +
-      '3. Ejecutar: python hacktribe-serve.py\n' +
-      '4. Abrir en Chrome: http://localhost:8080\n\n' +
-      'Sin PC: Ejecutar serve.bat en la PC\n' +
-      'y abrir http://IP:8080 en el telefono');
-    return;
-  }
-  if (midiAccess) {
-    enumerateDevices(midiAccess);
+    alert('Web MIDI API not supported in this browser.\nUse Chrome, Edge, or Opera.\nAlso check: chrome://flags → #web-midi');
     return;
   }
   try {
     debugEl.textContent = 'Requesting MIDI access...';
-    midiAccess = await navigator.requestMIDIAccess({sysex: false});
+    midiAccess = await navigator.requestMIDIAccess({sysex: true});
     debugEl.textContent = 'MIDI OK - scanning...';
     enumerateDevices(midiAccess);
-    setupMIDIStateChange();
-  } catch(e) {
-    console.error('MIDI access error (non-SysEx):', e);
-    try {
-      debugEl.textContent = 'Trying SysEx...';
-      midiAccess = await navigator.requestMIDIAccess({sysex: true});
-      debugEl.textContent = 'MIDI OK (SysEx) - scanning...';
+    midiAccess.onstatechange = () => {
+      // Debounce: don't reconnect more than once per second
+      if (midiAccess._stateTimer) return;
+      midiAccess._stateTimer = setTimeout(() => { midiAccess._stateTimer = null; }, 1000);
+      console.log('MIDI state changed');
       enumerateDevices(midiAccess);
-      setupMIDIStateChange();
+    };
+  } catch(e) {
+    console.error('MIDI access error:', e);
+    debugEl.textContent = 'SysEx failed, retrying...';
+    // Retry without SysEx as fallback
+    try {
+      midiAccess = await navigator.requestMIDIAccess({sysex: false});
+      debugEl.textContent = 'MIDI OK (no SysEx) - scanning...';
+      enumerateDevices(midiAccess);
+      midiAccess.onstatechange = () => {
+        if (midiAccess._stateTimer) return;
+        midiAccess._stateTimer = setTimeout(() => { midiAccess._stateTimer = null; }, 1000);
+        enumerateDevices(midiAccess);
+      };
     } catch(e2) {
       debugEl.textContent = 'MIDI failed: ' + e2.message;
-      console.error('MIDI SysEx error:', e2);
-      if (navigator.userAgent.includes('Android')) {
-        debugEl.textContent = 'MIDI failed. Check chrome://flags';
-      }
+      console.error('MIDI fallback error:', e2);
     }
   }
 }
 
-function setupMIDIStateChange() {
-  midiAccess.onstatechange = () => {
-    // Lighter debounce: reconnect after 500ms of quiet
-    clearTimeout(midiAccess._stateTimer);
-    midiAccess._stateTimer = setTimeout(() => {
-      console.log('MIDI state changed, rescanning...');
-      enumerateDevices(midiAccess);
-    }, 500);
-  };
-}
-
 // Also allow manual MIDI init by clicking the status dot
 document.addEventListener('DOMContentLoaded', () => {
-  const dot = document.getElementById('midiDot');
-  dot.style.cursor = 'pointer';
-  dot.title = 'Tap to initialize/refresh MIDI';
-  dot.onclick = () => {
+  document.getElementById('midiDot').onclick = () => {
     if (!midiAccess) initMIDI();
     else enumerateDevices(midiAccess);
   };
-  // Android: also handle touch on the dot
-  dot.ontouchend = (e) => {
-    e.preventDefault();
-    if (!midiAccess) initMIDI();
-    else enumerateDevices(midiAccess);
-  };
+  document.getElementById('midiDot').style.cursor = 'pointer';
+  document.getElementById('midiDot').title = 'Click to initialize/refresh MIDI';
 });
 
 function enumerateDevices(access) {
@@ -1011,18 +1078,13 @@ function connectInput() {
   for (const [id, input] of midiAccess.inputs) {
     input.onmidimessage = onMIDIMessage;
     connectedNames.push(input.name);
-    console.log('Listening on input:', input.name, '(id:', id, ')');
   }
 
   dot.classList.toggle('connected', !!(state.midiOut || state.midiIn));
   const outName = state.midiOut ? state.midiOut.name : 'none';
   const inName = connectedNames.length > 0 ? connectedNames.join(' + ') : 'none';
-  const deviceCount = midiAccess.outputs.size + midiAccess.inputs.size;
   debugEl.textContent = `Out: ${outName} | In: ${inName}`;
-  if (deviceCount === 0 && navigator.userAgent.includes('Android')) {
-    debugEl.textContent = 'No devices. Connect USB and tap dot to rescan.';
-  }
-  console.log('MIDI inputs listening:', connectedNames.join(', ') || 'none', '| Total devices:', deviceCount);
+  console.log('MIDI inputs listening:', connectedNames.join(', ') || 'none');
 }
 
 function onMIDIMessage(msg) {
@@ -1036,7 +1098,7 @@ function onMIDIMessage(msg) {
     return;
   }
   if (status === 0xFA) {
-    console.log('>>> MIDI Start received, syncMode:', state.midiSyncMode);
+    console.log('>>> MIDI Start received');
     handleMIDIStart();
     return;
   }
@@ -1069,11 +1131,6 @@ function handleMIDIClock(msg) {
   if (state.midiSyncMode !== 'slave') return;
   const now = msg.timeStamp;
   state.midiClockCount++;
-
-  // Log first few clock pulses for debugging
-  if (state.midiClockCount <= 6) {
-    console.log(`MIDI Clock #${state.midiClockCount}, playing:${state.playing}, mode:${state.midiSyncMode}`);
-  }
 
   // BPM analysis: track intervals between pulses
   if (state.lastClockTime > 0) {
@@ -1111,7 +1168,7 @@ function handleMIDIClock(msg) {
 
 function handleMIDIStart() {
   if (state.midiSyncMode !== 'slave') return;
-  console.log('MIDI Start received - resetting clock, syncMode:', state.midiSyncMode);
+  console.log('MIDI Start received - resetting clock');
   state.midiClockCount = 0;
   state.lastClockTime = 0;
   state.clockPulseTimes = [];
@@ -1122,7 +1179,6 @@ function handleMIDIStart() {
     state.partPlayStep.fill(-1);
     state.playStep = 0;
     playStartTime = performance.now();
-    console.log('MIDI Start: playback activated');
   }
 }
 
@@ -1243,6 +1299,11 @@ function buildPartList() {
       updateCCPanel();
       updateLFOUI();
       document.getElementById('btnMFX').classList.toggle('active', state.partMFX[i]);
+      const arp = state.partArp[i];
+      document.getElementById('btnArp').classList.toggle('active', arp.active);
+      document.getElementById('arpRate').value = arp.rate;
+      document.getElementById('arpMode').value = arp.mode;
+      document.getElementById('arpOctaves').value = arp.octaves;
     };
     ul.appendChild(li);
   });
@@ -1355,211 +1416,311 @@ function updateCCSlider(cc, val) {
 }
 
 // ==================== LFO PANEL ====================
+const WAVE_SYMBOLS = {sine:'∿', triangle:'△', saw:'⩘', square:'⊓', sampleHold:'⊞'};
+const WAVE_NAMES = ['sine','triangle','saw','square','sampleHold'];
+
 function buildLFOPanel() {
   const container = document.getElementById('lfoControls');
   if (!container) return;
   container.innerHTML = '';
 
   const partLfos = state.partLfos[state.selectedPart];
-  const waveSymbols = {sine:'∿', triangle:'△', saw:'⩘', square:'⊓', sampleHold:'⊞'};
-  const waveNames = ['sine','triangle','saw','square','sampleHold'];
   const rateOptions = Object.keys(RATE_MAP);
 
   for (let i = 0; i < 8; i++) {
     const lfo = partLfos[i];
     const card = document.createElement('div');
     card.className = 'lfo-card';
-    card.innerHTML = `
-      <div class="lfo-header">
-        <span class="lfo-num">LFO ${i+1}</span>
-        <button class="lfo-toggle ${lfo.active?'active':''}" data-i="${i}">${lfo.active?'ON':'OFF'}</button>
-        <select class="lfo-waveform" data-i="${i}">
-          ${waveNames.map(w => `<option value="${w}" ${lfo.waveform===w?'selected':''}>${waveSymbols[w]} ${w}</option>`).join('')}
-        </select>
-        <button class="lfo-mfx-btn ${lfo.destination===102?'active':''}" data-i="${i}" data-cc="102" title="Quick assign MFX X">X</button>
-        <button class="lfo-mfx-btn ${lfo.destination===103?'active':''}" data-i="${i}" data-cc="103" title="Quick assign MFX Y">Y</button>
-        <button class="lfo-inv-btn ${lfo.invert?'active':''}" data-i="${i}" title="Invert waveform">INV</button>
-      </div>
-      <canvas class="lfo-display" data-i="${i}" width="280" height="40"></canvas>
-      <div class="lfo-controls">
-        <div class="lfo-row">
-          <label>Rate</label>
-          <button class="lfo-rate-type ${lfo.rateType==='hz'?'active':''}" data-i="${i}">${lfo.rateType==='hz'?'Free':'Sync'}</button>
-          <select class="lfo-rate" data-i="${i}" ${lfo.rateType==='hz'?'style="display:none"':''}>
-            ${rateOptions.map(r => `<option value="${r}" ${lfo.rate===r?'selected':''}>${r}</option>`).join('')}
-          </select>
-          <input type="range" class="lfo-rate-hz" data-i="${i}" min="0.05" max="20" step="0.05" value="${lfo.rateHz||1}" ${lfo.rateType!=='hz'?'style="display:none"':''}>
-          <span class="lfo-rate-hz-val" data-i="${i}" ${lfo.rateType!=='hz'?'style="display:none"':''}>${lfo.rateHz||1}Hz</span>
-          <label>Depth</label>
-          <input type="range" class="lfo-depth" data-i="${i}" min="0" max="100" value="${lfo.depth}">
-          <span class="lfo-depth-val">${lfo.depth}%</span>
-        </div>
-        <div class="lfo-row">
-          <label>Dest</label>
-          <select class="lfo-dest" data-i="${i}">
-            <option value="-1">None</option>
-            ${CC_PARAMS.map(p => `<option value="${p.cc}" ${lfo.destination===p.cc?'selected':''}>${p.name}</option>`).join('')}
-          </select>
-        </div>
-        <div class="lfo-row">
-          <label>Min</label>
-          <input type="range" class="lfo-min" data-i="${i}" min="0" max="127" value="${lfo.min}">
-          <span class="lfo-min-val">${lfo.min}</span>
-          <label>Max</label>
-          <input type="range" class="lfo-max" data-i="${i}" min="0" max="127" value="${lfo.max}">
-          <span class="lfo-max-val">${lfo.max}</span>
-        </div>
-        <div class="lfo-row">
-          <label>Shuffle</label>
-          <input type="range" class="lfo-shuffle" data-i="${i}" min="0" max="100" value="${lfo.shuffle}">
-          <span class="lfo-shuffle-val">${lfo.shuffle}%</span>
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
-  }
 
-  // Initial waveform render
-  for (let i = 0; i < 8; i++) {
-    const canvas = container.querySelector(`.lfo-display[data-i="${i}"]`);
-    if (canvas) renderLFOWaveform(canvas, partLfos[i]);
+    // --- Header row ---
+    const header = document.createElement('div');
+    header.className = 'lfo-header';
+
+    const numLabel = document.createElement('span');
+    numLabel.className = 'lfo-num';
+    numLabel.textContent = 'LFO ' + (i + 1);
+    header.appendChild(numLabel);
+
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'lfo-toggle' + (lfo.active ? ' active' : '');
+    toggleBtn.textContent = lfo.active ? 'ON' : 'OFF';
+    toggleBtn.addEventListener('click', () => {
+      lfo.active = !lfo.active;
+      toggleBtn.classList.toggle('active', lfo.active);
+      toggleBtn.textContent = lfo.active ? 'ON' : 'OFF';
+      renderLFOWaveform(display, lfo);
+    });
+    header.appendChild(toggleBtn);
+
+    const waveSel = document.createElement('select');
+    waveSel.className = 'lfo-waveform';
+    WAVE_NAMES.forEach(w => {
+      const opt = document.createElement('option');
+      opt.value = w;
+      opt.textContent = WAVE_SYMBOLS[w] + ' ' + w;
+      if (lfo.waveform === w) opt.selected = true;
+      waveSel.appendChild(opt);
+    });
+    waveSel.addEventListener('change', () => {
+      lfo.waveform = waveSel.value;
+      renderLFOWaveform(display, lfo);
+    });
+    header.appendChild(waveSel);
+
+    const mfxX = document.createElement('button');
+    mfxX.className = 'lfo-mfx-btn' + (lfo.destination === 102 ? ' active' : '');
+    mfxX.textContent = 'X';
+    mfxX.title = 'Quick assign MFX X';
+    mfxX.addEventListener('click', () => handleMFXAssign(lfo, 102, mfxX, mfxY, destSel, i));
+    header.appendChild(mfxX);
+
+    const mfxY = document.createElement('button');
+    mfxY.className = 'lfo-mfx-btn' + (lfo.destination === 103 ? ' active' : '');
+    mfxY.textContent = 'Y';
+    mfxY.title = 'Quick assign MFX Y';
+    mfxY.addEventListener('click', () => handleMFXAssign(lfo, 103, mfxX, mfxY, destSel, i));
+    header.appendChild(mfxY);
+
+    const invBtn = document.createElement('button');
+    invBtn.className = 'lfo-inv-btn' + (lfo.invert ? ' active' : '');
+    invBtn.textContent = 'INV';
+    invBtn.title = 'Invert waveform';
+    invBtn.addEventListener('click', () => {
+      lfo.invert = !lfo.invert;
+      invBtn.classList.toggle('active', lfo.invert);
+      renderLFOWaveform(display, lfo);
+    });
+    header.appendChild(invBtn);
+
+    card.appendChild(header);
+
+    // --- Waveform display ---
+    const display = document.createElement('canvas');
+    display.className = 'lfo-display';
+    display.width = 280;
+    display.height = 40;
+    card.appendChild(display);
+
+    // --- Controls ---
+    const controls = document.createElement('div');
+    controls.className = 'lfo-controls';
+
+    // Row 1: Rate + Depth
+    const row1 = document.createElement('div');
+    row1.className = 'lfo-row';
+
+    const rateLabel = document.createElement('label');
+    rateLabel.textContent = 'Rate';
+    row1.appendChild(rateLabel);
+
+    const rateTypeBtn = document.createElement('button');
+    rateTypeBtn.className = 'lfo-rate-type' + (lfo.rateType === 'hz' ? ' active' : '');
+    rateTypeBtn.textContent = lfo.rateType === 'hz' ? 'Free' : 'Sync';
+    rateTypeBtn.addEventListener('click', () => {
+      lfo.rateType = lfo.rateType === 'hz' ? 'sync' : 'hz';
+      rateTypeBtn.textContent = lfo.rateType === 'hz' ? 'Free' : 'Sync';
+      rateTypeBtn.classList.toggle('active', lfo.rateType === 'hz');
+      rateSel.style.display = lfo.rateType === 'hz' ? 'none' : '';
+      hzSlider.style.display = lfo.rateType === 'hz' ? '' : 'none';
+      hzVal.style.display = lfo.rateType === 'hz' ? '' : 'none';
+    });
+    row1.appendChild(rateTypeBtn);
+
+    const rateSel = document.createElement('select');
+    rateSel.className = 'lfo-rate';
+    rateOptions.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r;
+      opt.textContent = r;
+      if (lfo.rate === r) opt.selected = true;
+      rateSel.appendChild(opt);
+    });
+    rateSel.style.display = lfo.rateType === 'hz' ? 'none' : '';
+    rateSel.addEventListener('change', () => {
+      lfo.rate = rateSel.value;
+    });
+    row1.appendChild(rateSel);
+
+    const hzSlider = document.createElement('input');
+    hzSlider.type = 'range';
+    hzSlider.className = 'lfo-rate-hz';
+    hzSlider.min = '0.05';
+    hzSlider.max = '20';
+    hzSlider.step = '0.05';
+    hzSlider.value = lfo.rateHz || 1;
+    hzSlider.style.display = lfo.rateType === 'hz' ? '' : 'none';
+    hzSlider.addEventListener('input', () => {
+      lfo.rateHz = +hzSlider.value;
+      hzVal.textContent = (+hzSlider.value).toFixed(1) + 'Hz';
+    });
+    row1.appendChild(hzSlider);
+
+    const hzVal = document.createElement('span');
+    hzVal.className = 'lfo-rate-hz-val';
+    hzVal.textContent = (lfo.rateHz || 1).toFixed(1) + 'Hz';
+    hzVal.style.display = lfo.rateType === 'hz' ? '' : 'none';
+    row1.appendChild(hzVal);
+
+    const depthLabel = document.createElement('label');
+    depthLabel.textContent = 'Depth';
+    row1.appendChild(depthLabel);
+
+    const depthSlider = document.createElement('input');
+    depthSlider.type = 'range';
+    depthSlider.className = 'lfo-depth';
+    depthSlider.min = '0';
+    depthSlider.max = '100';
+    depthSlider.value = lfo.depth;
+    depthSlider.addEventListener('input', () => {
+      lfo.depth = +depthSlider.value;
+      depthVal.textContent = depthSlider.value + '%';
+      renderLFOWaveform(display, lfo);
+    });
+    row1.appendChild(depthSlider);
+
+    const depthVal = document.createElement('span');
+    depthVal.className = 'lfo-depth-val';
+    depthVal.textContent = lfo.depth + '%';
+    row1.appendChild(depthVal);
+
+    controls.appendChild(row1);
+
+    // Row 2: Destination
+    const row2 = document.createElement('div');
+    row2.className = 'lfo-row';
+
+    const destLabel = document.createElement('label');
+    destLabel.textContent = 'Dest';
+    row2.appendChild(destLabel);
+
+    const destSel = document.createElement('select');
+    destSel.className = 'lfo-dest';
+    const noneOpt = document.createElement('option');
+    noneOpt.value = '-1';
+    noneOpt.textContent = 'None';
+    destSel.appendChild(noneOpt);
+    CC_PARAMS.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.cc;
+      opt.textContent = p.name;
+      if (lfo.destination === p.cc) opt.selected = true;
+      destSel.appendChild(opt);
+    });
+    destSel.addEventListener('change', () => {
+      const newDest = +destSel.value;
+      lfo.destination = newDest;
+      if (newDest === 102 || newDest === 103) enableMFX();
+    });
+    row2.appendChild(destSel);
+
+    controls.appendChild(row2);
+
+    // Row 3: Min + Max
+    const row3 = document.createElement('div');
+    row3.className = 'lfo-row';
+
+    const minLabel = document.createElement('label');
+    minLabel.textContent = 'Min';
+    row3.appendChild(minLabel);
+
+    const minSlider = document.createElement('input');
+    minSlider.type = 'range';
+    minSlider.className = 'lfo-min';
+    minSlider.min = '0';
+    minSlider.max = '127';
+    minSlider.value = lfo.min;
+    minSlider.addEventListener('input', () => {
+      lfo.min = +minSlider.value;
+      minVal.textContent = minSlider.value;
+    });
+    row3.appendChild(minSlider);
+
+    const minVal = document.createElement('span');
+    minVal.className = 'lfo-min-val';
+    minVal.textContent = lfo.min;
+    row3.appendChild(minVal);
+
+    const maxLabel = document.createElement('label');
+    maxLabel.textContent = 'Max';
+    row3.appendChild(maxLabel);
+
+    const maxSlider = document.createElement('input');
+    maxSlider.type = 'range';
+    maxSlider.className = 'lfo-max';
+    maxSlider.min = '0';
+    maxSlider.max = '127';
+    maxSlider.value = lfo.max;
+    maxSlider.addEventListener('input', () => {
+      lfo.max = +maxSlider.value;
+      maxVal.textContent = maxSlider.value;
+    });
+    row3.appendChild(maxSlider);
+
+    const maxVal = document.createElement('span');
+    maxVal.className = 'lfo-max-val';
+    maxVal.textContent = lfo.max;
+    row3.appendChild(maxVal);
+
+    controls.appendChild(row3);
+
+    // Row 4: Shuffle
+    const row4 = document.createElement('div');
+    row4.className = 'lfo-row';
+
+    const shufLabel = document.createElement('label');
+    shufLabel.textContent = 'Shuffle';
+    row4.appendChild(shufLabel);
+
+    const shufSlider = document.createElement('input');
+    shufSlider.type = 'range';
+    shufSlider.className = 'lfo-shuffle';
+    shufSlider.min = '0';
+    shufSlider.max = '100';
+    shufSlider.value = lfo.shuffle;
+    shufSlider.addEventListener('input', () => {
+      lfo.shuffle = +shufSlider.value;
+      shufVal.textContent = shufSlider.value + '%';
+    });
+    row4.appendChild(shufSlider);
+
+    const shufVal = document.createElement('span');
+    shufVal.className = 'lfo-shuffle-val';
+    shufVal.textContent = lfo.shuffle + '%';
+    row4.appendChild(shufVal);
+
+    controls.appendChild(row4);
+
+    card.appendChild(controls);
+    container.appendChild(card);
+
+    // Render initial waveform
+    renderLFOWaveform(display, lfo);
   }
 }
 
-// Bind LFO event delegation ONCE (not on every rebuild)
-function initLFOListeners() {
+function handleMFXAssign(lfo, cc, mfxXBtn, mfxYBtn, destSel, lfoIdx) {
   const container = document.getElementById('lfoControls');
-  if (!container || container._lfoListenersBound) return;
-  container._lfoListenersBound = true;
+  if (lfo.destination === cc) {
+    lfo.destination = -1;
+    mfxXBtn.classList.toggle('active', lfo.destination === 102);
+    mfxYBtn.classList.toggle('active', lfo.destination === 103);
+    destSel.value = -1;
+  } else {
+    lfo.destination = cc;
+    mfxXBtn.classList.toggle('active', lfo.destination === 102);
+    mfxYBtn.classList.toggle('active', lfo.destination === 103);
+    destSel.value = cc;
+    enableMFX();
+  }
+}
 
-  container.addEventListener('change', (e) => {
-    const el = e.target;
-    const i = +el.dataset.i;
-    if (isNaN(i)) return;
-    const lfo = state.partLfos[state.selectedPart][i];
-    if (el.classList.contains('lfo-waveform')) {
-      lfo.waveform = el.value;
-      const canvas = container.querySelector(`.lfo-display[data-i="${i}"]`);
-      renderLFOWaveform(canvas, lfo);
-    } else if (el.classList.contains('lfo-rate')) {
-      lfo.rate = el.value;
-    } else if (el.classList.contains('lfo-dest')) {
-      const newDest = +el.value;
-      if (newDest >= 0) {
-        const partLfos = state.partLfos[state.selectedPart];
-        for (let j = 0; j < 8; j++) {
-          if (j !== i && partLfos[j].active && partLfos[j].destination === newDest) {
-            partLfos[j].destination = -1;
-            const otherSel = container.querySelector(`.lfo-dest[data-i="${j}"]`);
-            if (otherSel) otherSel.value = -1;
-          }
-        }
-        // Auto-enable MFX + MFX Send when targeting MFX X (CC 102) or MFX Y (CC 103)
-        if (newDest === 102 || newDest === 103) {
-          sendCC(106, 127, state.selectedPart);
-          sendCC(105, 127, state.selectedPart);
-          state.partCCValues[state.selectedPart][106] = 127;
-          state.partCCValues[state.selectedPart][105] = 127;
-          state.partMFX[state.selectedPart] = true;
-          document.getElementById('btnMFX').classList.add('active');
-        }
-      }
-      lfo.destination = newDest;
-    }
-  });
-
-  container.addEventListener('input', (e) => {
-    const el = e.target;
-    const i = +el.dataset.i;
-    if (isNaN(i)) return;
-    const lfo = state.partLfos[state.selectedPart][i];
-    if (el.classList.contains('lfo-depth')) {
-      lfo.depth = +el.value;
-      el.nextElementSibling.textContent = el.value + '%';
-      const canvas = container.querySelector(`.lfo-display[data-i="${i}"]`);
-      renderLFOWaveform(canvas, lfo);
-    } else if (el.classList.contains('lfo-min')) {
-      lfo.min = +el.value;
-      el.nextElementSibling.textContent = el.value;
-    } else if (el.classList.contains('lfo-max')) {
-      lfo.max = +el.value;
-      el.nextElementSibling.textContent = el.value;
-    } else if (el.classList.contains('lfo-shuffle')) {
-      lfo.shuffle = +el.value;
-      el.nextElementSibling.textContent = el.value + '%';
-    } else if (el.classList.contains('lfo-rate-hz')) {
-      lfo.rateHz = +el.value;
-      const hzSpan = container.querySelector(`.lfo-rate-hz-val[data-i="${i}"]`);
-      if (hzSpan) hzSpan.textContent = (+el.value).toFixed(1) + 'Hz';
-    }
-  });
-
-  container.addEventListener('click', (e) => {
-    const btn = e.target;
-    const i = +btn.dataset.i;
-    if (isNaN(i)) return;
-
-    if (btn.classList.contains('lfo-toggle')) {
-      const lfo = state.partLfos[state.selectedPart][i];
-      lfo.active = !lfo.active;
-      btn.classList.toggle('active', lfo.active);
-      btn.textContent = lfo.active ? 'ON' : 'OFF';
-      const canvas = container.querySelector(`.lfo-display[data-i="${i}"]`);
-      renderLFOWaveform(canvas, lfo);
-    } else if (btn.classList.contains('lfo-mfx-btn')) {
-      const cc = +btn.dataset.cc;
-      const lfo = state.partLfos[state.selectedPart][i];
-      // Toggle: if already assigned, clear it
-      if (lfo.destination === cc) {
-        lfo.destination = -1;
-        btn.classList.remove('active');
-      } else {
-        // Clear other LFOs on this part targeting same CC
-        const partLfos = state.partLfos[state.selectedPart];
-        for (let j = 0; j < 8; j++) {
-          if (j !== i && partLfos[j].active && partLfos[j].destination === cc) {
-            partLfos[j].destination = -1;
-            const otherBtn = container.querySelector(`.lfo-mfx-btn[data-i="${j}"][data-cc="${cc}"]`);
-            if (otherBtn) otherBtn.classList.remove('active');
-            const otherSel = container.querySelector(`.lfo-dest[data-i="${j}"]`);
-            if (otherSel) otherSel.value = -1;
-          }
-        }
-        lfo.destination = cc;
-        // Update all MFX buttons for this LFO to reflect new state
-        container.querySelectorAll(`.lfo-mfx-btn[data-i="${i}"]`).forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        // Sync dropdown
-        const destSel = container.querySelector(`.lfo-dest[data-i="${i}"]`);
-        if (destSel) destSel.value = cc;
-        // Auto-enable MFX + MFX Send
-        sendCC(106, 127, state.selectedPart);
-        sendCC(105, 127, state.selectedPart);
-        state.partCCValues[state.selectedPart][106] = 127;
-        state.partCCValues[state.selectedPart][105] = 127;
-        state.partMFX[state.selectedPart] = true;
-        document.getElementById('btnMFX').classList.add('active');
-      }
-    } else if (btn.classList.contains('lfo-inv-btn')) {
-      const lfo = state.partLfos[state.selectedPart][i];
-      lfo.invert = !lfo.invert;
-      btn.classList.toggle('active', lfo.invert);
-      const canvas = container.querySelector(`.lfo-display[data-i="${i}"]`);
-      renderLFOWaveform(canvas, lfo);
-    } else if (btn.classList.contains('lfo-rate-type')) {
-      const lfo = state.partLfos[state.selectedPart][i];
-      const isHz = lfo.rateType === 'hz';
-      lfo.rateType = isHz ? 'sync' : 'hz';
-      btn.textContent = lfo.rateType === 'hz' ? 'Free' : 'Sync';
-      btn.classList.toggle('active', lfo.rateType === 'hz');
-      const rateSelect = container.querySelector(`.lfo-rate[data-i="${i}"]`);
-      const hzSlider = container.querySelector(`.lfo-rate-hz[data-i="${i}"]`);
-      const hzSpan = container.querySelector(`.lfo-rate-hz-val[data-i="${i}"]`);
-      if (rateSelect) rateSelect.style.display = lfo.rateType === 'hz' ? 'none' : '';
-      if (hzSlider) hzSlider.style.display = lfo.rateType === 'hz' ? '' : 'none';
-      if (hzSpan) hzSpan.style.display = lfo.rateType === 'hz' ? '' : 'none';
-    }
-  });
+function enableMFX() {
+  sendCC(106, 127, state.selectedPart);
+  sendCC(105, 127, state.selectedPart);
+  state.partCCValues[state.selectedPart][106] = 127;
+  state.partCCValues[state.selectedPart][105] = 127;
+  state.partMFX[state.selectedPart] = true;
+  document.getElementById('btnMFX').classList.add('active');
 }
 
 function updateLFOUI() {
@@ -1606,11 +1767,9 @@ function initPianoRoll() {
     const x = touch.clientX - rect.left;
     const y = touch.clientY - rect.top;
 
-    // Long press detection for context menu
     const existing = getNoteAt(x, y);
     if (existing) {
       touchLongPress = setTimeout(() => {
-        // Long press → show context menu
         state.selectedNote = existing;
         const menu = document.getElementById('contextMenu');
         menu.style.display = 'block';
@@ -1620,7 +1779,6 @@ function initPianoRoll() {
       }, 500);
     }
 
-    // Simulate mousedown
     onGridMouseDown({ clientX: touch.clientX, clientY: touch.clientY, button: 0, shiftKey: false });
   }, { passive: false });
 
@@ -1634,9 +1792,6 @@ function initPianoRoll() {
 
   gridCanvas.addEventListener('touchend', (e) => {
     if (touchLongPress) { clearTimeout(touchLongPress); touchLongPress = null; }
-    if (!touchMoved && e.changedTouches[0]) {
-      // Tap without move = just click (note added/selected by mousedown)
-    }
     onGridMouseUp({});
   });
 
@@ -1829,7 +1984,7 @@ function renderGrid() {
     const nw = (n.length || 1) * stepW - 2;
     const nh = state.noteHeight - 2;
 
-    const isSelected = state.selectedNote === n;
+    const isSelected = state.selectAll || state.selectedNote === n;
     const alpha = n.velocity / 127;
 
     // Note body
@@ -1966,6 +2121,9 @@ function onGridMouseDown(e) {
   const y = e.clientY - rect.top;
   const stepW = getStepWidth();
   const totalNotes = 12 * state.octaveRange + 1;
+
+  // Clear selectAll on any click
+  if (state.selectAll) { state.selectAll = false; }
 
   const existing = getNoteAt(x, y);
 
@@ -2104,9 +2262,29 @@ function onKeyDown(e) {
       e.preventDefault();
       togglePlay();
       break;
+    case 'a':
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        state.selectAll = true;
+        state.selectedNote = null;
+        const partCount = state.notes.filter(n => n.part === state.selectedPart).length;
+        document.getElementById('noteInfo').textContent = `Selected: ${partCount} notes`;
+        renderGrid();
+      }
+      break;
+    case 'Escape':
+      if (state.selectAll) {
+        state.selectAll = false;
+        document.getElementById('noteInfo').textContent = '--';
+        renderGrid();
+      }
+      break;
     case 'Delete':
     case 'Backspace':
-      if (state.selectedNote) deleteNote(state.selectedNote);
+      if (state.selectAll) {
+        clearNotes();
+        state.selectAll = false;
+      } else if (state.selectedNote) deleteNote(state.selectedNote);
       break;
     case 'ArrowLeft':
       if (state.selectedNote) {
@@ -2164,10 +2342,10 @@ function togglePlay() {
 
 function startPlayback() {
   playStartTime = performance.now();
-  initAudioContext();
-  resumeAudioContext();
-  // Use Web Audio API scheduler (works in background)
-  startAudioScheduler();
+  const msPerBeat = 60000 / state.bpm;
+  const msPerStep = msPerBeat / state.stepsPerBeat;
+  playInterval = setInterval(playStep, msPerStep);
+  startArpLoop();
   if (state.midiSyncMode === 'master') {
     startClockScheduler();
   }
@@ -2176,7 +2354,8 @@ function startPlayback() {
 function stopPlayback() {
   if (playInterval) clearInterval(playInterval);
   playInterval = null;
-  stopAudioScheduler();
+  stopArpLoop();
+  stopAllArps();
   stopClockScheduler();
   clockTimers.forEach(t => clearTimeout(t));
   clockTimers = [];
@@ -2211,90 +2390,33 @@ function playStep() {
     const prevPartStep = state.partPlayStep[part];
     state.partPlayStep[part] = (state.partPlayStep[part] + 1) % partStepCount;
 
-    // Note off for previous step
-    state.notes
-      .filter(n => n.part === part && n.step === prevPartStep)
-      .forEach(n => {
-        sendNoteOff(n.note + 12 * state.baseOctave, part);
-      });
+    if (state.partArp[part].active) {
+      buildArpPattern(part);
+    } else {
+      // Note off for previous step
+      state.notes
+        .filter(n => n.part === part && n.step === prevPartStep)
+        .forEach(n => {
+          sendNoteOff(n.note + 12 * state.baseOctave, part);
+        });
 
-    // Note on for current step
-    state.notes
-      .filter(n => n.part === part && n.step === state.partPlayStep[part])
-      .forEach(n => {
-        sendNoteOn(n.note + 12 * state.baseOctave, n.velocity, part);
-        const baseDur = (60000 / state.bpm / state.partStepsPerBeat[part]) * (n.length || 1);
-        // Apply swing: delay odd steps
-        let swingDelay = 0;
-        if (state.partSwing[part] !== 0 && state.partPlayStep[part] % 2 === 1) {
-          swingDelay = baseDur * (state.partSwing[part] / 100) * 0.5;
-        }
-        const dur = (baseDur - swingDelay) * 0.9;
-        setTimeout(() => sendNoteOff(n.note + 12 * state.baseOctave, part), Math.max(10, dur));
-      });
+      // Note on for current step
+      state.notes
+        .filter(n => n.part === part && n.step === state.partPlayStep[part])
+        .forEach(n => {
+          sendNoteOn(n.note + 12 * state.baseOctave, n.velocity, part);
+          const baseDur = (60000 / state.bpm / state.partStepsPerBeat[part]) * (n.length || 1);
+          let swingDelay = 0;
+          if (state.partSwing[part] !== 0 && state.partPlayStep[part] % 2 === 1) {
+            swingDelay = baseDur * (state.partSwing[part] / 100) * 0.5;
+          }
+          const dur = (baseDur - swingDelay) * 0.9;
+          setTimeout(() => sendNoteOff(n.note + 12 * state.baseOctave, part), Math.max(10, dur));
+        });
+    }
   }
 
   renderGrid();
-}
-
-// ==================== WEB AUDIO API SCHEDULER ====================
-// AudioContext continues running in background on Android/iOS
-let audioCtx = null;
-let audioGainNode = null;
-let audioSchedulerTimer = null;
-let audioNextStepTime = 0;
-let audioCurrentStep = 0;
-const AUDIO_LOOKAHEAD = 0.1;   // seconds to look ahead
-const AUDIO_SCHEDULE_INTERVAL = 25; // ms between scheduler checks
-
-function initAudioContext() {
-  if (audioCtx) return;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    audioGainNode = audioCtx.createGain();
-    audioGainNode.gain.value = 0;
-    audioGainNode.connect(audioCtx.destination);
-    const buf = audioCtx.createBuffer(1, 1, 22050);
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.loop = true;
-    src.connect(audioGainNode);
-    src.start(0);
-    console.log('AudioContext initialized — background timing active');
-  } catch(e) {
-    console.warn('AudioContext init failed:', e);
-  }
-}
-
-function resumeAudioContext() {
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-}
-
-function startAudioScheduler() {
-  if (!audioCtx) initAudioContext();
-  resumeAudioContext();
-  audioNextStepTime = audioCtx.currentTime + 0.05;
-  audioCurrentStep = 0;
-  scheduleAudioSteps();
-}
-
-function stopAudioScheduler() {
-  if (audioSchedulerTimer) clearTimeout(audioSchedulerTimer);
-  audioSchedulerTimer = null;
-}
-
-function scheduleAudioSteps() {
-  if (!state.playing || !audioCtx) return;
-  while (audioNextStepTime < audioCtx.currentTime + AUDIO_LOOKAHEAD) {
-    playStep();
-    const msPerBeat = 60000 / state.bpm;
-    const msPerStep = msPerBeat / state.stepsPerBeat;
-    audioNextStepTime += msPerStep / 1000;
-    audioCurrentStep++;
-  }
-  audioSchedulerTimer = setTimeout(scheduleAudioSteps, AUDIO_SCHEDULE_INTERVAL);
 }
 
 // ==================== LFO ENGINE ====================
@@ -2315,15 +2437,14 @@ const WAVEFORMS = {
   sampleHold: null,
 };
 
-let shValues = new Array(256).fill(0);
-let shLastIdx = -1;
-function sampleHoldWave(t) {
+function sampleHoldWave(t, lfo) {
+  if (!lfo._shValues) { lfo._shValues = new Array(256).fill(0); lfo._shLastIdx = -1; }
   const idx = Math.floor(t * 4) % 256;
-  if (idx !== shLastIdx) {
-    shValues[idx] = Math.random() * 2 - 1;
-    shLastIdx = idx;
+  if (idx !== lfo._shLastIdx) {
+    lfo._shValues[idx] = Math.random() * 2 - 1;
+    lfo._shLastIdx = idx;
   }
-  return shValues[idx];
+  return lfo._shValues[idx];
 }
 
 function getLFOFrequency(lfo) {
@@ -2334,14 +2455,11 @@ function getLFOFrequency(lfo) {
 
 function getLFOValue(lfo, time) {
   if (!lfo.active) return null;
-  const freq = getLFOFrequency(lfo);
-  // Use the phase passed in (from LFO engine loop), not recalculated from time
   let t = lfo.phase;
-  // Invert: flip waveform horizontally
   if (lfo.invert) t = 1 - t;
   let val;
   if (lfo.waveform === 'sampleHold') {
-    val = sampleHoldWave(t * 4);
+    val = sampleHoldWave(t * 4, lfo);
   } else {
     val = (WAVEFORMS[lfo.waveform] || WAVEFORMS.sine)(t);
   }
@@ -2359,13 +2477,13 @@ function initLFOLoop() {
     const dt = now - state.lfoLastTime;
     state.lfoLastTime = now;
 
-    // Run LFOs for ALL parts simultaneously
     for (let part = 0; part < 16; part++) {
       if (state.mutes[part]) continue;
       const partLfos = state.partLfos[part];
       for (let i = 0; i < 8; i++) {
         const lfo = partLfos[i];
         if (!lfo.active || lfo.destination < 0) continue;
+
         lfo.phase += dt * getLFOFrequency(lfo);
         lfo.phase %= 1;
 
@@ -2381,7 +2499,6 @@ function initLFOLoop() {
         const val = getLFOValue({...lfo, phase}, now);
         if (val !== null) {
           sendCC(lfo.destination, val, part);
-          // Only update CC slider UI if this is the currently selected part
           if (part === state.selectedPart) {
             updateCCSlider(lfo.destination, val);
           }
@@ -2390,9 +2507,114 @@ function initLFOLoop() {
     }
     lfoAnimFrame = requestAnimationFrame(loop);
   }
-  // Use setInterval for background-safe LFO updates (rAF throttles in background)
-  setInterval(loop, 16); // ~60fps
   lfoAnimFrame = requestAnimationFrame(loop);
+}
+
+// ==================== ARPEGGIATOR ====================
+const ARP_RATES = {
+  '1/1': 1, '1/2d': 1.5, '1/2': 2, '1/2t': 3,
+  '1/4d': 3, '1/4': 4, '1/4t': 6,
+  '1/8d': 6, '1/8': 8, '1/8t': 12,
+  '1/16d': 12, '1/16': 16, '1/16t': 24,
+  '1/32': 32,
+};
+
+function buildArpPattern(part) {
+  const arp = state.partArp[part];
+  const stepNotes = state.notes.filter(n => n.part === part && n.step === state.partPlayStep[part]);
+  if (stepNotes.length === 0) { arp.pattern = []; return; }
+
+  let notes = [...new Set(stepNotes.map(n => n.note))].sort((a, b) => a - b);
+
+  if (arp.mode === 'chord') {
+    arp.pattern = [];
+    for (let oct = 0; oct < arp.octaves; oct++) {
+      notes.forEach(n => arp.pattern.push(n + oct * 12));
+    }
+    return;
+  }
+
+  let expanded = [];
+  for (let oct = 0; oct < arp.octaves; oct++) {
+    notes.forEach(n => expanded.push(n + oct * 12));
+  }
+
+  if (arp.mode === 'up') {
+    arp.pattern = expanded;
+  } else if (arp.mode === 'down') {
+    arp.pattern = [...expanded].reverse();
+  } else if (arp.mode === 'updown') {
+    const rev = [...expanded].slice(1, -1).reverse();
+    arp.pattern = [...expanded, ...rev];
+  } else if (arp.mode === 'random') {
+    arp.pattern = expanded;
+  }
+
+  arp.index = 0;
+}
+
+function arpTick(part) {
+  const arp = state.partArp[part];
+  if (!arp.active || arp.pattern.length === 0) return;
+
+  let idx;
+  if (arp.mode === 'random') {
+    idx = Math.floor(Math.random() * arp.pattern.length);
+  } else {
+    idx = arp.index % arp.pattern.length;
+  }
+
+  const note = arp.pattern[idx];
+
+  if (arp.lastNote >= 0) {
+    sendNoteOff(arp.lastNote + 12 * state.baseOctave, part);
+  }
+
+  sendNoteOn(note + 12 * state.baseOctave, 100, part);
+  arp.lastNote = note;
+  arp.index = (idx + 1) % arp.pattern.length;
+}
+
+let arpInterval = null;
+function startArpLoop() {
+  stopArpLoop();
+  function tick() {
+    for (let part = 0; part < 16; part++) {
+      const arp = state.partArp[part];
+      if (arp.active && state.playing && !state.mutes[part]) {
+        arpTick(part);
+      }
+    }
+  }
+  const msPerBeat = 60000 / state.bpm;
+  const rateMult = ARP_RATES[state.partArp[state.selectedPart]?.rate] || 8;
+  const msPerArpTick = msPerBeat / rateMult;
+  arpInterval = setInterval(tick, msPerArpTick);
+}
+
+function stopArpLoop() {
+  if (arpInterval) clearInterval(arpInterval);
+  arpInterval = null;
+}
+
+function restartArpForPart(part) {
+  const arp = state.partArp[part];
+  if (!arp.active) return;
+  buildArpPattern(part);
+}
+
+function stopAllArps() {
+  for (let part = 0; part < 16; part++) {
+    const arp = state.partArp[part];
+    if (arp.lastNote >= 0) {
+      sendNoteOff(arp.lastNote + 12 * state.baseOctave, part);
+      arp.lastNote = -1;
+    }
+  }
+}
+
+function updateArpRate() {
+  if (state.playing) startArpLoop();
 }
 
 function renderLFOWaveform(canvas, lfo) {
@@ -2422,7 +2644,7 @@ function renderLFOWaveform(canvas, lfo) {
     if (lfo.invert) t = 1 - t;
     let val;
     if (lfo.waveform === 'sampleHold') {
-      val = sampleHoldWave(t * 4);
+      val = sampleHoldWave(t * 4, lfo);
     } else {
       val = (WAVEFORMS[lfo.waveform] || WAVEFORMS.sine)(t);
     }
@@ -2494,7 +2716,21 @@ function generateStylePattern() {
   const minOct = Math.max(0, state.randOctMin);
   const maxOct = Math.min(state.octaveRange - 1, state.randOctMax);
   const baseOct = Math.floor((minOct + maxOct) / 2);
-  const isPoly = state.melodyMode === 'poly';
+  const mode = state.melodyMode;
+  const srcSteps = 16; // patterns are defined for 16 steps
+  const dstSteps = state.stepCount;
+
+  // Scale step position from pattern space (16) to current stepCount
+  function scaleStep(s) {
+    if (dstSteps === srcSteps) return s;
+    return Math.min(dstSteps - 1, Math.round(s * dstSteps / srcSteps));
+  }
+
+  // Scale note length proportionally
+  function scaleLen(l) {
+    if (dstSteps === srcSteps) return l;
+    return Math.max(1, Math.round(l * dstSteps / srcSteps));
+  }
 
   // Set BPM from style
   const bpm = style.bpm[0] + Math.floor(Math.random() * (style.bpm[1] - style.bpm[0]));
@@ -2502,38 +2738,48 @@ function generateStylePattern() {
   document.getElementById('bpmSlider').value = bpm;
   document.getElementById('bpmDisplay').textContent = bpm;
 
-  // Generate melody notes
-  if (style.melody) {
-    style.melody.forEach(h => {
-      if (h.step >= state.stepCount) return;
-      const scaleIdx = ((h.n % scaleNotes.length) + scaleNotes.length) % scaleNotes.length;
-      const octOffset = baseOct + (h.oct || 0) + Math.floor(h.n / scaleNotes.length);
+  function addNoteFromHit(h, velMult) {
+    const step = scaleStep(h.step);
+    if (step >= dstSteps) return;
+    const scaleIdx = ((h.n % scaleNotes.length) + scaleNotes.length) % scaleNotes.length;
+    const octOffset = baseOct + (h.oct || 0) + Math.floor(h.n / scaleNotes.length);
+    const noteNum = octOffset * 12 + scaleNotes[scaleIdx];
+    if (noteNum < 0 || noteNum >= 12 * state.octaveRange) return;
+    const vel = Math.min(127, Math.round((h.vel || 100) * (velMult || 1)));
+    const len = scaleLen(h.l || 1);
+    if (!state.notes.find(n => n.part === state.selectedPart && n.step === step && n.note === noteNum)) {
+      state.notes.push({ part: state.selectedPart, step, note: noteNum, velocity: vel, length: len });
+    }
+  }
+
+  function addChordFromHit(ch) {
+    const step = scaleStep(ch.step);
+    if (step >= dstSteps) return;
+    ch.degrees.forEach(deg => {
+      const scaleIdx = ((deg % scaleNotes.length) + scaleNotes.length) % scaleNotes.length;
+      const octOffset = baseOct + (ch.oct || 0) + Math.floor(deg / scaleNotes.length);
       const noteNum = octOffset * 12 + scaleNotes[scaleIdx];
       if (noteNum < 0 || noteNum >= 12 * state.octaveRange) return;
-      const vel = h.vel || 100;
-      const len = h.l || 1;
-      if (!state.notes.find(n => n.part === state.selectedPart && n.step === h.step && n.note === noteNum)) {
-        state.notes.push({ part: state.selectedPart, step: h.step, note: noteNum, velocity: vel, length: len });
+      const vel = ch.vel || 70;
+      const len = scaleLen(ch.l || 4);
+      if (!state.notes.find(n => n.part === state.selectedPart && n.step === step && n.note === noteNum)) {
+        state.notes.push({ part: state.selectedPart, step, note: noteNum, velocity: vel, length: len });
       }
     });
   }
 
-  // Generate chords (poly mode only)
-  if (isPoly && style.chords) {
-    style.chords.forEach(ch => {
-      if (ch.step >= state.stepCount) return;
-      ch.degrees.forEach(deg => {
-        const scaleIdx = ((deg % scaleNotes.length) + scaleNotes.length) % scaleNotes.length;
-        const octOffset = baseOct + (ch.oct || 0) + Math.floor(deg / scaleNotes.length);
-        const noteNum = octOffset * 12 + scaleNotes[scaleIdx];
-        if (noteNum < 0 || noteNum >= 12 * state.octaveRange) return;
-        const vel = ch.vel || 70;
-        const len = ch.l || 4;
-        if (!state.notes.find(n => n.part === state.selectedPart && n.step === ch.step && n.note === noteNum)) {
-          state.notes.push({ part: state.selectedPart, step: ch.step, note: noteNum, velocity: vel, length: len });
-        }
-      });
-    });
+  // Generate based on mode
+  if (mode === 'melody' || mode === 'both') {
+    if (style.melody) style.melody.forEach(h => addNoteFromHit(h));
+  }
+
+  if (mode === 'rhythm' || mode === 'both') {
+    if (style.rhythm) style.rhythm.forEach(h => addNoteFromHit(h, mode === 'both' ? 0.8 : 1));
+  }
+
+  if (mode === 'poly') {
+    if (style.melody) style.melody.forEach(h => addNoteFromHit(h));
+    if (style.chords) style.chords.forEach(ch => addChordFromHit(ch));
   }
 
   state.notes.sort((a, b) => a.step - b.step);
@@ -2601,18 +2847,23 @@ function clearNotes() {
 }
 
 function shiftNotes(dir) {
-  const partNotes = state.notes.filter(n => n.part === state.selectedPart);
-  partNotes.forEach(n => {
+  state.notes.filter(n => n.part === state.selectedPart).forEach(n => {
     n.step = (n.step + dir + state.stepCount) % state.stepCount;
   });
   renderGrid();
 }
 
 function transposeOctave(dir) {
-  const partNotes = state.notes.filter(n => n.part === state.selectedPart);
-  partNotes.forEach(n => {
-    n.note = Math.max(0, Math.min(12 * state.octaveRange - 1, n.note + dir * 12));
-  });
+  const totalNotes = 12 * state.octaveRange;
+  if (state.selectAll) {
+    state.notes.filter(n => n.part === state.selectedPart).forEach(n => {
+      n.note = Math.max(0, Math.min(totalNotes - 1, n.note + dir * 12));
+    });
+  } else {
+    state.notes.filter(n => n.part === state.selectedPart).forEach(n => {
+      n.note = Math.max(0, Math.min(totalNotes - 1, n.note + dir * 12));
+    });
+  }
   renderGrid();
 }
 
@@ -2754,6 +3005,38 @@ function initEventListeners() {
     document.getElementById('btnChordMode').classList.toggle('active', state.chordMode);
   };
 
+  // Arpeggiator
+  document.getElementById('btnArp').onclick = () => {
+    const arp = state.partArp[state.selectedPart];
+    arp.active = !arp.active;
+    document.getElementById('btnArp').classList.toggle('active', arp.active);
+    if (arp.active) {
+      buildArpPattern(state.selectedPart);
+      if (state.playing) startArpLoop();
+    } else {
+      if (arp.lastNote >= 0) {
+        sendNoteOff(arp.lastNote + 12 * state.baseOctave, state.selectedPart);
+        arp.lastNote = -1;
+      }
+      if (state.playing) startArpLoop();
+    }
+  };
+
+  document.getElementById('arpRate').onchange = (e) => {
+    state.partArp[state.selectedPart].rate = e.target.value;
+    if (state.playing) startArpLoop();
+  };
+
+  document.getElementById('arpMode').onchange = (e) => {
+    state.partArp[state.selectedPart].mode = e.target.value;
+    buildArpPattern(state.selectedPart);
+  };
+
+  document.getElementById('arpOctaves').onchange = (e) => {
+    state.partArp[state.selectedPart].octaves = +e.target.value;
+    buildArpPattern(state.selectedPart);
+  };
+
   // MIDI Sync mode
   document.getElementById('midiSyncMode').onchange = (e) => {
     state.midiSyncMode = e.target.value;
@@ -2780,74 +3063,19 @@ function initEventListeners() {
       document.querySelectorAll('.panel-tabs .tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const target = tab.dataset.tab;
-      if (target) {
-        document.getElementById('ccTab').style.display = target === 'cc' ? '' : 'none';
-        document.getElementById('lfoTab').style.display = target === 'lfo' ? '' : 'none';
-      }
+      document.getElementById('ccTab').style.display = target === 'cc' ? '' : 'none';
+      document.getElementById('lfoTab').style.display = target === 'lfo' ? '' : 'none';
     };
   });
 
-  // Close panel button (mobile)
-  const closeBtn = document.getElementById('btnClosePanel');
-  if (closeBtn) {
-    closeBtn.onclick = () => {
-      const panel = document.getElementById('ccPanel');
-      panel.style.display = panel.style.display === 'none' ? '' : 'none';
-    };
-  }
-
-  // Mobile floating panel toggle
+  // Mobile panel toggle
   const toggleBtn = document.getElementById('btnTogglePanel');
   if (toggleBtn) {
     toggleBtn.onclick = () => {
       const panel = document.getElementById('ccPanel');
-      if (panel.style.display === 'none') {
-        panel.style.display = '';
-        toggleBtn.textContent = '✕';
-      } else {
-        panel.style.display = 'none';
-        toggleBtn.textContent = '🎛️';
-      }
+      panel.style.display = panel.style.display === 'none' ? '' : 'none';
     };
   }
-
-  // Preset panel
-  const btnOpenPresets = document.getElementById('btnOpenPresets');
-  const btnClosePresets = document.getElementById('btnClosePresets');
-  const btnSavePreset = document.getElementById('btnSavePreset');
-  const btnExportAll = document.getElementById('btnExportAll');
-  const btnImportFile = document.getElementById('btnImportFile');
-  const presetFileInput = document.getElementById('presetFileInput');
-
-  if (btnOpenPresets) btnOpenPresets.onclick = openPresetPanel;
-  if (btnClosePresets) btnClosePresets.onclick = closePresetPanel;
-  if (btnSavePreset) btnSavePreset.onclick = () => {
-    const name = prompt('Preset name:', 'My Preset');
-    if (name) { savePreset(name); renderPresetList(); }
-  };
-  if (btnExportAll) btnExportAll.onclick = exportAllPresets;
-  if (btnImportFile) btnImportFile.onclick = () => presetFileInput.click();
-  if (presetFileInput) presetFileInput.onchange = e => {
-    if (e.target.files[0]) importPresetsFromFile(e.target.files[0]);
-    e.target.value = '';
-  };
-
-  updateAutosaveInfo();
-
-  // Restore autosave on load
-  const presets = getSavedPresets();
-  if (presets['__autosave__']) {
-    if (confirm('Restore last session?')) {
-      setPresetData(presets['__autosave__']);
-    }
-  }
-
-  // Auto-save on state changes (debounced)
-  document.addEventListener('change', e => {
-    if (e.target.closest('.transport, .pianoroll-toolbar, .sidebar, .right-panel, .header')) {
-      triggerAutoSave();
-    }
-  });
 }
 
 // ==================== PRESETS ====================
@@ -2873,6 +3101,7 @@ function getPresetData() {
       destination: lfo.destination, min: lfo.min, max: lfo.max,
       shuffle: lfo.shuffle, invert: lfo.invert
     }))),
+    partArp: state.partArp.map(a => ({ active: a.active, rate: a.rate, mode: a.mode, octaves: a.octaves })),
     notes: state.notes.map(n => ({ part: n.part, step: n.step, note: n.note, velocity: n.velocity, length: n.length }))
   };
 }
@@ -2891,7 +3120,7 @@ function setPresetData(data) {
   state.randOctMin = data.randOctMin ?? 2;
   state.randOctMax = data.randOctMax ?? 4;
   state.selectedStyle = data.selectedStyle ?? 'House';
-  state.melodyMode = data.melodyMode ?? 'mono';
+  state.melodyMode = data.melodyMode ?? 'melody';
   state.noteSendEnabled = data.noteSendEnabled ?? true;
   state.octaveRange = data.octaveRange ?? 5;
   state.baseOctave = data.baseOctave ?? 2;
@@ -2905,9 +3134,34 @@ function setPresetData(data) {
     const src = data.partLfos[i]?.[j];
     if (src) { const l = state.partLfos[i][j]; Object.assign(l, { active:src.active??false, waveform:src.waveform??'sine', rate:src.rate??'1/4', rateType:src.rateType??'sync', rateHz:src.rateHz??1, depth:src.depth??50, destination:src.destination??-1, min:src.min??0, max:src.max??127, shuffle:src.shuffle??0, invert:src.invert??false }); }
   }
+  // Deduplicate LFO destinations per part: only first active LFO per CC wins
+  for (let i = 0; i < 16; i++) {
+    const seen = new Set();
+    for (let j = 0; j < 8; j++) {
+      const lfo = state.partLfos[i][j];
+      if (lfo.active && lfo.destination >= 0) {
+        if (seen.has(lfo.destination)) { lfo.destination = -1; }
+        else { seen.add(lfo.destination); }
+      }
+    }
+  }
+  if (data.partArp) for (let i = 0; i < 16; i++) {
+    const src = data.partArp[i];
+    if (src) { const a = state.partArp[i]; Object.assign(a, { active:src.active??false, rate:src.rate??'1/8', mode:src.mode??'up', octaves:src.octaves??2 }); }
+  }
   state.notes = (data.notes || []).map(n => ({ part:n.part, step:n.step, note:n.note, velocity:n.velocity, length:n.length }));
   if (typeof data.selectedPart === 'number' && data.selectedPart >= 0 && data.selectedPart < 16) state.selectedPart = data.selectedPart;
-  selectPart(state.selectedPart);
+  state.midiChannel = state.selectedPart;
+  document.getElementById('midiChannel').value = state.midiChannel;
+  buildPartList();
+  buildCCPanel();
+  buildLFOPanel();
+  document.getElementById('btnMFX').classList.toggle('active', state.partMFX[state.selectedPart]);
+  const arp = state.partArp[state.selectedPart];
+  document.getElementById('btnArp').classList.toggle('active', arp.active);
+  document.getElementById('arpRate').value = arp.rate;
+  document.getElementById('arpMode').value = arp.mode;
+  document.getElementById('arpOctaves').value = arp.octaves;
   document.getElementById('bpmDisplay').textContent = state.bpm;
   document.getElementById('bpmSlider').value = state.bpm;
   document.getElementById('swingSlider').value = state.swing;
@@ -2924,17 +3178,11 @@ function setPresetData(data) {
   document.getElementById('randOctMax').value = state.randOctMax;
   document.getElementById('styleSelect').value = state.selectedStyle;
   document.getElementById('melodyMode').value = state.melodyMode;
-  updateNoteSendBtn(); updateMFXBtn(); updateChordBtn();
-  buildCCPanel(); buildLFOPanel(); initLFOListeners();
+  buildCCPanel(); buildLFOPanel();
   drawPiano(); drawGrid();
   return true;
 }
 
-function updateNoteSendBtn() { const b = document.getElementById('btnNoteSend'); if (b) b.style.opacity = state.noteSendEnabled ? '1' : '0.5'; }
-function updateMFXBtn() { const b = document.getElementById('btnMFX'); if (b) b.style.opacity = state.partMFX[state.selectedPart] ? '1' : '0.5'; }
-function updateChordBtn() { const b = document.getElementById('btnChordMode'); if (b) b.style.opacity = state.chordMode ? '1' : '0.5'; }
-
-// --- localStorage ---
 function getSavedPresets() { try { return JSON.parse(localStorage.getItem(PRESET_STORAGE_KEY)) || {}; } catch { return {}; } }
 function savePresetsToStorage(p) { localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(p)); }
 
@@ -2944,7 +3192,7 @@ function renderPresetList() {
   const presets = getSavedPresets();
   const names = Object.keys(presets).filter(n => n !== '__autosave__').sort();
   if (names.length === 0) {
-    list.innerHTML = '<div class="preset-empty">No saved presets yet.<br>Tap "+ SAVE" to save current state.</div>';
+    list.innerHTML = '<div class="preset-empty">No saved presets yet.<br>Click "+ SAVE" to save current state.</div>';
     return;
   }
   list.innerHTML = '';
@@ -2954,130 +3202,105 @@ function renderPresetList() {
     const notes = (p.notes || []).length;
     const div = document.createElement('div');
     div.className = 'preset-item';
-    div.innerHTML = `<div class="preset-item-name">${name}<br><span style="font-size:8px;color:var(--text-dim)">${date} · ${notes} notes</span></div>
-      <button class="preset-item-btn" data-action="load" data-name="${name}">LOAD</button>
-      <button class="preset-item-btn delete" data-action="delete" data-name="${name}">✕</button>`;
+    div.innerHTML = '<div class="preset-item-name">' + name + '<br><span class="preset-item-date">' + date + ' - ' + notes + ' notes</span></div>' +
+      '<button class="preset-item-btn" data-action="load" data-name="' + name + '">LOAD</button>' +
+      '<button class="preset-item-btn delete" data-action="delete" data-name="' + name + '">X</button>';
     list.appendChild(div);
   });
   list.querySelectorAll('.preset-item-btn').forEach(btn => {
-    btn.onclick = (e) => {
+    btn.onclick = function(e) {
       e.stopPropagation();
-      const action = btn.dataset.action;
-      const name = btn.dataset.name;
-      if (action === 'load') { loadPreset(name); closePresetPanel(); }
-      else if (action === 'delete') { if (confirm('Delete preset "' + name + '"?')) { deletePreset(name); renderPresetList(); } }
+      var action = btn.dataset.action;
+      var nm = btn.dataset.name;
+      if (action === 'load') { loadPreset(nm); closePresetPanel(); }
+      else if (action === 'delete') { if (confirm('Delete preset "' + nm + '"?')) { deletePreset(nm); renderPresetList(); } }
     };
   });
 }
 
 function savePreset(name) {
   if (!name) return;
-  const data = getPresetData();
+  var data = getPresetData();
   data.name = name;
-  const presets = getSavedPresets();
+  var presets = getSavedPresets();
   presets[name] = data;
   savePresetsToStorage(presets);
   renderPresetList();
   updateAutosaveInfo();
 }
 function loadPreset(name) {
-  const presets = getSavedPresets();
+  var presets = getSavedPresets();
   if (presets[name]) { setPresetData(presets[name]); return true; }
   return false;
 }
 function deletePreset(name) {
-  const presets = getSavedPresets();
+  var presets = getSavedPresets();
   delete presets[name];
   savePresetsToStorage(presets);
 }
 
-// --- auto-save ---
 function triggerAutoSave() {
   clearTimeout(autoSaveTimer);
-  autoSaveTimer = setTimeout(() => {
-    const data = getPresetData();
+  autoSaveTimer = setTimeout(function() {
+    var data = getPresetData();
     data.name = '__autosave__';
-    const presets = getSavedPresets();
+    var presets = getSavedPresets();
     presets['__autosave__'] = data;
     savePresetsToStorage(presets);
     updateAutosaveInfo();
   }, 1500);
 }
 function updateAutosaveInfo() {
-  const el = document.getElementById('presetAutosave');
+  var el = document.getElementById('presetAutosave');
   if (!el) return;
-  const presets = getSavedPresets();
-  const a = presets['__autosave__'];
+  var presets = getSavedPresets();
+  var a = presets['__autosave__'];
   if (a) {
-    const t = a.timestamp ? new Date(a.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}) : '';
-    const notes = (a.notes || []).length;
-    el.textContent = 'Auto-save: ' + t + ' · ' + notes + ' notes · ' + Object.keys(presets).filter(n => n !== '__autosave__').length + ' presets saved';
-  } else {
-    el.textContent = 'No auto-save yet';
-  }
+    var t = a.timestamp ? new Date(a.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}) : '';
+    var notes = (a.notes || []).length;
+    el.textContent = 'Auto-save: ' + t + ' - ' + notes + ' notes - ' + Object.keys(presets).filter(function(n){return n!=='__autosave__';}).length + ' presets saved';
+  } else { el.textContent = 'No auto-save yet'; }
 }
 
-// --- file export/import ---
 function exportAllPresets() {
-  const presets = getSavedPresets();
-  const data = JSON.stringify(presets, null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const a = document.createElement('a');
+  var presets = getSavedPresets();
+  var blob = new Blob([JSON.stringify(presets, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'hacktribe_presets_' + new Date().toISOString().slice(0,10) + '.json';
   a.click();
   URL.revokeObjectURL(a.href);
 }
 function importPresetsFromFile(file) {
-  const reader = new FileReader();
-  reader.onload = e => {
+  var reader = new FileReader();
+  reader.onload = function(e) {
     try {
-      const data = JSON.parse(e.target.result);
-      let count = 0;
+      var data = JSON.parse(e.target.result);
+      var count = 0;
       if (data.v === 1 && data.name) {
-        // Single preset file
-        const presets = getSavedPresets();
+        var presets = getSavedPresets();
         presets[data.name] = data;
         savePresetsToStorage(presets);
         count = 1;
       } else if (typeof data === 'object' && !data.v) {
-        // Multiple presets file (full export)
-        const presets = getSavedPresets();
-        Object.keys(data).forEach(k => { if (k !== '__autosave__') { presets[k] = data[k]; count++; } });
+        var presets = getSavedPresets();
+        Object.keys(data).forEach(function(k) { if (k !== '__autosave__') { presets[k] = data[k]; count++; } });
         savePresetsToStorage(presets);
       }
       if (count > 0) { renderPresetList(); alert('Imported ' + count + ' preset(s)'); }
       else { alert('No valid presets found in file'); }
-    } catch { alert('Error reading file'); }
+    } catch(ex) { alert('Error reading file'); }
   };
   reader.readAsText(file);
 }
 
-// --- panel open/close ---
 function openPresetPanel() {
-  const panel = document.getElementById('presetPanel');
+  var panel = document.getElementById('presetPanel');
   if (panel) { panel.classList.add('open'); renderPresetList(); updateAutosaveInfo(); }
 }
 function closePresetPanel() {
-  const panel = document.getElementById('presetPanel');
+  var panel = document.getElementById('presetPanel');
   if (panel) panel.classList.remove('open');
-}
-
-// --- PWA install ---
-function installPWA() {
-  if (!state._deferredInstallPrompt) {
-    alert('To install: Chrome menu > "Install app" or "Add to Home screen"');
-    return;
-  }
-  state._deferredInstallPrompt.prompt();
-  state._deferredInstallPrompt.userChoice.then(result => {
-    if (result.outcome === 'accepted') {
-      console.log('PWA installed');
-      const btn = document.getElementById('btnInstall');
-      if (btn) btn.style.display = 'none';
-    }
-    state._deferredInstallPrompt = null;
-  });
 }
 
 // ==================== START ====================

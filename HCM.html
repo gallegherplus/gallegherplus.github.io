@@ -893,12 +893,23 @@ function initMIDIOnce() {
 // ==================== MIDI ====================
 let midiAccess = null;
 let midiPollTimer = null;
+const isAndroid = /Android/i.test(navigator.userAgent);
 
 async function initMIDI() {
   const debugEl = document.getElementById('midiDebug');
   if (!navigator.requestMIDIAccess) {
     debugEl.textContent = 'Web MIDI not supported';
-    alert('Web MIDI API not supported in this browser.\nUse Chrome, Edge, or Opera.\nAlso check: chrome://flags → #web-midi');
+    const msg = isAndroid
+      ? 'Web MIDI no disponible en este navegador.\n\n' +
+        'En Android necesitas:\n' +
+        '1. Chrome (no Samsung Internet)\n' +
+        '2. Abrir chrome://flags/#web-midi\n' +
+        '3. Habilitar "Web MIDI API"\n' +
+        '4. Reiniciar Chrome\n\n' +
+        'Si ya esta habilitado, verifica que la pagina\n' +
+        'se abra con HTTPS (GitHub Pages lo hace).'
+      : 'Web MIDI API not supported in this browser.\nUse Chrome, Edge, or Opera.\nAlso check: chrome://flags → #web-midi';
+    alert(msg);
     return;
   }
   try {
@@ -926,6 +937,9 @@ async function initMIDI() {
     } catch(e2) {
       debugEl.textContent = 'MIDI failed: ' + e2.message;
       console.error('MIDI fallback error:', e2);
+      if (isAndroid) {
+        debugEl.textContent = 'MIDI blocked - check chrome://flags';
+      }
     }
   }
 }
@@ -945,14 +959,22 @@ function startMidiPoll() {
   }, 3000);
 }
 
-// Also allow manual MIDI init by clicking the status dot
+// Also allow manual MIDI init by clicking/tapping the status dot
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('midiDot').onclick = () => {
+  const dot = document.getElementById('midiDot');
+  dot.onclick = () => {
     if (!midiAccess) initMIDI();
     else enumerateDevices(midiAccess);
   };
-  document.getElementById('midiDot').style.cursor = 'pointer';
-  document.getElementById('midiDot').title = 'Click to initialize/refresh MIDI';
+  dot.ontouchend = (e) => {
+    e.preventDefault();
+    if (!midiAccess) initMIDI();
+    else enumerateDevices(midiAccess);
+  };
+  dot.style.cursor = 'pointer';
+  dot.title = isAndroid
+    ? 'Tap to init/refresh MIDI\nIf no devices: chrome://flags/#web-midi'
+    : 'Click to initialize/refresh MIDI';
 });
 
 function enumerateDevices(access) {
@@ -1038,14 +1060,18 @@ function enumerateDevices(access) {
   const connected = !!(state.midiOut || state.midiIn);
   dot.classList.toggle('connected', connected);
 
-  const outName = outSel.value ? access.outputs.get(outSel.value)?.name : 'none';
-  const inName = inSel.value ? access.inputs.get(inSel.value)?.name : 'none';
   if (outDevices.length === 0 && inDevices.length === 0) {
-    debugEl.textContent = 'No devices found - plug OTG + USB';
+    if (isAndroid) {
+      debugEl.textContent = 'No devices - tap dot to retry';
+      debugEl.title = 'Android: check chrome://flags/#web-midi is Enabled, then tap this dot';
+    } else {
+      debugEl.textContent = 'No MIDI devices found';
+    }
   } else {
+    const outName = outSel.value ? access.outputs.get(outSel.value)?.name : 'none';
+    const inName = inSel.value ? access.inputs.get(inSel.value)?.name : 'none';
     debugEl.textContent = `Out: ${outName} | In: ${inName} (${outDevices.length + inDevices.length} dev)`;
   }
-  debugEl.title = `Outputs: ${outDevices.length}, Inputs: ${inDevices.length}`;
   console.log(`MIDI devices: ${outDevices.length} out, ${inDevices.length} in`);
 
   outSel.onchange = connectOutput;

@@ -147,6 +147,7 @@ button.active{background:var(--accent);color:#000}
 
 /* Mobile panel toggle */
 .mobile-panel-toggle{display:none;position:fixed;bottom:80px;right:12px;width:48px;height:48px;border-radius:50%;background:var(--accent2);color:#000;border:none;font-size:20px;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,0.5);cursor:pointer}
+.mobile-fs-toggle{display:none;position:fixed;bottom:140px;right:12px;width:48px;height:48px;border-radius:50%;background:var(--accent3);color:#000;border:none;font-size:20px;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,0.5);cursor:pointer}
 
 /* ==================== MOBILE — Landscape (compact) ==================== */
 @media (max-height:400px) and (orientation:landscape) {
@@ -262,6 +263,7 @@ button.active{background:var(--accent);color:#000}
   .context-menu{position:fixed;bottom:0;left:0;right:0;border-radius:12px 12px 0 0;padding:8px 0;z-index:200;min-width:auto}
   .context-menu-item{padding:14px 20px;font-size:14px}
   .mobile-panel-toggle{display:flex;align-items:center;justify-content:center}
+  .mobile-fs-toggle{display:flex;align-items:center;justify-content:center}
 }
 </style>
 </head>
@@ -451,7 +453,8 @@ button.active{background:var(--accent);color:#000}
 </div>
 
 <!-- Mobile panel toggle -->
-<button id="btnTogglePanel" class="mobile-panel-toggle" title="Toggle CC/LFO panel">
+<button id="btnTogglePanel" class="mobile-panel-toggle" title="Toggle CC/LFO panel">&#x1f39b;</button>
+<button id="btnFullscreen" class="mobile-fs-toggle" title="Fullscreen">&#x26f6;</button>
 
 <script>
 // ==================== DATA ====================
@@ -3117,6 +3120,22 @@ function initEventListeners() {
       const panel = document.getElementById('ccPanel');
       panel.style.display = panel.style.display === 'none' ? '' : 'none';
     };
+  }
+
+  // Mobile fullscreen toggle (F11-style)
+  const fsBtn = document.getElementById('btnFullscreen');
+  if (fsBtn) {
+    fsBtn.onclick = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+    document.addEventListener('fullscreenchange', () => {
+      fsBtn.innerHTML = document.fullscreenElement ? '&#x2716;' : '&#x26f6;';
+      fsBtn.title = document.fullscreenElement ? 'Exit Fullscreen' : 'Fullscreen';
+    });
   }
 }
 

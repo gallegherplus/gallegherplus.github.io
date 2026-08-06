@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KAOSS PAD">
+    <title>KAOSS PAD - Multi-Effects Processor</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎛️</text></svg>">
+<style>
+/* ============================================
+   KAOSS PAD - Mobile-First Dark Theme
+   ============================================ */
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface-alt: #1a1a25;
+    --border: #2a2a35;
+    --text: #e8e8f0;
+    --text-muted: #8888a0;
+    --accent: #00ffcc;
+    --accent-dim: #00cc99;
+    --accent-glow: rgba(0, 255, 204, 0.15);
+    --danger: #ff4466;
+    --warning: #ffaa22;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* --- App Layout --- */
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    padding: var(--safe-top) var(--safe-left) var(--safe-bottom) var(--safe-right);
+}
+
+/* --- Header --- */
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    min-height: 48px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--text);
+}
+
+.logo .accent {
+    color: var(--accent);
+}
+
+.header-right {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.icon-btn:hover, .icon-btn:focus-visible {
+    background: var(--surface-alt);
+    color: var(--text);
+}
+
+/* --- Effects Navigation --- */
+#effects-nav {
+    display: flex;
+    gap: 4px;
+    padding: 8px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    min-height: 52px;
+    align-items: center;
+}
+
+#effects-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.effect-btn {
+    flex-shrink: 0;
+    min-width: 64px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.effect-btn:hover {
+    border-color: var(--accent-dim);
+    color: var(--text);
+}
+
+.effect-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.effect-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    box-shadow: 0 0 16px var(--accent-glow);
+}
+
+/* --- XY Pad --- */
+#pad-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 10px;
+    min-height: 0;
+}
+
+#pad-wrapper {
+    flex: 1;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    min-height: 0;
+    touch-action: none;
+}
+
+#pad {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+#pad-cursor {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    background: rgba(0, 255, 204, 0.1);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.1s ease-out;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 0 20px var(--accent-glow), inset 0 0 8px var(--accent-glow);
+}
+
+#pad-cursor.visible {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#pad-crosshair-h, #pad-crosshair-v {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+#pad-crosshair-h {
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+    transform: translateY(-0.5px);
+}
+
+#pad-crosshair-v {
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--accent-dim), transparent);
+    transform: translateX(-0.5px);
+}
+
+#pad-wrapper.active #pad-crosshair-h,
+#pad-wrapper.active #pad-crosshair-v {
+    opacity: 0.5;
+}
+
+/* --- Parameter Labels --- */
+#param-labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.param {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    min-height: 40px;
+}
+
+.param-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.param-value {
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+}
+
+/* --- BPM Section --- */
+#bpm-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    min-height: 52px;
+}
+
+#bpm-display {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+#bpm-value {
+    font-size: 24px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+    min-width: 48px;
+    text-align: right;
+}
+
+#bpm-value.detected {
+    color: var(--accent);
+}
+
+#bpm-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#bpm-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bpm-btn {
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.1s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.bpm-btn:active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    transform: scale(0.95);
+}
+
+.bpm-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+
+#bpm-mode-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.mode-btn {
+    height: 32px;
+    padding: 0 10px;
+    border: none;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.mode-btn + .mode-btn {
+    border-left: 1px solid var(--border);
+}
+
+.mode-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+#internal-bpm {
+    width: 80px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+}
+
+#internal-bpm::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+#internal-bpm-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+}
+
+#beat-led {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: background 0.05s, box-shadow 0.05s;
+}
+
+#beat-led.flash {
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-glow);
+}
+
+/* --- Transport Bar --- */
+#transport {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    gap: 8px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    min-height: 60px;
+}
+
+.transport-left, .transport-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.transport-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.transport-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.transport-btn:hover {
+    border-color: var(--accent-dim);
+    color: var(--text);
+}
+
+.transport-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.transport-btn.primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+
+.transport-btn.primary:hover {
+    background: var(--accent-dim);
+}
+
+.transport-btn.primary.active {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+.led {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: background 0.15s;
+}
+
+.led.on {
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+}
+
+.led.off {
+    background: var(--danger);
+}
+
+/* --- VU Meter --- */
+#vu-meter {
+    display: flex;
+    gap: 3px;
+    height: 24px;
+    width: 120px;
+    align-items: flex-end;
+}
+
+.vu-bar {
+    flex: 1;
+    height: 0%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: height 0.05s linear;
+    min-height: 2px;
+}
+
+.vu-bar.high {
+    background: var(--danger);
+}
+
+/* --- Settings Panel --- */
+.panel {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: flex-end;
+    animation: fadeIn 0.15s ease-out;
+}
+
+.panel.hidden {
+    display: none;
+}
+
+.panel-content {
+    width: 100%;
+    max-height: 70vh;
+    background: var(--surface);
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    overflow-y: auto;
+    animation: slideUp 0.2s ease-out;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+}
+
+.panel-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+.setting {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.setting:last-child {
+    border-bottom: none;
+}
+
+.setting label {
+    flex: 0 0 120px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.setting input[type="range"] {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+}
+
+.setting input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+.setting-val {
+    flex: 0 0 48px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+.setting select {
+    flex: 1;
+    height: 36px;
+    padding: 0 8px;
+    background: var(--surface-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+}
+
+/* --- Help Panel --- */
+.help-section {
+    margin-bottom: 16px;
+}
+
+.help-section h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+}
+
+.help-section p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.help-section hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+}
+
+.help-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.help-table th {
+    text-align: left;
+    padding: 6px 8px;
+    color: var(--accent);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+}
+
+.help-table td {
+    padding: 6px 8px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+}
+
+/* --- Input Select Dropdown --- */
+#input-select {
+    height: 44px;
+    padding: 0 8px;
+    background: var(--surface-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    max-width: 160px;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* --- Responsive: Larger Screens --- */
+@media (min-width: 600px) {
+    #effects-nav {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .effect-btn {
+        min-width: 80px;
+        height: 44px;
+        font-size: 14px;
+    }
+
+    #param-labels {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    #vu-meter {
+        width: 200px;
+    }
+}
+
+@media (min-width: 900px) {
+    #pad-container {
+        max-width: 700px;
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+/* --- Reduced Motion --- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* --- Focus Visible --- */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* --- Scrollbar (desktop) --- */
+@media (pointer: fine) {
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+    }
+}
+</style>
+</head>
+<body>
+    <div id="app">
+        <header id="header">
+            <h1 class="logo">KAOSS<span class="accent">PAD</span></h1>
+            <div class="header-right">
+                <button id="btn-settings" class="icon-btn" aria-label="Settings">⚙️</button>
+                <button id="btn-help" class="icon-btn" aria-label="Help">❓</button>
+            </div>
+        </header>
+
+        <nav id="effects-nav" role="tablist" aria-label="Effects">
+            <button class="effect-btn active" data-effect="delay" role="tab" aria-selected="true" aria-controls="pad">Delay</button>
+            <button class="effect-btn" data-effect="filter" role="tab" aria-selected="false" aria-controls="pad">Filter</button>
+            <button class="effect-btn" data-effect="reverb" role="tab" aria-selected="false" aria-controls="pad">Reverb</button>
+            <button class="effect-btn" data-effect="distortion" role="tab" aria-selected="false" aria-controls="pad">Drive</button>
+            <button class="effect-btn" data-effect="flanger" role="tab" aria-selected="false" aria-controls="pad">Flanger</button>
+            <button class="effect-btn" data-effect="phaser" role="tab" aria-selected="false" aria-controls="pad">Phaser</button>
+        </nav>
+
+        <main id="pad-container">
+            <div id="pad-wrapper">
+                <canvas id="pad" aria-label="XY Effect Pad - drag to control parameters" role="img"></canvas>
+                <div id="pad-cursor" aria-hidden="true"></div>
+                <div id="pad-crosshair-h" aria-hidden="true"></div>
+                <div id="pad-crosshair-v" aria-hidden="true"></div>
+            </div>
+            <div id="param-labels">
+                <div class="param" id="param-x">
+                    <span class="param-name">Time</span>
+                    <span class="param-value" id="param-x-val">0%</span>
+                </div>
+                <div class="param" id="param-y">
+                    <span class="param-name">Feedback</span>
+                    <span class="param-value" id="param-y-val">0%</span>
+                </div>
+            </div>
+        </main>
+
+        <section id="bpm-section">
+            <div id="bpm-display">
+                <span id="bpm-value">---</span>
+                <span id="bpm-label">BPM</span>
+            </div>
+            <div id="bpm-controls">
+                <button id="btn-tap" class="bpm-btn" aria-label="Tap tempo">TAP</button>
+                <div id="bpm-mode-toggle" role="radiogroup" aria-label="BPM source">
+                    <button class="mode-btn active" data-mode="auto" role="radio" aria-checked="true">Auto</button>
+                    <button class="mode-btn" data-mode="internal" role="radio" aria-checked="false">Int</button>
+                    <button class="mode-btn" data-mode="tap" role="radio" aria-checked="false">Tap</button>
+                </div>
+            </div>
+            <input type="range" id="internal-bpm" min="30" max="300" step="1" value="120" style="display:none" aria-label="Internal BPM">
+            <span id="internal-bpm-val" style="display:none">120</span>
+            <div id="beat-led" aria-hidden="true"></div>
+        </section>
+
+        <footer id="transport">
+            <div class="transport-left">
+                <button id="btn-bypass" class="transport-btn" aria-label="Bypass all effects" aria-pressed="true">
+                    <span class="led off"></span> Bypass
+                </button>
+            </div>
+            <div class="transport-center">
+                <div id="vu-meter" aria-label="Audio level meter">
+                    <div class="vu-bar" id="vu-left"></div>
+                    <div class="vu-bar" id="vu-right"></div>
+                </div>
+            </div>
+            <div class="transport-right">
+                <button id="btn-input" class="transport-btn primary" aria-label="Enable audio input">
+                    🎤 Input
+                </button>
+                <select id="input-select" aria-label="Audio input device" style="display:none">
+                    <option value="">Select device...</option>
+                </select>
+            </div>
+        </footer>
+    </div>
+
+    <div id="settings-panel" class="panel hidden" role="dialog" aria-label="Settings">
+        <div class="panel-content">
+            <div class="panel-header">
+                <h2>Settings</h2>
+                <button class="icon-btn close-btn" aria-label="Close settings">✕</button>
+            </div>
+            <div class="panel-body">
+                <div class="setting">
+                    <label for="input-volume">Input Volume</label>
+                    <input type="range" id="input-volume" min="0" max="2" step="0.01" value="1">
+                    <span class="setting-val" id="input-volume-val">100%</span>
+                </div>
+                <div class="setting">
+                    <label for="output-volume">Output Volume</label>
+                    <input type="range" id="output-volume" min="0" max="2" step="0.01" value="1">
+                    <span class="setting-val" id="output-volume-val">100%</span>
+                </div>
+                <div class="setting">
+                    <label for="effect-mix">Effect Mix</label>
+                    <input type="range" id="effect-mix" min="0" max="1" step="0.01" value="1">
+                    <span class="setting-val" id="effect-mix-val">100%</span>
+                </div>
+                <div class="setting">
+                    <label for="latency-select">Buffer Size</label>
+                    <select id="latency-select">
+                        <option value="256">256 (Low Latency)</option>
+                        <option value="512" selected>512 (Balanced)</option>
+                        <option value="1024">1024 (Stable)</option>
+                        <option value="2048">2048 (High Quality)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="help-panel" class="panel hidden" role="dialog" aria-label="Help">
+        <div class="panel-content">
+            <div class="panel-header">
+                <h2>How to Use</h2>
+                <button class="icon-btn close-btn" aria-label="Close help">✕</button>
+            </div>
+            <div class="panel-body">
+                <div class="help-section">
+                    <h3>1. Connect iRig</h3>
+                    <p>Plug your iRig audio interface into your phone. Tap <strong>🎤 Input</strong> to enable it.</p>
+                </div>
+                <div class="help-section">
+                    <h3>2. Select Effect</h3>
+                    <p>Choose an effect from the tabs above the pad (Delay, Filter, Reverb, Drive, Flanger, Phaser).</p>
+                </div>
+                <div class="help-section">
+                    <h3>3. Touch the Pad</h3>
+                    <p>Drag your finger on the XY pad to control the effect. <strong>X-axis</strong> = parameter 1, <strong>Y-axis</strong> = parameter 2.</p>
+                </div>
+                <div class="help-section">
+                    <h3>4. Bypass Toggle</h3>
+                    <p>Tap <strong>Bypass</strong> to toggle effects on/off. Green LED = active, Off = bypassed.</p>
+                </div>
+                <hr>
+                <div class="help-section">
+                    <h3>Effects Reference</h3>
+                    <table class="help-table">
+                        <tr><th>Effect</th><th>X-Axis</th><th>Y-Axis</th></tr>
+                        <tr><td>Delay</td><td>Time</td><td>Feedback</td></tr>
+                        <tr><td>Filter</td><td>Frequency</td><td>Resonance</td></tr>
+                        <tr><td>Reverb</td><td>Room Size</td><td>Wet/Dry</td></tr>
+                        <tr><td>Drive</td><td>Amount</td><td>Output</td></tr>
+                        <tr><td>Flanger</td><td>Rate</td><td>Depth</td></tr>
+                        <tr><td>Phaser</td><td>Rate</td><td>Feedback</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+/* ============================================
+   KAOSS PAD - Web Audio Engine (Standalone)
+   ============================================ */
+'use strict';
+
+/* --- State --- */
+const S = {
+    ctx: null,
+    inputGain: null,
+    outputGain: null,
+    effectMix: null,
+    analyserL: null,
+    analyserR: null,
+    splitter: null,
+    sourceNode: null,
+    stream: null,
+    activeEffect: 'delay',
+    bypassed: true,
+    xy: { x: 0.5, y: 0.5 },
+    effects: {},
+    inputActive: false,
+    animFrame: null,
+};
+
+/* --- Effect Definitions --- */
+const EFFECTS = {
+    delay: {
+        label: ['Time', 'Feedback'],
+        defaults: { time: 0.4, feedback: 0.35 },
+        range: {
+            time:    { min: 0.01, max: 1.0 },
+            feedback: { min: 0, max: 0.92 },
+        },
+    },
+    filter: {
+        label: ['Frequency', 'Resonance'],
+        defaults: { frequency: 1000, resonance: 1 },
+        range: {
+            frequency: { min: 80, max: 12000 },
+            resonance: { min: 0.1, max: 28 },
+        },
+    },
+    reverb: {
+        label: ['Room Size', 'Wet/Dry'],
+        defaults: { decay: 2, wet: 0.6 },
+        range: {
+            decay: { min: 0.1, max: 5 },
+            wet:   { min: 0, max: 1 },
+        },
+    },
+    distortion: {
+        label: ['Drive', 'Output'],
+        defaults: { drive: 80, output: 0.6 },
+        range: {
+            drive:  { min: 1, max: 400 },
+            output: { min: 0, max: 1 },
+        },
+    },
+    flanger: {
+        label: ['Rate', 'Depth'],
+        defaults: { rate: 1.5, depth: 0.002 },
+        range: {
+            rate:  { min: 0.05, max: 10 },
+            depth: { min: 0.0005, max: 0.008 },
+        },
+    },
+    phaser: {
+        label: ['Rate', 'Feedback'],
+        defaults: { rate: 0.5, feedback: 0.5 },
+        range: {
+            rate:     { min: 0.05, max: 10 },
+            feedback: { min: 0, max: 0.85 },
+        },
+    },
+};
+
+/* --- Initialization --- */
+function init() {
+    setupCanvas();
+    setupPadEvents();
+    setupUI();
+}
+
+/* --- Audio Context (lazy init) --- */
+function ensureCtx() {
+    if (S.ctx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    S.ctx = new AC({ latencyHint: 'interactive', sampleRate: 48000 });
+
+    S.inputGain = S.ctx.createGain();
+    S.inputGain.gain.value = 1;
+
+    S.effectMix = S.ctx.createGain();
+    S.effectMix.gain.value = 1;
+
+    S.outputGain = S.ctx.createGain();
+    S.outputGain.gain.value = 1;
+
+    S.splitter = S.ctx.createChannelSplitter(2);
+    S.analyserL = S.ctx.createAnalyser();
+    S.analyserR = S.ctx.createAnalyser();
+    S.analyserL.fftSize = 256;
+    S.analyserR.fftSize = 256;
+    S.splitter.connect(S.analyserL, 0);
+    S.splitter.connect(S.analyserR, 1);
+
+    S.inputGain.connect(S.outputGain);
+    S.effectMix.connect(S.outputGain);
+    S.outputGain.connect(S.splitter);
+    S.outputGain.connect(S.ctx.destination);
+
+    for (const name of Object.keys(EFFECTS)) {
+        createEffect(name);
+    }
+
+    setupBPMDetection();
+    if (BPM.mode === 'auto') detectBPMFrame();
+}
+
+/* --- Effect Creation --- */
+function createEffect(name) {
+    const ctx = S.ctx;
+    const d = EFFECTS[name];
+    const def = d.defaults;
+    let nodes = {};
+
+    switch (name) {
+        case 'delay': {
+            const delay = ctx.createDelay(2);
+            delay.delayTime.value = def.time;
+            const fb = ctx.createGain();
+            fb.gain.value = def.feedback;
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 3500;
+            delay.connect(fb);
+            fb.connect(filter);
+            filter.connect(delay);
+            nodes = { delay, fb, filter, input: delay, output: filter };
+            break;
+        }
+        case 'filter': {
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = def.frequency;
+            filter.Q.value = def.resonance;
+            nodes = { filter, input: filter, output: filter };
+            break;
+        }
+        case 'reverb': {
+            const conv = ctx.createConvolver();
+            conv.buffer = generateImpulse(def.decay, ctx.sampleRate);
+            const wet = ctx.createGain();
+            wet.gain.value = def.wet;
+            const dry = ctx.createGain();
+            dry.gain.value = 1 - def.wet;
+            const merger = ctx.createGain();
+            conv.connect(wet);
+            wet.connect(merger);
+            dry.connect(merger);
+            nodes = { conv, wet, dry, merger, input: dry, output: merger, _input: conv };
+            break;
+        }
+        case 'distortion': {
+            const shaper = ctx.createWaveShaper();
+            shaper.curve = makeDistortionCurve(def.drive);
+            shaper.oversample = '4x';
+            const out = ctx.createGain();
+            out.gain.value = def.output;
+            shaper.connect(out);
+            nodes = { shaper, out, input: shaper, output: out };
+            break;
+        }
+        case 'flanger': {
+            const delay = ctx.createDelay(0.02);
+            delay.delayTime.value = 0.0015;
+            const lfo = ctx.createOscillator();
+            lfo.type = 'sine';
+            lfo.frequency.value = def.rate;
+            const lfoGain = ctx.createGain();
+            lfoGain.gain.value = def.depth;
+            const fb = ctx.createGain();
+            fb.gain.value = 0.7;
+            lfo.connect(lfoGain);
+            lfoGain.connect(delay.delayTime);
+            delay.connect(fb);
+            fb.connect(delay);
+            nodes = { delay, lfo, lfoGain, fb, input: delay, output: delay, _lfo: lfo };
+            break;
+        }
+        case 'phaser': {
+            const stages = 4;
+            const allpasses = [];
+            let lastNode;
+            for (let i = 0; i < stages; i++) {
+                const ap = ctx.createBiquadFilter();
+                ap.type = 'allpass';
+                ap.frequency.value = 500 + i * 300;
+                ap.Q.value = 5;
+                allpasses.push(ap);
+                if (lastNode) lastNode.connect(ap);
+                lastNode = ap;
+            }
+            const lfo = ctx.createOscillator();
+            lfo.type = 'sine';
+            lfo.frequency.value = def.rate;
+            const lfoGain = ctx.createGain();
+            lfoGain.gain.value = 500;
+            const fb = ctx.createGain();
+            fb.gain.value = def.feedback;
+            allpasses[stages - 1].connect(fb);
+            fb.connect(allpasses[0]);
+            lfo.connect(lfoGain);
+            allpasses.forEach(ap => lfoGain.connect(ap.frequency));
+            nodes = { allpasses, lfo, lfoGain, fb, input: allpasses[0], output: allpasses[stages - 1], _lfo: lfo };
+            break;
+        }
+    }
+    S.effects[name] = nodes;
+}
+
+/* --- Impulse Response Generator --- */
+function generateImpulse(duration, sampleRate) {
+    const length = sampleRate * duration;
+    const buffer = S.ctx.createBuffer(2, length, sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+        const data = buffer.getChannelData(ch);
+        for (let i = 0; i < length; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.5);
+        }
+    }
+    return buffer;
+}
+
+/* --- Distortion Curve --- */
+function makeDistortionCurve(amount) {
+    const k = typeof amount === 'number' ? amount : 50;
+    const n = 44100;
+    const curve = new Float32Array(n);
+    const deg = Math.PI / 180;
+    for (let i = 0; i < n; i++) {
+        const x = (i * 2) / n - 1;
+        curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+    }
+    return curve;
+}
+
+/* --- Effect Routing --- */
+function connectEffect(name) {
+    const nodes = S.effects[name];
+    if (!nodes) return;
+    S.inputGain.disconnect(S.effectMix);
+    S.effectMix.disconnect();
+    S.inputGain.connect(nodes.input);
+    nodes.output.connect(S.effectMix);
+}
+
+function disconnectAllEffects() {
+    try { S.inputGain.disconnect(); } catch {}
+    try { S.effectMix.disconnect(); } catch {}
+    S.inputGain.connect(S.outputGain);
+    S.effectMix.connect(S.outputGain);
+}
+
+/* --- Update Effect Parameters from XY --- */
+function updateEffect() {
+    const name = S.activeEffect;
+    const nodes = S.effects[name];
+    const d = EFFECTS[name];
+    if (!nodes || S.bypassed) return;
+
+    const x = S.xy.x;
+    const y = S.xy.y;
+
+    switch (name) {
+        case 'delay': {
+            const time = lerp(d.range.time.min, d.range.time.max, x);
+            const fb = lerp(d.range.feedback.min, d.range.feedback.max, y);
+            nodes.delay.delayTime.setTargetAtTime(time, S.ctx.currentTime, 0.02);
+            nodes.fb.gain.setTargetAtTime(fb, S.ctx.currentTime, 0.02);
+            updateParamUI('Time', `${(time * 1000).toFixed(0)}ms`, 'Feedback', `${(fb * 100).toFixed(0)}%`);
+            break;
+        }
+        case 'filter': {
+            const freq = lerp(d.range.frequency.min, d.range.frequency.max, x);
+            const res = lerp(d.range.resonance.min, d.range.resonance.max, y);
+            nodes.filter.frequency.setTargetAtTime(freq, S.ctx.currentTime, 0.02);
+            nodes.filter.Q.setTargetAtTime(res, S.ctx.currentTime, 0.02);
+            updateParamUI('Frequency', `${freq.toFixed(0)}Hz`, 'Resonance', res.toFixed(1));
+            break;
+        }
+        case 'reverb': {
+            const decay = lerp(d.range.decay.min, d.range.decay.max, x);
+            const wet = lerp(d.range.wet.min, d.range.wet.max, y);
+            if (Math.abs(decay - (nodes._lastDecay || 0)) > 0.3) {
+                nodes.conv.buffer = generateImpulse(decay, S.ctx.currentTime);
+                nodes._lastDecay = decay;
+            }
+            nodes.wet.gain.setTargetAtTime(wet, S.ctx.currentTime, 0.02);
+            nodes.dry.gain.setTargetAtTime(1 - wet, S.ctx.currentTime, 0.02);
+            updateParamUI('Room Size', `${decay.toFixed(1)}s`, 'Wet/Dry', `${(wet * 100).toFixed(0)}%`);
+            break;
+        }
+        case 'distortion': {
+            const drive = lerp(d.range.drive.min, d.range.drive.max, x);
+            const out = lerp(d.range.output.min, d.range.output.max, y);
+            nodes.shaper.curve = makeDistortionCurve(drive);
+            nodes.out.gain.setTargetAtTime(out, S.ctx.currentTime, 0.02);
+            updateParamUI('Drive', `${drive.toFixed(0)}`, 'Output', `${(out * 100).toFixed(0)}%`);
+            break;
+        }
+        case 'flanger': {
+            const rate = lerp(d.range.rate.min, d.range.rate.max, x);
+            const depth = lerp(d.range.depth.min, d.range.depth.max, y);
+            nodes.lfo.frequency.setTargetAtTime(rate, S.ctx.currentTime, 0.02);
+            nodes.lfoGain.gain.setTargetAtTime(depth, S.ctx.currentTime, 0.02);
+            updateParamUI('Rate', `${rate.toFixed(1)}Hz`, 'Depth', `${(depth * 1000).toFixed(2)}ms`);
+            break;
+        }
+        case 'phaser': {
+            const rate = lerp(d.range.rate.min, d.range.rate.max, x);
+            const fb = lerp(d.range.feedback.min, d.range.feedback.max, y);
+            nodes.lfo.frequency.setTargetAtTime(rate, S.ctx.currentTime, 0.02);
+            nodes.fb.gain.setTargetAtTime(fb, S.ctx.currentTime, 0.02);
+            updateParamUI('Rate', `${rate.toFixed(1)}Hz`, 'Feedback', `${(fb * 100).toFixed(0)}%`);
+            break;
+        }
+    }
+}
+
+/* --- Utility --- */
+function lerp(min, max, t) {
+    return min + (max - min) * t;
+}
+
+function updateParamUI(name1, val1, name2, val2) {
+    const xName = document.querySelector('#param-x .param-name');
+    const xVal = document.getElementById('param-x-val');
+    const yName = document.querySelector('#param-y .param-name');
+    const yVal = document.getElementById('param-y-val');
+    if (xName) xName.textContent = name1;
+    if (xVal) xVal.textContent = val1;
+    if (yName) yName.textContent = name2;
+    if (yVal) yVal.textContent = val2;
+}
+
+/* --- Canvas Rendering --- */
+function setupCanvas() {
+    const canvas = document.getElementById('pad');
+    const wrapper = document.getElementById('pad-wrapper');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+        const rect = wrapper.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        drawPad();
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+}
+
+function drawPad() {
+    const canvas = document.getElementById('pad');
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.6);
+    grad.addColorStop(0, '#1a1a2e');
+    grad.addColorStop(1, '#0a0a12');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.strokeStyle = 'rgba(0, 255, 204, 0.06)';
+    ctx.lineWidth = 1;
+    const gridStep = w / 10;
+    for (let i = 1; i < 10; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridStep, 0);
+        ctx.lineTo(i * gridStep, h);
+        ctx.stroke();
+    }
+    const gridStepY = h / 10;
+    for (let i = 1; i < 10; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridStepY);
+        ctx.lineTo(w, i * gridStepY);
+        ctx.stroke();
+    }
+
+    ctx.strokeStyle = 'rgba(0, 255, 204, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 0);
+    ctx.lineTo(w / 2, h);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, h / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(0, 255, 204, 0.04)';
+    ctx.font = `bold ${w * 0.15}px -apple-system, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(S.activeEffect.toUpperCase(), w / 2, h / 2);
+}
+
+/* --- XY Pad Events --- */
+function setupPadEvents() {
+    const wrapper = document.getElementById('pad-wrapper');
+    const cursor = document.getElementById('pad-cursor');
+    const chH = document.getElementById('pad-crosshair-h');
+    const chV = document.getElementById('pad-crosshair-v');
+    let active = false;
+
+    function getXY(e) {
+        const rect = wrapper.getBoundingClientRect();
+        const touch = e.touches ? e.touches[0] : e;
+        const x = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+        const y = Math.max(0, Math.min(1, (touch.clientY - rect.top) / rect.height));
+        return { x, y };
+    }
+
+    function updateCursor(xy) {
+        const rect = wrapper.getBoundingClientRect();
+        const px = xy.x * rect.width;
+        const py = xy.y * rect.height;
+        cursor.style.left = px + 'px';
+        cursor.style.top = py + 'px';
+        chH.style.top = py + 'px';
+        chV.style.left = px + 'px';
+    }
+
+    function onStart(e) {
+        ensureCtx();
+        if (S.ctx.state === 'suspended') S.ctx.resume();
+        active = true;
+        wrapper.classList.add('active');
+        cursor.classList.add('visible');
+        const xy = getXY(e);
+        S.xy = xy;
+        updateCursor(xy);
+        if (!S.bypassed) updateEffect();
+        haptic();
+    }
+
+    function onMove(e) {
+        if (!active) return;
+        e.preventDefault();
+        const xy = getXY(e);
+        S.xy = xy;
+        updateCursor(xy);
+        if (!S.bypassed) updateEffect();
+    }
+
+    function onEnd() {
+        active = false;
+        wrapper.classList.remove('active');
+        cursor.classList.remove('visible');
+    }
+
+    wrapper.addEventListener('mousedown', onStart);
+    wrapper.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onEnd);
+    wrapper.addEventListener('touchstart', onStart, { passive: false });
+    wrapper.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+}
+
+/* --- VU Meter --- */
+function startVUMeter() {
+    const vuL = document.getElementById('vu-left');
+    const vuR = document.getElementById('vu-right');
+    if (!vuL || !vuR || !S.analyserL || !S.analyserR) return;
+
+    const bufL = new Float32Array(S.analyserL.fftSize);
+    const bufR = new Float32Array(S.analyserR.fftSize);
+
+    function loop() {
+        S.analyserL.getFloatTimeDomainData(bufL);
+        S.analyserR.getFloatTimeDomainData(bufR);
+
+        let peakL = 0, peakR = 0;
+        for (let i = 0; i < bufL.length; i++) {
+            const v = Math.abs(bufL[i]);
+            if (v > peakL) peakL = v;
+        }
+        for (let i = 0; i < bufR.length; i++) {
+            const v = Math.abs(bufR[i]);
+            if (v > peakR) peakR = v;
+        }
+
+        const pctL = Math.min(100, peakL * 100);
+        const pctR = Math.min(100, peakR * 100);
+
+        vuL.style.height = pctL + '%';
+        vuR.style.height = pctR + '%';
+        vuL.classList.toggle('high', pctL > 90);
+        vuR.classList.toggle('high', pctR > 90);
+
+        S.animFrame = requestAnimationFrame(loop);
+    }
+
+    loop();
+}
+
+/* --- BPM Detection --- */
+const BPM = {
+    mode: 'auto',
+    bpm: 0,
+    internalBpm: 120,
+    analyser: null,
+    dataArray: null,
+    energyHistory: new Float32Array(64),
+    historyIdx: 0,
+    peaks: [],
+    lastPeakTime: 0,
+    threshold: 0.35,
+    cooldown: 0.12,
+    lastBeatTime: 0,
+    tapTimes: [],
+    tapTimeout: null,
+    beatLedTimeout: null,
+    animFrame: null,
+};
+
+function setupBPMDetection() {
+    if (!S.ctx || BPM.analyser) return;
+    BPM.analyser = S.ctx.createAnalyser();
+    BPM.analyser.fftSize = 512;
+    BPM.analyser.smoothingTimeConstant = 0.3;
+    BPM.dataArray = new Float32Array(BPM.analyser.fftSize);
+    S.inputGain.connect(BPM.analyser);
+}
+
+function detectBPMFrame() {
+    if (BPM.mode !== 'auto' || !BPM.analyser) {
+        BPM.animFrame = requestAnimationFrame(detectBPMFrame);
+        return;
+    }
+
+    BPM.analyser.getFloatTimeDomainData(BPM.dataArray);
+
+    let sum = 0;
+    for (let i = 0; i < BPM.dataArray.length; i++) {
+        sum += BPM.dataArray[i] * BPM.dataArray[i];
+    }
+    const rms = Math.sqrt(sum / BPM.dataArray.length);
+
+    BPM.energyHistory[BPM.historyIdx] = rms;
+    BPM.historyIdx = (BPM.historyIdx + 1) % BPM.energyHistory.length;
+
+    let avgEnergy = 0;
+    for (let i = 0; i < BPM.energyHistory.length; i++) {
+        avgEnergy += BPM.energyHistory[i];
+    }
+    avgEnergy /= BPM.energyHistory.length;
+
+    const now = S.ctx.currentTime;
+    const adaptiveThreshold = avgEnergy * 1.4 + 0.02;
+
+    if (rms > adaptiveThreshold && rms > BPM.threshold && (now - BPM.lastPeakTime) > BPM.cooldown) {
+        if (BPM.lastPeakTime > 0) {
+            const interval = now - BPM.lastPeakTime;
+            BPM.peaks.push(interval);
+            if (BPM.peaks.length > 24) BPM.peaks.shift();
+
+            if (BPM.peaks.length >= 3) {
+                const avgInterval = BPM.peaks.reduce((a, b) => a + b, 0) / BPM.peaks.length;
+                const detected = Math.round(60 / avgInterval);
+                if (detected >= 30 && detected <= 300) {
+                    BPM.bpm = BPM.bpm === 0 ? detected : Math.round(BPM.bpm * 0.85 + detected * 0.15);
+                    updateBPMDisplay();
+                }
+            }
+            flashBeat();
+        }
+        BPM.lastPeakTime = now;
+    }
+
+    BPM.animFrame = requestAnimationFrame(detectBPMFrame);
+}
+
+function flashBeat() {
+    const led = document.getElementById('beat-led');
+    if (!led) return;
+    led.classList.add('flash');
+    if (BPM.beatLedTimeout) clearTimeout(BPM.beatLedTimeout);
+    BPM.beatLedTimeout = setTimeout(() => led.classList.remove('flash'), 80);
+}
+
+function updateBPMDisplay() {
+    const val = document.getElementById('bpm-value');
+    if (!val) return;
+    if (BPM.mode === 'auto' && BPM.bpm > 0) {
+        val.textContent = BPM.bpm;
+        val.classList.add('detected');
+    } else if (BPM.mode === 'internal') {
+        val.textContent = BPM.internalBpm;
+        val.classList.remove('detected');
+    } else if (BPM.mode === 'tap') {
+        val.textContent = BPM.tapTimes.length > 1 ? BPM.bpm : '---';
+        val.classList.toggle('detected', BPM.tapTimes.length > 1);
+    } else {
+        val.textContent = '---';
+        val.classList.remove('detected');
+    }
+}
+
+function handleTapTempo() {
+    const now = Date.now();
+    BPM.tapTimes.push(now);
+    BPM.tapTimes = BPM.tapTimes.filter(t => now - t < 3000);
+
+    if (BPM.tapTimes.length >= 2) {
+        const intervals = [];
+        for (let i = 1; i < BPM.tapTimes.length; i++) {
+            intervals.push(BPM.tapTimes[i] - BPM.tapTimes[i - 1]);
+        }
+        const avgMs = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+        BPM.bpm = Math.round(60000 / avgMs);
+        updateBPMDisplay();
+        flashBeat();
+    }
+
+    if (BPM.tapTimeout) clearTimeout(BPM.tapTimeout);
+    BPM.tapTimeout = setTimeout(() => { BPM.tapTimes = []; }, 3000);
+}
+
+function setBPMMode(mode) {
+    BPM.mode = mode;
+    document.querySelectorAll('.mode-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === mode);
+        b.setAttribute('aria-checked', b.dataset.mode === mode ? 'true' : 'false');
+    });
+
+    const internalSlider = document.getElementById('internal-bpm');
+    const internalVal = document.getElementById('internal-bpm-val');
+    const showInternal = mode === 'internal';
+    if (internalSlider) internalSlider.style.display = showInternal ? 'block' : 'none';
+    if (internalVal) internalVal.style.display = showInternal ? 'inline' : 'none';
+
+    if (mode === 'auto') {
+        BPM.peaks = [];
+        BPM.lastPeakTime = 0;
+        BPM.bpm = 0;
+    } else if (mode === 'tap') {
+        BPM.tapTimes = [];
+    }
+    updateBPMDisplay();
+    haptic();
+}
+
+/* --- Audio Input --- */
+async function startInput() {
+    ensureCtx();
+    if (S.ctx.state === 'suspended') await S.ctx.resume();
+
+    try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioInputs = devices.filter(d => d.kind === 'audioinput');
+        const select = document.getElementById('input-select');
+
+        if (audioInputs.length > 1) {
+            select.innerHTML = '<option value="">Select device...</option>';
+            audioInputs.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.deviceId;
+                opt.textContent = d.label || `Input ${d.deviceId.slice(0, 8)}`;
+                select.appendChild(opt);
+            });
+            select.style.display = 'block';
+
+            const irig = audioInputs.find(d =>
+                d.label.toLowerCase().includes('irig') ||
+                d.label.toLowerCase().includes('ik multimedia')
+            );
+            if (irig) select.value = irig.deviceId;
+        }
+
+        const deviceId = select.value || undefined;
+        const constraints = {
+            audio: {
+                echoCancellation: false,
+                noiseSuppression: false,
+                autoGainControl: false,
+                channelCount: 2,
+                sampleRate: 48000,
+                ...(deviceId ? { deviceId: { exact: deviceId } } : {}),
+            },
+            video: false,
+        };
+
+        S.stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+        if (S.sourceNode) S.sourceNode.disconnect();
+        S.sourceNode = S.ctx.createMediaStreamSource(S.stream);
+        S.sourceNode.connect(S.inputGain);
+
+        if (!S.bypassed) {
+            disconnectAllEffects();
+            connectEffect(S.activeEffect);
+        }
+
+        S.inputActive = true;
+        updateInputUI(true);
+        startVUMeter();
+    } catch (err) {
+        console.error('Input error:', err);
+        alert('Could not access audio input. Make sure iRig is connected and permissions are granted.\n\n' + err.message);
+    }
+}
+
+function stopInput() {
+    if (S.stream) {
+        S.stream.getTracks().forEach(t => t.stop());
+        S.stream = null;
+    }
+    if (S.sourceNode) {
+        S.sourceNode.disconnect();
+        S.sourceNode = null;
+    }
+    S.inputActive = false;
+    if (S.animFrame) cancelAnimationFrame(S.animFrame);
+    updateInputUI(false);
+    document.getElementById('vu-left').style.height = '2px';
+    document.getElementById('vu-right').style.height = '2px';
+}
+
+function updateInputUI(active) {
+    const btn = document.getElementById('btn-input');
+    btn.classList.toggle('active', active);
+    btn.innerHTML = active ? '🔴 Stop' : '🎤 Input';
+}
+
+/* --- UI Setup --- */
+function setupUI() {
+    document.querySelectorAll('.effect-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.effect-btn').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            S.activeEffect = btn.dataset.effect;
+            drawPad();
+            updateParamUI(
+                EFFECTS[S.activeEffect].label[0], '—',
+                EFFECTS[S.activeEffect].label[1], '—'
+            );
+            haptic();
+        });
+    });
+
+    document.getElementById('btn-input').addEventListener('click', () => {
+        ensureCtx();
+        if (S.inputActive) stopInput(); else startInput();
+        haptic();
+    });
+
+    document.getElementById('btn-bypass').addEventListener('click', () => {
+        ensureCtx();
+        S.bypassed = !S.bypassed;
+        const led = document.querySelector('#btn-bypass .led');
+        led.classList.toggle('on', !S.bypassed);
+        led.classList.toggle('off', S.bypassed);
+        if (S.bypassed) disconnectAllEffects(); else { connectEffect(S.activeEffect); updateEffect(); }
+        haptic();
+    });
+
+    document.getElementById('btn-settings').addEventListener('click', () => {
+        document.getElementById('settings-panel').classList.remove('hidden');
+    });
+    document.querySelector('#settings-panel .close-btn').addEventListener('click', () => {
+        document.getElementById('settings-panel').classList.add('hidden');
+    });
+
+    document.getElementById('btn-help').addEventListener('click', () => {
+        document.getElementById('help-panel').classList.remove('hidden');
+    });
+    document.querySelector('#help-panel .close-btn').addEventListener('click', () => {
+        document.getElementById('help-panel').classList.add('hidden');
+    });
+
+    document.querySelectorAll('.panel').forEach(panel => {
+        panel.addEventListener('click', (e) => {
+            if (e.target === panel) panel.classList.add('hidden');
+        });
+    });
+
+    setupSlider('input-volume', v => { if (S.inputGain) S.inputGain.gain.value = v; });
+    setupSlider('output-volume', v => { if (S.outputGain) S.outputGain.gain.value = v; });
+    setupSlider('effect-mix', v => { if (S.effectMix) S.effectMix.gain.value = v; });
+
+    document.getElementById('latency-select').addEventListener('change', async (e) => {
+        if (S.ctx) {
+            await S.ctx.close();
+            S.ctx = null;
+            S.effects = {};
+            ensureCtx();
+            if (S.inputActive) { stopInput(); startInput(); }
+        }
+    });
+
+    document.getElementById('input-select').addEventListener('change', () => {
+        if (S.inputActive) { stopInput(); startInput(); }
+    });
+
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => setBPMMode(btn.dataset.mode));
+    });
+
+    const tapBtn = document.getElementById('btn-tap');
+    if (tapBtn) tapBtn.addEventListener('click', handleTapTempo);
+
+    const internalBpmSlider = document.getElementById('internal-bpm');
+    const internalBpmVal = document.getElementById('internal-bpm-val');
+    if (internalBpmSlider) {
+        internalBpmSlider.addEventListener('input', () => {
+            BPM.internalBpm = parseInt(internalBpmSlider.value);
+            if (internalBpmVal) internalBpmVal.textContent = BPM.internalBpm;
+            updateBPMDisplay();
+        });
+    }
+}
+
+function setupSlider(id, onChange) {
+    const input = document.getElementById(id);
+    const display = document.getElementById(id + '-val');
+    if (!input) return;
+    input.addEventListener('input', () => {
+        const v = parseFloat(input.value);
+        if (display) display.textContent = Math.round(v * 100) + '%';
+        onChange(v);
+    });
+}
+
+/* --- Haptic Feedback --- */
+function haptic() {
+    if (navigator.vibrate) navigator.vibrate(8);
+}
+
+/* --- Boot --- */
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+</script>
+</body>
+</html>

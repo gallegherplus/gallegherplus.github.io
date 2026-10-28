@@ -1,706 +1,1151 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-mode="plus">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ariel Dutria aka Gallegher Plus</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallegher Plus · Ariel Dutria</title>
+<meta name="description" content="Música, juegos y arte digital de Gallegher Plus (Ariel Dutria) / CosmoMedia Colectivo">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ariel Dutria aka Gallegher Plus">
-    <meta property="og:description" content="Música, juegos y arte digital de Gallegher Plus / CosmoMedia Colectivo">
-    <meta property="og:image" content="https://github.com/gallegherplus/gallegherplus.github.io/blob/main/gallegher%20starship%20juego_upscayl_4x_digital-art-4x.png?raw=true">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ariel Dutria aka Gallegher Plus">
+<meta property="og:description" content="Música, juegos y arte digital de Gallegher Plus / CosmoMedia Colectivo">
+<meta property="og:image" content="https://github.com/gallegherplus/gallegherplus.github.io/blob/main/gallegher%20starship%20juego_upscayl_4x_digital-art-4x.png?raw=true">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Ariel Dutria aka Gallegher Plus">
-    <meta name="twitter:description" content="Música, juegos y arte digital de Gallegher Plus / CosmoMedia Colectivo">
-    <meta name="twitter:image" content="https://images4.imagebam.com/d2/51/96/ME1AMLDR_o.png">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ariel Dutria aka Gallegher Plus">
+<meta name="twitter:description" content="Música, juegos y arte digital de Gallegher Plus / CosmoMedia Colectivo">
+<meta name="twitter:image" content="https://images4.imagebam.com/d2/51/96/ME1AMLDR_o.png">
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        @keyframes flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .animate-flow { background-size: 200% auto; animation: flow 3s linear infinite; }
-        @keyframes equalizer {
-            0% { height: 10%; } 50% { height: 100%; } 100% { height: 10%; }
-        }
-        .eq-bar { animation: equalizer 0.5s ease-in-out infinite alternate; }
-        @keyframes knobTurn {
-            0%,100% { transform: rotate(-35deg); } 50% { transform: rotate(215deg); }
-        }
-        @keyframes faderSlide {
-            0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); }
-        }
-        @keyframes ledPulse {
-            0%,100% { opacity: .3; } 50% { opacity: 1; }
-        }
-        @keyframes speakerPump {
-            0%,100% { transform: scale(1); } 50% { transform: scale(1.07); }
-        }
-        @keyframes vuBounce {
-            0% { transform: scaleY(.2); } 25% { transform: scaleY(.9); }
-            50% { transform: scaleY(.4); } 75% { transform: scaleY(1); } 100% { transform: scaleY(.2); }
-        }
-        @keyframes padFlash {
-            0%,60%,100% { opacity: .3; } 70% { opacity: 1; }
-        }
-        @keyframes scrollStrip {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .knob-t  { animation: knobTurn 5s ease-in-out infinite; }
-        .fader-s { animation: faderSlide 2.5s ease-in-out infinite; }
-        .led-p   { animation: ledPulse 1.4s ease-in-out infinite; }
-        .spk-p   { animation: speakerPump .55s ease-in-out infinite; }
-        .vu-b    { animation: vuBounce 2.2s ease-in-out infinite; transform-origin: bottom; }
-        .pad-f   { animation: padFlash 1.8s ease-in-out infinite; }
-        .scroll-strip { animation: scrollStrip 30s linear infinite; }
-    </style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307080c'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' font-weight='bold' text-anchor='middle' fill='%23ff8c00'%3EG+%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#07080c; --panel:#0c0e14; --panel2:#11131b; --line:#1f2230; --line2:#2a2c3a;
+  --text:#e8e0d0; --muted:#8a8c9a;
+  --orange:#ff8c00; --teal:#00c9a0; --red:#ff3050; --amber:#ffb830; --blue:#5ab8ff;
+  --a:var(--orange); --b:var(--teal); --c:var(--red);
+  --display:'Syne',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+html[data-mode="sobrio"]{ --a:var(--teal); --b:var(--amber); --c:var(--blue); }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:15px;line-height:1.6;overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+::selection{background:var(--a);color:#000}
+:focus-visible{outline:2px solid var(--a);outline-offset:3px}
+
+/* ---------- fondo ---------- */
+#field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:var(--fieldO,1);transition:opacity .6s}
+.grain{position:fixed;inset:-50%;z-index:1;pointer-events:none;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-4%)}60%{transform:translate(-4%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+.scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px)}
+main,header,footer{position:relative;z-index:2}
+
+/* ---------- cursor ---------- */
+#cur,#ring{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .25s}
+#cur{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--a)}
+#ring{width:38px;height:38px;margin:-19px 0 0 -19px;border:1px solid var(--a);display:grid;place-items:center;
+  transition:opacity .25s,width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background .3s,border-color .3s}
+#ring span{font-size:9px;letter-spacing:.15em;color:#000;font-weight:600;opacity:0;transition:opacity .2s}
+body.cursor-on #cur,body.cursor-on #ring{opacity:1}
+body.cursor-hover #ring{width:74px;height:74px;margin:-37px 0 0 -37px;background:var(--a);border-color:var(--a);mix-blend-mode:normal}
+body.cursor-hover #ring span{opacity:1}
+body.cursor-hover #cur{opacity:0}
+@media (pointer:fine){body.has-cursor,body.has-cursor a,body.has-cursor button{cursor:none}}
+
+/* ---------- boot ---------- */
+#boot{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;align-items:flex-end;padding:clamp(20px,5vw,60px);
+  font-size:13px;color:var(--muted);transition:opacity .6s var(--ease),visibility .6s}
+#boot.done{opacity:0;visibility:hidden}
+#boot pre{font-family:var(--mono);white-space:pre-wrap}
+#boot b{color:var(--a);font-weight:500}
+#boot .bar{position:absolute;left:0;bottom:0;height:2px;background:var(--a);width:0;animation:boot 1.5s var(--ease) forwards}
+@keyframes boot{to{width:100%}}
+
+/* ---------- transformación ---------- */
+#flash{position:fixed;inset:0;z-index:9000;pointer-events:none;display:grid;place-items:center;opacity:0;
+  background:radial-gradient(circle at var(--fx,50%) var(--fy,50%),color-mix(in srgb,var(--a) 55%,transparent),transparent 60%)}
+#flash p{font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,5vw,3.6rem);letter-spacing:-.02em;text-align:center;padding:0 16px;color:#fff;mix-blend-mode:difference}
+#flash.go{animation:flash .9s var(--ease)}
+@keyframes flash{0%{opacity:0}12%{opacity:1}55%{opacity:1}100%{opacity:0}}
+body.glitch main{animation:glitch .5s steps(2) 1}
+@keyframes glitch{0%{transform:translate(0);filter:none}20%{transform:translate(-6px,2px);filter:hue-rotate(80deg) saturate(2)}40%{transform:translate(5px,-3px)}60%{transform:translate(-3px,1px);filter:hue-rotate(-60deg)}80%{transform:translate(2px,0)}100%{transform:none;filter:none}}
+
+/* ---------- nav ---------- */
+#progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--a),var(--b),var(--c));z-index:60}
+header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px clamp(16px,4vw,40px);transition:background .4s,backdrop-filter .4s,border-color .4s;border-bottom:1px solid transparent}
+header::before{content:"";position:absolute;inset:0;z-index:-2;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transition:opacity .4s}
+header.solid{border-color:var(--line)}
+header.solid::before{opacity:1}
+.logo{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo i{font-style:normal;color:var(--a);transition:color .4s}
+.logo small{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--muted);letter-spacing:.08em}
+nav ul{display:flex;gap:clamp(12px,2vw,28px);list-style:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+nav a{color:var(--muted);transition:color .25s;position:relative;padding:4px 0}
+nav a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--a);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+nav a:hover,nav a.active{color:var(--text)}
+nav a:hover::after,nav a.active::after{transform:scaleX(1);transform-origin:left}
+.right{display:flex;align-items:center;gap:10px}
+
+.mode{display:flex;align-items:center;gap:10px;padding:6px 8px 6px 12px;border:1px solid var(--line2);border-radius:99px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--panel)}
+.mode .sw{position:relative;width:42px;height:22px;border-radius:99px;background:var(--line);transition:background .4s}
+.mode .sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--a);box-shadow:0 0 12px var(--a);transition:transform .45s var(--ease),background .4s}
+html[data-mode="plus"] .mode .sw::after{transform:translateX(20px)}
+.mode .m-s,.mode .m-p{transition:color .3s;color:var(--muted)}
+html[data-mode="sobrio"] .mode .m-s,html[data-mode="plus"] .mode .m-p{color:var(--text)}
+#menuBtn{display:none;width:40px;height:40px;border:1px solid var(--line2);border-radius:50%;background:var(--panel)}
+#menuBtn span{display:block;width:16px;height:1px;background:var(--text);margin:4px auto;transition:transform .3s}
+@media (max-width:900px){
+  nav{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;z-index:-1}
+  nav.open{opacity:1;visibility:visible}
+  nav ul{flex-direction:column;align-items:center;gap:22px;font-size:16px}
+  #menuBtn{display:block}
+  .mode .m-s{display:none}
+  .logo small{display:none}
+}
+
+/* ---------- layout ---------- */
+section{padding:clamp(80px,12vw,150px) clamp(16px,5vw,64px);max-width:1320px;margin:0 auto}
+.sh{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:clamp(32px,5vw,56px)}
+.sh .num{font-size:12px;color:var(--a);letter-spacing:.2em;transition:color .4s}
+.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,7vw,5.6rem);line-height:.95;letter-spacing:-.035em}
+.sh p{flex-basis:100%;max-width:56ch;color:var(--muted);font-size:14px}
+.js .reveal{opacity:0;transform:translateY(46px);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:var(--d,0s)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;max-width:none;display:flex;flex-direction:column;justify-content:center;position:relative;padding-top:120px;padding-bottom:110px}
+.hero .kicker{font-size:12px;letter-spacing:clamp(.12em,1vw,.3em);text-transform:uppercase;color:var(--muted);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+.hero .kicker::before{content:"";width:40px;height:1px;background:var(--a)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.title{font-family:var(--display);font-weight:800;line-height:.82;letter-spacing:-.045em;user-select:none}
+.title .row1{display:flex;width:max-content;font-size:var(--fs,clamp(2.2rem,9.5vw,12rem))}
+.title .row1 span{display:inline-block;will-change:transform;transition:color .3s;transform:translateY(var(--ty,0)) scaleY(var(--sy,1));transform-origin:50% 100%;color:color-mix(in srgb,var(--text) calc(100% - var(--p,0)*100%),var(--a))}
+.title .row2{display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-size:var(--fs,clamp(2.2rem,9.5vw,12rem));margin-top:.04em}
+.plus{background:linear-gradient(90deg,var(--a),var(--b),var(--c),var(--a));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite;cursor:default}
+html[data-mode="sobrio"] .plus{background:none;-webkit-text-stroke:1.5px var(--a);color:transparent;animation:none}
+@keyframes flow{to{background-position:300% 0}}
+.title .tag{font-family:var(--mono);font-weight:400;font-size:clamp(12px,1.3vw,15px);letter-spacing:.04em;line-height:1.5;color:var(--muted);max-width:30ch}
+.title .tag b{color:var(--text);font-weight:500}
+.hero-foot{position:absolute;left:clamp(16px,5vw,64px);right:clamp(16px,5vw,64px);bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hud span{display:block}
+.hud b{color:var(--a);font-weight:500;transition:color .4s}
+.scrollcue{display:flex;align-items:center;gap:10px}
+.scrollcue i{width:1px;height:46px;background:linear-gradient(var(--a),transparent);animation:cue 2s var(--ease) infinite;transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.hint{margin-top:34px;font-size:12px;color:var(--muted);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+kbd{font-family:var(--mono);font-size:11px;padding:2px 7px;border:1px solid var(--line2);border-bottom-width:3px;border-radius:5px;background:var(--panel2);color:var(--text)}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:99px;border:1px solid var(--a);font-size:12px;letter-spacing:.14em;text-transform:uppercase;transition:background .3s,color .3s,border-color .4s}
+.cta:hover{background:var(--a);color:#000}
+.cta.ghost{border-color:var(--line2)}
+.cta.ghost:hover{border-color:var(--text);background:var(--text)}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:40px}
+@media (max-width:640px){.hud{display:none}.title .row2{flex-wrap:wrap}.title .tag{flex-basis:100%;margin-top:14px}}
+
+/* ---------- marquee ---------- */
+.marquee{position:relative;z-index:2;overflow:hidden;border-block:1px solid var(--line);background:color-mix(in srgb,var(--panel) 80%,transparent);padding:18px 0;transform:skewY(calc(var(--skew,0) * 1deg))}
+.marquee .trk{display:flex;width:max-content;animation:mq 38s linear infinite;font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2.4rem);letter-spacing:-.02em;white-space:nowrap}
+.marquee.rev .trk{animation-direction:reverse;animation-duration:46s}
+.marquee .trk span{padding:0 .6em;color:transparent;-webkit-text-stroke:1px var(--line2)}
+.marquee .trk span:nth-child(3n+1){color:var(--text);-webkit-text-stroke:0}
+.marquee .trk em{font-style:normal;color:var(--a);transition:color .4s}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- origen / split ---------- */
+.split{position:relative;border:1px solid var(--line);border-radius:22px;overflow:hidden;min-height:520px;--x:50%;touch-action:pan-y;user-select:none}
+.layer{position:absolute;inset:0;display:flex;align-items:center;padding:clamp(28px,5vw,64px)}
+.layer .txt{max-width:min(42%,460px)}
+.layer h3{font-family:var(--display);font-weight:800;font-size:clamp(2rem,4.4vw,3.6rem);line-height:.95;letter-spacing:-.03em;margin-bottom:8px}
+.layer .role{font-size:11px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:22px;display:block}
+.layer p{font-size:14px;color:inherit;opacity:.85;margin-bottom:12px}
+.l-sobrio{background-color:#0a1013;color:#cfe9e3;
+  background-image:linear-gradient(rgba(0,201,160,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,201,160,.08) 1px,transparent 1px),linear-gradient(rgba(0,201,160,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,201,160,.035) 1px,transparent 1px);
+  background-size:80px 80px,80px 80px,16px 16px,16px 16px}
+.l-sobrio .role{color:var(--teal)}
+.l-sobrio .schem{position:absolute;right:6%;top:50%;width:min(40%,420px);transform:translateY(-50%);opacity:.5}
+.l-plus{justify-content:flex-end;color:#fff;clip-path:inset(0 0 0 var(--x));
+  background:radial-gradient(circle at 20% 30%,rgba(255,48,80,.55),transparent 55%),radial-gradient(circle at 70% 80%,rgba(255,140,0,.5),transparent 50%),radial-gradient(circle at 90% 10%,rgba(0,201,160,.35),transparent 45%),#12070c}
+.l-plus .txt{text-align:right}
+.l-plus .role{color:var(--amber)}
+.l-plus h3{background:linear-gradient(90deg,var(--amber),var(--orange),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+.l-plus .rings{position:absolute;left:6%;top:50%;width:min(36%,380px);aspect-ratio:1;transform:translateY(-50%)}
+.l-plus .rings i{position:absolute;inset:calc(var(--i)*11%);border-radius:50%;border:1px solid rgba(255,184,48,.5);animation:pulse 2.4s var(--ease) infinite;animation-delay:calc(var(--i)*-.4s)}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.06);opacity:1}}
+.divider{position:absolute;top:0;bottom:0;left:var(--x);width:1px;background:#fff;z-index:3;pointer-events:none}
+.divider b{position:absolute;top:50%;left:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-size:13px;font-weight:600}
+.note{margin-top:20px;font-size:12px;color:var(--muted);max-width:80ch}
+.note em{color:var(--text)}
+@media (max-width:820px){
+  .split{min-height:0;display:grid}
+  .layer{position:relative;clip-path:none!important;justify-content:flex-start}
+  .layer .txt{max-width:none;text-align:left!important}
+  .l-sobrio .schem,.l-plus .rings,.divider{display:none}
+}
+
+/* ---------- discos ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:clamp(18px,2.4vw,30px)}
+.album{perspective:900px}
+.album .card{border:1px solid var(--line);border-radius:18px;background:var(--panel);overflow:hidden;transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .5s var(--ease),border-color .4s;transform-style:preserve-3d}
+.album:hover .card{border-color:color-mix(in srgb,var(--h) 60%,var(--line))}
+.album.loaded .card{transform:none}
+.cover{position:relative;aspect-ratio:350/470;width:100%;overflow:hidden;background:#0a0b10}
+.cover iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.load{position:absolute;inset:0;width:100%;text-align:left;display:block}
+.art{position:absolute;inset:0;transition:transform .9s var(--ease);
+  background:radial-gradient(circle at var(--cx) var(--cy),color-mix(in srgb,var(--h) 85%,transparent) 0,transparent 52%),
+  repeating-radial-gradient(circle at var(--cx) var(--cy),transparent 0 11px,rgba(255,255,255,.05) 11px 12px),
+  conic-gradient(from var(--ang) at var(--cx) var(--cy),transparent,color-mix(in srgb,var(--h) 30%,transparent),transparent 40%),
+  linear-gradient(160deg,#171a25,#07080c)}
+.album:hover .art{transform:scale(1.07) rotate(-1.5deg)}
+.glare{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 45%);opacity:0;transition:opacity .4s}
+.album:hover .glare{opacity:1}
+.yr{position:absolute;top:16px;left:18px;font-size:12px;letter-spacing:.2em;color:#fff;opacity:.8}
+.big{position:absolute;left:14px;right:14px;bottom:72px;font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,3vw,2.5rem);line-height:.92;letter-spacing:-.03em;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.5)}
+.wave{position:absolute;left:18px;right:18px;bottom:24px;height:30px;display:flex;align-items:flex-end;gap:3px}
+.wave i{flex:1;background:#fff;opacity:.55;border-radius:1px;height:var(--v);transition:height .3s}
+.album:hover .wave i{animation:eq .6s ease-in-out infinite alternate;animation-delay:calc(var(--k)*-.07s)}
+@keyframes eq{to{height:calc(var(--v) * .25)}}
+.playbtn{position:absolute;top:14px;right:14px;width:46px;height:46px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-size:14px;transform:scale(.85);transition:transform .35s var(--ease),background .3s}
+.album:hover .playbtn{transform:scale(1);background:var(--h)}
+.meta{padding:16px 18px 18px}
+.meta h3{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em;line-height:1.15}
+.meta .sub{font-size:12px;color:var(--muted);margin:2px 0 12px}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.links a{font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border:1px solid var(--line2);border-radius:99px;transition:border-color .25s,background .25s,color .25s}
+.links a:hover{border-color:var(--h,var(--a));background:var(--h,var(--a));color:#000}
+
+/* ---------- videos ---------- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(18px,2.4vw,30px)}
+.video figcaption{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:12px;display:flex;gap:10px}
+.video figcaption b{color:var(--a);font-weight:500}
+.vbox{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vf{position:absolute;inset:0;width:100%}
+.vf img{width:100%;height:100%;object-fit:cover;filter:grayscale(.6) contrast(1.1);transition:filter .5s,transform .9s var(--ease)}
+.vf:hover img{filter:none;transform:scale(1.05)}
+.vf .playbtn{top:50%;left:50%;right:auto;width:72px;height:72px;margin:-36px 0 0 -36px;font-size:20px}
+.vf:hover .playbtn{transform:scale(1.1);background:var(--a)}
+.vf .gen{position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,color-mix(in srgb,var(--c) 70%,transparent),transparent 55%),radial-gradient(circle at 75% 70%,color-mix(in srgb,var(--b) 50%,transparent),transparent 50%),repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 9px),#0a0b10}
+.vf .gen span{position:absolute;left:22px;bottom:18px;font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.03em;color:#fff}
+
+.wide{margin-top:clamp(18px,2.4vw,30px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(18px,2.4vw,30px)}
+.embed{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel);min-height:var(--hgt)}
+.embed iframe{width:100%;height:var(--hgt);border:0;display:block}
+.embed .load{display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:24px;background:linear-gradient(140deg,color-mix(in srgb,var(--h) 30%,transparent),transparent 60%),repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 7px)}
+.embed .load strong{font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);letter-spacing:-.03em;line-height:1}
+.embed .load small{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.embed .playbtn{top:22px;right:22px}
+.embed:hover .playbtn{transform:scale(1);background:var(--h)}
+
+/* ---------- juego ---------- */
+.game{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(20px,3vw,40px);align-items:stretch}
+.shot{perspective:1000px;display:block}
+.shot .inner{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .5s var(--ease);height:100%;min-height:300px;background:#000}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.shot:hover img{transform:scale(1.05)}
+.shot .lbl{position:absolute;left:0;right:0;bottom:0;padding:22px;background:linear-gradient(transparent,rgba(0,0,0,.85));display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.shot .lbl strong{font-family:var(--display);font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:.95;letter-spacing:-.03em}
+.shot .lbl span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:9px 16px;border-radius:99px;background:var(--a);color:#000;white-space:nowrap}
+.controls{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:clamp(20px,3vw,30px);display:flex;flex-direction:column;gap:22px}
+.controls h3{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.ctl strong{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;color:var(--a)}
+.ctl:nth-child(3) strong{color:var(--b)}
+.ctl:nth-child(4) strong{color:var(--c)}
+.keys{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.key{display:flex;align-items:center;gap:8px}
+.cap{min-width:38px;height:38px;padding:0 9px;display:grid;place-items:center;border:1px solid var(--line2);border-bottom-width:4px;border-radius:8px;background:var(--panel2);color:var(--text);font-weight:600;transition:transform .08s,border-color .2s,background .2s,color .2s}
+.cap.down{transform:translateY(3px);border-bottom-width:1px;background:var(--a);color:#000;border-color:var(--a)}
+@media (max-width:820px){.game{grid-template-columns:1fr}}
+
+/* ---------- laboratorio ---------- */
+.lab{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px);align-items:start}
+.device{border:1px solid var(--line2);border-radius:24px;background:linear-gradient(170deg,#151823,#0b0c12);padding:clamp(16px,2.6vw,26px);box-shadow:0 30px 80px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05)}
+.screen{position:relative;border-radius:12px;background:#05060a;border:1px solid var(--line);height:120px;overflow:hidden;margin-bottom:16px}
+.screen canvas{width:100%;height:100%;display:block}
+.screen .lcd{position:absolute;top:8px;left:12px;right:12px;display:flex;justify-content:space-between;font-size:10px;letter-spacing:.16em;color:var(--a);text-transform:uppercase;transition:color .4s}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pad{position:relative;aspect-ratio:1;border-radius:12px;background:var(--panel2);border:1px solid var(--line2);display:flex;flex-direction:column;justify-content:space-between;padding:9px;text-align:left;overflow:hidden;transition:transform .1s,box-shadow .2s;touch-action:manipulation}
+.pad::before{content:"";position:absolute;inset:0;background:var(--pc);opacity:.12;transition:opacity .4s}
+.pad span,.pad small{position:relative;font-size:10px;letter-spacing:.12em}
+.pad small{color:var(--muted);align-self:flex-end}
+.pad.hit{transform:scale(.95);box-shadow:0 0 30px -4px var(--pc)}
+.pad.hit::before{opacity:.9;transition:none}
+.pad.hit span,.pad.hit small{color:#000}
+.transport{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.transport button{padding:9px 16px;border-radius:99px;border:1px solid var(--line2);font-size:11px;letter-spacing:.14em;text-transform:uppercase;transition:background .2s,color .2s,border-color .2s}
+.transport button[aria-pressed="true"]{background:var(--a);color:#000;border-color:var(--a)}
+.steps{display:flex;gap:4px;flex:1;min-width:160px}
+.steps i{flex:1;height:6px;border-radius:2px;background:var(--line2);transition:background .08s}
+.steps i:nth-child(4n+1){background:#3a3d50}
+.steps i.on{background:var(--a)}
+.labgrid{display:grid;grid-template-columns:minmax(200px,280px) 1fr;gap:clamp(14px,2vw,24px);align-items:start}
+.seqwrap{overflow-x:auto;padding-bottom:4px}
+.rows{display:grid;gap:5px;min-width:520px}
+.row{display:grid;grid-template-columns:70px repeat(16,1fr);gap:4px;align-items:center}
+.row .rl{font-size:10px;letter-spacing:.12em;color:var(--pc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell{height:26px;border-radius:5px;background:var(--panel2);border:1px solid var(--line2);transition:background .12s,box-shadow .12s,transform .1s;touch-action:manipulation}
+.cell.q{background:#181b26}
+.cell:hover{border-color:var(--pc)}
+.cell[aria-pressed="true"]{background:var(--pc);border-color:var(--pc);box-shadow:0 0 12px -2px var(--pc)}
+.cell.now{outline:1px solid var(--text);outline-offset:1px}
+.cell.now[aria-pressed="true"]{transform:scale(1.12);background:#fff}
+.bpm{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.bpm input{accent-color:var(--a);width:120px}
+.bpm output{color:var(--text);min-width:3ch}
+.tsp{flex:1}
+#recBtn[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#000}
+.labkeys{margin-top:20px}
+.subh{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.02em;margin:clamp(50px,7vw,80px) 0 clamp(18px,2.4vw,28px)}
+@media (max-width:900px){.labgrid{grid-template-columns:1fr}.pads{max-width:420px}}
+.labtxt h3{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:-.02em;line-height:1.05;margin-bottom:16px}
+.labtxt p{color:var(--muted);margin-bottom:14px;max-width:46ch}
+.labtxt .keys{margin-top:18px}
+@media (max-width:820px){.lab{grid-template-columns:1fr}}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:clamp(60px,9vw,110px) clamp(16px,5vw,64px) 30px;overflow:hidden}
+.fbig{font-family:var(--display);font-weight:800;font-size:clamp(3rem,15vw,15rem);line-height:.8;letter-spacing:-.05em;white-space:nowrap;color:transparent;-webkit-text-stroke:1px var(--line2);transition:-webkit-text-stroke-color .4s}
+.fbig:hover{-webkit-text-stroke-color:var(--a)}
+.frow{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:40px;font-size:12px;color:var(--muted);letter-spacing:.08em}
+.frow .links a{color:var(--text)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .js .reveal{opacity:1;transform:none}
+}
+</style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-[#0d0f14] via-[#0a0c10] to-[#07080c]">
+<body>
 
-<!-- ========== MOBILE: TOP SCROLLING STRIP ========== -->
-<div class="lg:hidden w-full overflow-hidden border-b-2 border-[#1a1c28] bg-[#0c0e14] py-3">
-    <div class="flex items-center gap-6 scroll-strip w-max">
-        <!-- set 1 -->
-        <!-- Speaker -->
-        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
-            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
-            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p"/>
-            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
-            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
-            <circle cx="65" cy="178" r="4" fill="#00ff80" class="led-p"/>
-        </svg>
-        <!-- Knobs -->
-        <svg viewBox="0 0 130 95" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="89" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="28" cy="38" r="16" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
-            <line x1="28" y1="24" x2="28" y2="38" stroke="#ff8c00" stroke-width="2.5" class="knob-t" style="transform-origin:28px 38px"/>
-            <circle cx="65" cy="38" r="16" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
-            <line x1="65" y1="24" x2="65" y2="38" stroke="#00c9a0" stroke-width="2.5" class="knob-t" style="transform-origin:65px 38px;animation-delay:.7s"/>
-            <circle cx="102" cy="38" r="16" fill="#1a1c26" stroke="#ff3050" stroke-width="2"/>
-            <line x1="102" y1="24" x2="102" y2="38" stroke="#ff3050" stroke-width="2.5" class="knob-t" style="transform-origin:102px 38px;animation-delay:1.4s"/>
-            <text x="28" y="68" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">LOW</text>
-            <text x="65" y="68" fill="#00c9a0" font-size="7" text-anchor="middle" font-family="monospace">MID</text>
-            <text x="102" y="68" fill="#ff3050" font-size="7" text-anchor="middle" font-family="monospace">HI</text>
-        </svg>
-        <!-- VU -->
-        <svg viewBox="0 0 100 150" class="w-20 shrink-0">
-            <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
-            <rect x="14" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b"/>
-            <rect x="14" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.1s"/>
-            <rect x="14" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.2s"/>
-            <rect x="14" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.3s"/>
-            <rect x="14" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.4s"/>
-            <rect x="72" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.15s"/>
-            <rect x="72" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.25s"/>
-            <rect x="72" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.35s"/>
-            <rect x="72" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.45s"/>
-            <rect x="72" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.55s"/>
-            <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle">L</text>
-            <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle">R</text>
-        </svg>
-        <!-- Groovebox -->
-        <svg viewBox="0 0 130 130" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="124" rx="10" fill="#13151e" stroke="#ff3050" stroke-width="2"/>
-            <rect x="14" y="12" width="72" height="22" rx="4" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
-            <text x="50" y="27" fill="#00c9a0" font-size="10" text-anchor="middle" font-family="monospace">MPC</text>
-            <circle cx="102" cy="18" r="8" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
-            <circle cx="102" cy="18" r="2" fill="#ff3050"/>
-            <rect x="12" y="42" width="24" height="24" rx="4" fill="#ff3050" class="pad-f"/>
-            <rect x="40" y="42" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:.2s"/>
-            <rect x="68" y="42" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:.4s"/>
-            <rect x="96" y="42" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.6s"/>
-            <rect x="12" y="72" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.8s"/>
-            <rect x="40" y="72" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:1s"/>
-            <rect x="68" y="72" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:1.2s"/>
-            <rect x="96" y="72" width="24" height="24" rx="4" fill="#ff3050" class="pad-f" style="animation-delay:1.4s"/>
-            <circle cx="30" cy="110" r="9" fill="#1a1c26" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="65" cy="110" r="9" fill="#1a1c26" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="100" cy="110" r="9" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
-        </svg>
-        <!-- Faders -->
-        <svg viewBox="0 0 130 125" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="119" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <text x="65" y="16" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">MIXER</text>
-            <rect x="12" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="9" y="48" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s"/>
-            <rect x="32" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="29" y="38" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s" style="animation-delay:.3s"/>
-            <rect x="52" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="49" y="56" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.6s"/>
-            <rect x="72" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="69" y="42" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.9s"/>
-            <rect x="96" y="22" width="14" height="70" rx="3" fill="#0c0e16" stroke="#ff3050" stroke-width="1"/>
-            <rect x="93" y="35" width="20" height="16" rx="3" fill="#ff3050" class="fader-s" style="animation-delay:1.2s"/>
-            <text x="17" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">1</text>
-            <text x="37" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">2</text>
-            <text x="57" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">3</text>
-            <text x="77" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">4</text>
-            <text x="103" y="107" fill="#ff3050" font-size="7" text-anchor="middle" font-weight="bold">M</text>
-        </svg>
-        <!-- Synth Module -->
-        <svg viewBox="0 0 130 170" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="164" rx="8" fill="#13151e" stroke="#ff8c00" stroke-width="2"/>
-            <text x="65" y="18" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">SYNTH</text>
-            <circle cx="25" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="50" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="75" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="100" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="25" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="50" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="75" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="100" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <path d="M25,35 Q45,70 75,58" stroke="#ff3050" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <path d="M50,35 Q80,68 100,58" stroke="#ffb830" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <circle cx="35" cy="95" r="14" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
-            <line x1="35" y1="83" x2="35" y2="95" stroke="#ff8c00" stroke-width="2" class="knob-t" style="transform-origin:35px 95px;animation-delay:1s"/>
-            <circle cx="95" cy="95" r="14" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
-            <line x1="95" y1="83" x2="95" y2="95" stroke="#00c9a0" stroke-width="2" class="knob-t" style="transform-origin:95px 95px;animation-delay:2s"/>
-            <rect x="20" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-            <rect x="18" y="130" width="16" height="12" rx="2" fill="#ff8c00" class="fader-s"/>
-            <rect x="55" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-            <rect x="53" y="138" width="16" height="12" rx="2" fill="#00c9a0" class="fader-s" style="animation-delay:.5s"/>
-            <rect x="90" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-            <rect x="88" y="125" width="16" height="12" rx="2" fill="#ff3050" class="fader-s" style="animation-delay:1s"/>
-        </svg>
-        <!-- Mic -->
-        <svg viewBox="0 0 70 120" class="w-14 shrink-0">
-            <rect x="20" y="8" width="30" height="55" rx="15" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
-            <line x1="24" y1="18" x2="46" y2="18" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="24" x2="46" y2="24" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="30" x2="46" y2="30" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="36" x2="46" y2="36" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="42" x2="46" y2="42" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="48" x2="46" y2="48" stroke="#2a2c3a" stroke-width="1.2"/>
-            <circle cx="35" cy="58" r="4" fill="#ff3050" class="led-p"/>
-            <path d="M14,45 Q14,72 35,72 Q56,72 56,45" fill="none" stroke="#2a2c3a" stroke-width="2.5"/>
-            <line x1="35" y1="72" x2="35" y2="100" stroke="#2a2c3a" stroke-width="3"/>
-            <line x1="18" y1="100" x2="52" y2="100" stroke="#2a2c3a" stroke-width="4" stroke-linecap="round"/>
-            <ellipse cx="35" cy="108" rx="18" ry="6" fill="#13151e" stroke="#2a2c3a" stroke-width="1.5"/>
-        </svg>
-        <!-- Headphones -->
-        <svg viewBox="0 0 100 80" class="w-16 shrink-0">
-            <path d="M15,50 Q15,15 50,15 Q85,15 85,50" fill="none" stroke="#3a3c4a" stroke-width="7" stroke-linecap="round"/>
-            <rect x="5" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
-            <rect x="9" y="47" width="14" height="22" rx="5" fill="#13151e"/>
-            <rect x="73" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#00c9a0" stroke-width="2.5"/>
-            <rect x="77" y="47" width="14" height="22" rx="5" fill="#13151e"/>
-        </svg>
-        <!-- Speaker 2 -->
-        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
-            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
-            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p" style="animation-delay:.2s"/>
-            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
-            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
-            <circle cx="65" cy="178" r="4" fill="#ff3050" class="led-p" style="animation-delay:.5s"/>
-        </svg>
+<div id="boot" aria-hidden="true"><pre id="bootTxt"></pre><div class="bar"></div></div>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="scan" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"><span></span></div>
+<div id="flash" aria-hidden="true"><p></p></div>
+<div id="progress" aria-hidden="true"></div>
 
-        <!-- DUPLICATE set for seamless loop -->
-        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
-            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
-            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p"/>
-            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
-            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
-            <circle cx="65" cy="178" r="4" fill="#00ff80" class="led-p"/>
-        </svg>
-        <svg viewBox="0 0 130 95" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="89" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="28" cy="38" r="16" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
-            <line x1="28" y1="24" x2="28" y2="38" stroke="#ff8c00" stroke-width="2.5" class="knob-t" style="transform-origin:28px 38px"/>
-            <circle cx="65" cy="38" r="16" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
-            <line x1="65" y1="24" x2="65" y2="38" stroke="#00c9a0" stroke-width="2.5" class="knob-t" style="transform-origin:65px 38px;animation-delay:.7s"/>
-            <circle cx="102" cy="38" r="16" fill="#1a1c26" stroke="#ff3050" stroke-width="2"/>
-            <line x1="102" y1="24" x2="102" y2="38" stroke="#ff3050" stroke-width="2.5" class="knob-t" style="transform-origin:102px 38px;animation-delay:1.4s"/>
-            <text x="28" y="68" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">LOW</text>
-            <text x="65" y="68" fill="#00c9a0" font-size="7" text-anchor="middle" font-family="monospace">MID</text>
-            <text x="102" y="68" fill="#ff3050" font-size="7" text-anchor="middle" font-family="monospace">HI</text>
-        </svg>
-        <svg viewBox="0 0 100 150" class="w-20 shrink-0">
-            <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
-            <rect x="14" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b"/>
-            <rect x="14" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.1s"/>
-            <rect x="14" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.2s"/>
-            <rect x="14" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.3s"/>
-            <rect x="14" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.4s"/>
-            <rect x="72" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.15s"/>
-            <rect x="72" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.25s"/>
-            <rect x="72" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.35s"/>
-            <rect x="72" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.45s"/>
-            <rect x="72" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.55s"/>
-            <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle">L</text>
-            <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle">R</text>
-        </svg>
-        <svg viewBox="0 0 130 130" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="124" rx="10" fill="#13151e" stroke="#ff3050" stroke-width="2"/>
-            <rect x="14" y="12" width="72" height="22" rx="4" fill="#0c0e16"/>
-            <text x="50" y="27" fill="#00c9a0" font-size="10" text-anchor="middle" font-family="monospace">MPC</text>
-            <circle cx="102" cy="18" r="8" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
-            <rect x="12" y="42" width="24" height="24" rx="4" fill="#ff3050" class="pad-f"/>
-            <rect x="40" y="42" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:.2s"/>
-            <rect x="68" y="42" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:.4s"/>
-            <rect x="96" y="42" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.6s"/>
-            <rect x="12" y="72" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.8s"/>
-            <rect x="40" y="72" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:1s"/>
-            <rect x="68" y="72" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:1.2s"/>
-            <rect x="96" y="72" width="24" height="24" rx="4" fill="#ff3050" class="pad-f" style="animation-delay:1.4s"/>
-            <circle cx="30" cy="110" r="9" fill="#1a1c26" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="65" cy="110" r="9" fill="#1a1c26" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="100" cy="110" r="9" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
-        </svg>
-        <svg viewBox="0 0 130 125" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="119" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <text x="65" y="16" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">MIXER</text>
-            <rect x="12" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="9" y="48" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s"/>
-            <rect x="32" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="29" y="38" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s" style="animation-delay:.3s"/>
-            <rect x="52" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="49" y="56" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.6s"/>
-            <rect x="72" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-            <rect x="69" y="42" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.9s"/>
-            <rect x="96" y="22" width="14" height="70" rx="3" fill="#0c0e16" stroke="#ff3050" stroke-width="1"/>
-            <rect x="93" y="35" width="20" height="16" rx="3" fill="#ff3050" class="fader-s" style="animation-delay:1.2s"/>
-        </svg>
-        <svg viewBox="0 0 130 170" class="w-24 shrink-0">
-            <rect x="3" y="3" width="124" height="164" rx="8" fill="#13151e" stroke="#ff8c00" stroke-width="2"/>
-            <text x="65" y="18" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">SYNTH</text>
-            <circle cx="25" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="50" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="75" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="100" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-            <circle cx="25" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="50" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="75" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <circle cx="100" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-            <path d="M25,35 Q45,70 75,58" stroke="#ff3050" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <path d="M50,35 Q80,68 100,58" stroke="#ffb830" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <circle cx="35" cy="95" r="14" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
-            <circle cx="95" cy="95" r="14" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
-            <rect x="20" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-            <rect x="18" y="130" width="16" height="12" rx="2" fill="#ff8c00" class="fader-s"/>
-            <rect x="55" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-            <rect x="53" y="138" width="16" height="12" rx="2" fill="#00c9a0" class="fader-s" style="animation-delay:.5s"/>
-            <rect x="90" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-            <rect x="88" y="125" width="16" height="12" rx="2" fill="#ff3050" class="fader-s" style="animation-delay:1s"/>
-        </svg>
-        <svg viewBox="0 0 70 120" class="w-14 shrink-0">
-            <rect x="20" y="8" width="30" height="55" rx="15" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
-            <line x1="24" y1="18" x2="46" y2="18" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="24" x2="46" y2="24" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="30" x2="46" y2="30" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="36" x2="46" y2="36" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="42" x2="46" y2="42" stroke="#2a2c3a" stroke-width="1.2"/>
-            <line x1="24" y1="48" x2="46" y2="48" stroke="#2a2c3a" stroke-width="1.2"/>
-            <circle cx="35" cy="58" r="4" fill="#ff3050" class="led-p"/>
-            <path d="M14,45 Q14,72 35,72 Q56,72 56,45" fill="none" stroke="#2a2c3a" stroke-width="2.5"/>
-            <line x1="35" y1="72" x2="35" y2="100" stroke="#2a2c3a" stroke-width="3"/>
-            <line x1="18" y1="100" x2="52" y2="100" stroke="#2a2c3a" stroke-width="4" stroke-linecap="round"/>
-            <ellipse cx="35" cy="108" rx="18" ry="6" fill="#13151e" stroke="#2a2c3a" stroke-width="1.5"/>
-        </svg>
-        <svg viewBox="0 0 100 80" class="w-16 shrink-0">
-            <path d="M15,50 Q15,15 50,15 Q85,15 85,50" fill="none" stroke="#3a3c4a" stroke-width="7" stroke-linecap="round"/>
-            <rect x="5" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
-            <rect x="9" y="47" width="14" height="22" rx="5" fill="#13151e"/>
-            <rect x="73" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#00c9a0" stroke-width="2.5"/>
-            <rect x="77" y="47" width="14" height="22" rx="5" fill="#13151e"/>
-        </svg>
-        <svg viewBox="0 0 130 190" class="w-24 shrink-0">
-            <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
-            <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
-            <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p" style="animation-delay:.2s"/>
-            <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
-            <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
-            <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
-            <circle cx="65" cy="178" r="4" fill="#ff3050" class="led-p" style="animation-delay:.5s"/>
-        </svg>
+<header id="top">
+  <a href="#inicio" class="logo" aria-label="Gallegher Plus, inicio">G<i>+</i> <small>ARIEL DUTRIA</small></a>
+  <nav id="nav" aria-label="Secciones">
+    <ul>
+      <li><a href="#juegos">Juegos</a></li>
+      <li><a href="#lab">Lab</a></li>
+      <li><a href="#musica">Música</a></li>
+      <li><a href="#vivo">En vivo</a></li>
+      <li><a href="#cosmomedia">CosmoMedia</a></li>
+      <li><a href="#origen">Origen</a></li>
+    </ul>
+  </nav>
+  <div class="right">
+    <button id="modeBtn" class="mode mag" aria-pressed="true" aria-label="Cambiar entre Gallegher y Gallegher Plus" data-cursor="MUTAR">
+      <span class="m-s">Gallegher</span><span class="sw"></span><span class="m-p">Plus</span>
+    </button>
+    <button id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav"><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio">
+  <p class="kicker reveal">Música · Juegos · Arte digital</p>
+  <h1 class="title"><span class="sr">Gallegher Plus</span>
+    <span class="row1" id="word" aria-hidden="true">GALLEGHER</span>
+    <span class="row2">
+      <span class="plus" id="plusWord" aria-hidden="true">PLUS</span>
+      <span class="tag reveal" style="--d:.3s">Ariel Dutria <b>aka</b> Gallegher Plus — el científico de día, la máquina de hacer música cuando se suelta.</span>
+    </span>
+  </h1>
+  <div class="ctas reveal" style="--d:.45s">
+    <a href="#musica" class="cta mag" data-cursor="IR">Escuchar ↓</a>
+    <a href="ship.html" class="cta ghost mag" data-cursor="JUGAR">Jugar Starship</a>
+  </div>
+  
+
+  <div class="hero-foot">
+    <div class="hud">
+      <span>Modo: <b id="hudMode">PLUS</b></span>
+      <span>Señal: <b id="hudSig">▮▮▯▯▯</b></span>
+      <span>Cursor: <b id="hudXY">000 · 000</b></span>
     </div>
-</div>
+    <div class="scrollcue"><i></i>Scroll</div>
+  </div>
+</section>
 
+<div class="marquee" aria-hidden="true"><div class="trk" id="mq1"></div></div>
 
-<!-- ========== DESKTOP: LEFT RACK (fixed) ========== -->
-<div class="fixed left-0 top-0 bottom-0 w-36 xl:w-44 hidden lg:flex flex-col items-center justify-evenly py-6 bg-[#0c0e14] border-r-2 border-[#1a1c28] z-0 pointer-events-none">
-    <svg viewBox="0 0 130 190" class="w-28 xl:w-32">
-        <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
-        <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
-        <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
-        <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p"/>
-        <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
-        <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
-        <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
-        <circle cx="65" cy="178" r="4" fill="#00ff80" class="led-p"/>
-        <text x="65" y="148" fill="#3a3c4a" font-size="8" text-anchor="middle" font-family="monospace">STUDIO</text>
-    </svg>
-    <svg viewBox="0 0 130 95" class="w-28 xl:w-32">
-        <rect x="3" y="3" width="124" height="89" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <circle cx="28" cy="38" r="16" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
-        <line x1="28" y1="24" x2="28" y2="38" stroke="#ff8c00" stroke-width="2.5" class="knob-t" style="transform-origin:28px 38px"/>
-        <circle cx="65" cy="38" r="16" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
-        <line x1="65" y1="24" x2="65" y2="38" stroke="#00c9a0" stroke-width="2.5" class="knob-t" style="transform-origin:65px 38px;animation-delay:.7s"/>
-        <circle cx="102" cy="38" r="16" fill="#1a1c26" stroke="#ff3050" stroke-width="2"/>
-        <line x1="102" y1="24" x2="102" y2="38" stroke="#ff3050" stroke-width="2.5" class="knob-t" style="transform-origin:102px 38px;animation-delay:1.4s"/>
-        <text x="28" y="68" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">LOW</text>
-        <text x="65" y="68" fill="#00c9a0" font-size="7" text-anchor="middle" font-family="monospace">MID</text>
-        <text x="102" y="68" fill="#ff3050" font-size="7" text-anchor="middle" font-family="monospace">HIGH</text>
-        <text x="65" y="84" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">EQUALIZER</text>
-    </svg>
-    <svg viewBox="0 0 100 150" class="w-24 xl:w-28">
-        <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
-        <rect x="14" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b"/>
-        <rect x="14" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.1s"/>
-        <rect x="14" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.2s"/>
-        <rect x="14" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.3s"/>
-        <rect x="14" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.4s"/>
-        <rect x="72" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.15s"/>
-        <rect x="72" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.25s"/>
-        <rect x="72" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.35s"/>
-        <rect x="72" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.45s"/>
-        <rect x="72" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.55s"/>
-        <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle" font-family="monospace">L</text>
-        <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle" font-family="monospace">R</text>
-    </svg>
-    <svg viewBox="0 0 130 170" class="w-28 xl:w-32">
-        <rect x="3" y="3" width="124" height="164" rx="8" fill="#13151e" stroke="#ff8c00" stroke-width="2"/>
-        <text x="65" y="18" fill="#ff8c00" font-size="7" text-anchor="middle" font-family="monospace">SYNTH MOD</text>
-        <circle cx="25" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-        <circle cx="50" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-        <circle cx="75" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-        <circle cx="100" cy="35" r="8" fill="#0c0e16" stroke="#ff8c00" stroke-width="1.5"/>
-        <circle cx="25" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-        <circle cx="50" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-        <circle cx="75" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-        <circle cx="100" cy="58" r="8" fill="#0c0e16" stroke="#00c9a0" stroke-width="1.5"/>
-        <path d="M25,35 Q45,70 75,58" stroke="#ff3050" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <path d="M50,35 Q80,68 100,58" stroke="#ffb830" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <circle cx="35" cy="95" r="14" fill="#1a1c26" stroke="#ff8c00" stroke-width="2"/>
-        <line x1="35" y1="83" x2="35" y2="95" stroke="#ff8c00" stroke-width="2" class="knob-t" style="transform-origin:35px 95px;animation-delay:1s"/>
-        <circle cx="95" cy="95" r="14" fill="#1a1c26" stroke="#00c9a0" stroke-width="2"/>
-        <line x1="95" y1="83" x2="95" y2="95" stroke="#00c9a0" stroke-width="2" class="knob-t" style="transform-origin:95px 95px;animation-delay:2s"/>
-        <rect x="20" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-        <rect x="18" y="130" width="16" height="12" rx="2" fill="#ff8c00" class="fader-s"/>
-        <rect x="55" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-        <rect x="53" y="138" width="16" height="12" rx="2" fill="#00c9a0" class="fader-s" style="animation-delay:.5s"/>
-        <rect x="90" y="120" width="12" height="35" rx="3" fill="#0c0e16"/>
-        <rect x="88" y="125" width="16" height="12" rx="2" fill="#ff3050" class="fader-s" style="animation-delay:1s"/>
-    </svg>
-    <svg viewBox="0 0 100 80" class="w-24 xl:w-28">
-        <path d="M15,50 Q15,15 50,15 Q85,15 85,50" fill="none" stroke="#3a3c4a" stroke-width="7" stroke-linecap="round"/>
-        <rect x="5" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
-        <rect x="9" y="47" width="14" height="22" rx="5" fill="#13151e"/>
-        <rect x="73" y="42" width="22" height="32" rx="8" fill="#1a1c26" stroke="#00c9a0" stroke-width="2.5"/>
-        <rect x="77" y="47" width="14" height="22" rx="5" fill="#13151e"/>
-    </svg>
-</div>
-
-<!-- ========== DESKTOP: RIGHT RACK (fixed) ========== -->
-<div class="fixed right-0 top-0 bottom-0 w-36 xl:w-44 hidden lg:flex flex-col items-center justify-evenly py-6 bg-[#0c0e14] border-l-2 border-[#1a1c28] z-0 pointer-events-none">
-    <svg viewBox="0 0 130 190" class="w-28 xl:w-32">
-        <rect x="4" y="4" width="122" height="182" rx="10" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <circle cx="65" cy="38" r="14" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2"/>
-        <circle cx="65" cy="38" r="7" fill="#1a1c26"/>
-        <circle cx="65" cy="100" r="38" fill="#0c0e16" stroke="#2a2c3a" stroke-width="2.5"/>
-        <circle cx="65" cy="100" r="28" fill="#10121a" class="spk-p" style="animation-delay:.1s"/>
-        <circle cx="65" cy="100" r="16" fill="#1a1c26"/>
-        <circle cx="65" cy="100" r="6" fill="#2a2c3a"/>
-        <rect x="38" y="152" width="54" height="12" rx="6" fill="#0c0e16" stroke="#2a2c3a" stroke-width="1.5"/>
-        <circle cx="65" cy="178" r="4" fill="#ff3050" class="led-p" style="animation-delay:.5s"/>
-        <text x="65" y="148" fill="#3a3c4a" font-size="8" text-anchor="middle" font-family="monospace">STUDIO</text>
-    </svg>
-    <svg viewBox="0 0 130 125" class="w-28 xl:w-32">
-        <rect x="3" y="3" width="124" height="119" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <text x="65" y="16" fill="#3a3c4a" font-size="6" text-anchor="middle" font-family="monospace">MIXER</text>
-        <rect x="12" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-        <rect x="9" y="48" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s"/>
-        <rect x="32" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-        <rect x="29" y="38" width="16" height="14" rx="3" fill="#00c9a0" class="fader-s" style="animation-delay:.3s"/>
-        <rect x="52" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-        <rect x="49" y="56" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.6s"/>
-        <rect x="72" y="22" width="10" height="70" rx="3" fill="#0c0e16"/>
-        <rect x="69" y="42" width="16" height="14" rx="3" fill="#ffb830" class="fader-s" style="animation-delay:.9s"/>
-        <rect x="96" y="22" width="14" height="70" rx="3" fill="#0c0e16" stroke="#ff3050" stroke-width="1.5"/>
-        <rect x="93" y="35" width="20" height="16" rx="3" fill="#ff3050" class="fader-s" style="animation-delay:1.2s"/>
-        <text x="17" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">1</text>
-        <text x="37" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">2</text>
-        <text x="57" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">3</text>
-        <text x="77" y="107" fill="#3a3c4a" font-size="7" text-anchor="middle">4</text>
-        <text x="103" y="107" fill="#ff3050" font-size="7" text-anchor="middle" font-weight="bold">M</text>
-    </svg>
-    <svg viewBox="0 0 100 150" class="w-24 xl:w-28">
-        <rect x="3" y="3" width="94" height="144" rx="8" fill="#13151e" stroke="#2a2c3a" stroke-width="2.5"/>
-        <text x="50" y="18" fill="#3a3c4a" font-size="7" text-anchor="middle" font-family="monospace">LEVEL</text>
-        <rect x="14" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.2s"/>
-        <rect x="14" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.3s"/>
-        <rect x="14" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.4s"/>
-        <rect x="14" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.5s"/>
-        <rect x="14" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.6s"/>
-        <rect x="72" y="100" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.3s"/>
-        <rect x="72" y="78" width="14" height="20" rx="2" fill="#00c9a0" class="vu-b" style="animation-delay:.4s"/>
-        <rect x="72" y="56" width="14" height="20" rx="2" fill="#ffb830" class="vu-b" style="animation-delay:.5s"/>
-        <rect x="72" y="36" width="14" height="18" rx="2" fill="#ff8c00" class="vu-b" style="animation-delay:.6s"/>
-        <rect x="72" y="22" width="14" height="12" rx="2" fill="#ff3050" class="vu-b" style="animation-delay:.7s"/>
-        <text x="21" y="134" fill="#00c9a0" font-size="9" text-anchor="middle" font-family="monospace">L</text>
-        <text x="79" y="134" fill="#ff8c00" font-size="9" text-anchor="middle" font-family="monospace">R</text>
-    </svg>
-    <svg viewBox="0 0 130 130" class="w-28 xl:w-32">
-        <rect x="3" y="3" width="124" height="124" rx="10" fill="#13151e" stroke="#ff3050" stroke-width="2"/>
-        <rect x="14" y="12" width="72" height="22" rx="4" fill="#0c0e16" stroke="#1a1c26" stroke-width="1"/>
-        <text x="50" y="27" fill="#00c9a0" font-size="10" text-anchor="middle" font-family="monospace">MPC-3000</text>
-        <circle cx="102" cy="18" r="8" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
-        <circle cx="102" cy="18" r="2" fill="#ff3050"/>
-        <rect x="12" y="42" width="24" height="24" rx="4" fill="#ff3050" class="pad-f"/>
-        <rect x="40" y="42" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:.2s"/>
-        <rect x="68" y="42" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:.4s"/>
-        <rect x="96" y="42" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.6s"/>
-        <rect x="12" y="72" width="24" height="24" rx="4" fill="#00c9a0" class="pad-f" style="animation-delay:.8s"/>
-        <rect x="40" y="72" width="24" height="24" rx="4" fill="#ffb830" class="pad-f" style="animation-delay:1s"/>
-        <rect x="68" y="72" width="24" height="24" rx="4" fill="#ff8c00" class="pad-f" style="animation-delay:1.2s"/>
-        <rect x="96" y="72" width="24" height="24" rx="4" fill="#ff3050" class="pad-f" style="animation-delay:1.4s"/>
-        <circle cx="30" cy="110" r="9" fill="#1a1c26" stroke="#ff8c00" stroke-width="1.5"/>
-        <circle cx="65" cy="110" r="9" fill="#1a1c26" stroke="#00c9a0" stroke-width="1.5"/>
-        <circle cx="100" cy="110" r="9" fill="#1a1c26" stroke="#ff3050" stroke-width="1.5"/>
-    </svg>
-    <svg viewBox="0 0 70 120" class="w-16 xl:w-20">
-        <rect x="20" y="8" width="30" height="55" rx="15" fill="#1a1c26" stroke="#ff8c00" stroke-width="2.5"/>
-        <line x1="24" y1="18" x2="46" y2="18" stroke="#2a2c3a" stroke-width="1.2"/>
-        <line x1="24" y1="24" x2="46" y2="24" stroke="#2a2c3a" stroke-width="1.2"/>
-        <line x1="24" y1="30" x2="46" y2="30" stroke="#2a2c3a" stroke-width="1.2"/>
-        <line x1="24" y1="36" x2="46" y2="36" stroke="#2a2c3a" stroke-width="1.2"/>
-        <line x1="24" y1="42" x2="46" y2="42" stroke="#2a2c3a" stroke-width="1.2"/>
-        <line x1="24" y1="48" x2="46" y2="48" stroke="#2a2c3a" stroke-width="1.2"/>
-        <circle cx="35" cy="58" r="4" fill="#ff3050" class="led-p"/>
-        <path d="M14,45 Q14,72 35,72 Q56,72 56,45" fill="none" stroke="#2a2c3a" stroke-width="2.5"/>
-        <line x1="35" y1="72" x2="35" y2="100" stroke="#2a2c3a" stroke-width="3"/>
-        <line x1="18" y1="100" x2="52" y2="100" stroke="#2a2c3a" stroke-width="4" stroke-linecap="round"/>
-        <ellipse cx="35" cy="108" rx="18" ry="6" fill="#13151e" stroke="#2a2c3a" stroke-width="1.5"/>
-    </svg>
-</div>
-
-
-<!-- ========== MAIN CONTENT ========== -->
-<div class="flex justify-center">
-<div class="text-center p-8 w-full max-w-lg relative z-10 pt-6 lg:pt-12">
-
-    <h1 class="text-5xl md:text-7xl font-bold text-[#e8e0d0] mb-4 animate-pulse">
-        Ariel Dutria
-    </h1>
-    <p class="text-2xl md:text-4xl text-[#ffb830] font-light tracking-widest">
-        aka
-    </p>
-    <h2 class="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-[#ff8c00] via-[#00c9a0] to-[#ff3050] bg-clip-text text-transparent mt-4 animate-flow">
-        Gallegher Plus
-    </h2>
-
-    <!-- Equalizer -->
-    <div class="mt-8 h-12 flex justify-center items-end space-x-1.5 p-2 bg-[#0c0e14] rounded-lg border border-[#2a2c3a]">
-        <div class="w-2 bg-[#00c9a0] rounded-t eq-bar" style="animation-duration:.4s"></div>
-        <div class="w-2 bg-[#00c9a0] rounded-t eq-bar" style="animation-duration:.7s"></div>
-        <div class="w-2 bg-[#ffb830] rounded-t eq-bar" style="animation-duration:.5s"></div>
-        <div class="w-2 bg-[#ff8c00] rounded-t eq-bar" style="animation-duration:.6s"></div>
-        <div class="w-2 bg-[#ff3050] rounded-t eq-bar" style="animation-duration:.3s"></div>
-        <div class="w-2 bg-[#ff3050] rounded-t eq-bar" style="animation-duration:.8s"></div>
+<!-- ============ JUEGOS ============ -->
+<section id="juegos">
+  <div class="sh reveal">
+    <span class="num">01 /</span><h2 data-scramble>Juegos</h2>
+    <p>El científico también programa. Gallegher Starship: shooter espacial para navegador, teclado, joystick o touch.</p>
+  </div>
+  <div class="game">
+    <a href="ship.html" class="shot tilt reveal" data-cursor="JUGAR">
+      <div class="inner">
+        <img src="https://drive.google.com/thumbnail?id=1McWdKxyppi_2QvhbKY5Z3LSdF9SkWYN9&sz=w1000" alt="Captura de Gallegher Starship" loading="lazy">
+        <div class="glare"></div>
+        <div class="lbl"><span style="margin-left:auto">Jugar ▶</span></div>
+      </div>
+    </a>
+    <div class="controls reveal" style="--d:.1s">
+      <h3>Controles / Controls</h3>
+      <div class="ctl">
+        <strong>PC · Teclado</strong>
+        <div class="keys">
+          <span class="key"><span class="cap" data-key="a">A</span>Disparo</span>
+          <span class="key"><span class="cap" data-key="s">S</span>Bomba</span>
+          <span class="key"><span class="cap" data-key="d">D</span>Inicia juego</span>
+        </div>
+      </div>
+      <div class="ctl">
+        <strong>Joystick USB</strong>
+        <div class="keys">
+          <span class="key"><span class="cap">✚</span>D-Pad / Stick: mover</span>
+          <span class="key"><span class="cap">1</span>Inicio · Disparo</span>
+          <span class="key"><span class="cap">2</span>Bomba</span>
+        </div>
+      </div>
+      <div class="ctl">
+        <strong>Mobile · Touch</strong>
+        <div class="keys">
+          <span class="key"><span class="cap">☝</span>Arrastrá el dedo para mover la nave</span>
+          <span class="key"><span class="cap">✦</span>Tocá la pantalla para tirar bomba</span>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="mt-12 w-full flex flex-col items-center">
-        
-        <!-- JUEGOS -->
-        <div class="w-full max-w-sm mb-12 space-y-4">
-            <h3 class="text-center text-[#00c9a0] font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-[#00c9a0]/30 pb-2">Juegos / Games</h3>
-            
-            <a href="ship.html" class="group relative flex flex-col items-center justify-center p-2 border border-[#2a2c3a] rounded-2xl bg-[#0c0e14] hover:bg-[#13151e] transition-all duration-300 hover:scale-[1.02] hover:border-[#ff8c00]/50 overflow-hidden shadow-lg">
-                <div class="w-full relative">
-                    <img src="https://drive.google.com/thumbnail?id=1McWdKxyppi_2QvhbKY5Z3LSdF9SkWYN9&sz=w1000" alt="Gallegher Starship" class="w-full h-auto rounded-xl opacity-90 group-hover:opacity-100 transition-opacity duration-300 border border-[#1a1c28]">
-                </div>
-                <span class="py-3 text-lg font-bold text-[#e8e0d0] group-hover:text-[#ff8c00] tracking-widest uppercase transition-colors duration-300">
-                    Gallegher Starship Game
-                </span>
-            </a>
-
-            <div class="w-full p-4 rounded-xl bg-[#0c0e14] border border-[#2a2c3a] text-[#a0a0b0] text-xs md:text-sm">
-                <h4 class="text-[#ffb830] font-bold mb-3 uppercase tracking-wider text-center border-b border-[#2a2c3a] pb-2">Controles / Controls</h4>
-                <div class="grid grid-cols-1 gap-4 text-center md:text-left">
-                    <div class="flex items-start space-x-2">
-                        <span class="text-lg">⌨️</span>
-                        <div>
-                            <strong class="text-[#ff8c00] block text-xs uppercase mb-1">PC (Teclado)</strong>
-                            <p class="opacity-90 leading-relaxed">
-                                <span class="text-[#e8e0d0] font-mono bg-[#1a1c26] px-1 rounded border border-[#2a2c3a]">A</span> Disparo &nbsp;|&nbsp; 
-                                <span class="text-[#e8e0d0] font-mono bg-[#1a1c26] px-1 rounded border border-[#2a2c3a]">S</span> Bomba &nbsp;|&nbsp; 
-                                <span class="text-[#e8e0d0] font-mono bg-[#1a1c26] px-1 rounded border border-[#2a2c3a]">D</span> Inicia juego
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-2">
-                        <span class="text-lg">🎮</span>
-                        <div>
-                            <strong class="text-[#00c9a0] block text-xs uppercase mb-1">Joystick USB</strong>
-                            <p class="opacity-90 leading-relaxed">
-                                <span class="text-[#e8e0d0] font-mono bg-[#1a1c26] px-1 rounded border border-[#2a2c3a]">D-Pad/Stick</span> Mover &nbsp;|&nbsp; 
-                                <span class="text-[#e8e0d0] font-mono bg-[#1a1c26] px-1 rounded border border-[#2a2c3a]">1</span> Inicio - Disparo &nbsp;|&nbsp; 
-                                <span class="text-[#e8e0d0] font-mono bg-[#1a1c26] px-1 rounded border border-[#2a2c3a]">2</span> Bomba
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-2">
-                        <span class="text-lg">📱</span>
-                        <div>
-                            <strong class="text-[#ffb830] block text-xs uppercase mb-1">Mobile / Touch</strong>
-                            <p class="opacity-90 leading-relaxed">
-                                <span class="text-[#e8e0d0]">Dedo</span> para Mover la nave.<br>
-                                <span class="text-[#e8e0d0]">Tocar pantalla</span> para tirar Bomba.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MÚSICA -->
-        <div class="w-full max-w-md space-y-8 flex flex-col items-center">
-            <h3 class="text-center text-[#ff8c00] font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-[#ff8c00]/30 pb-2 w-full">Música / Music</h3>
-
-            <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=1489493561/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/track=4237668646/transparent=true/" seamless><a href="https://cphnkx.bandcamp.com/album/ciberdelia-volumen-1">Ciberdelia</a></iframe>
-            </div>
-
-            <div class="flex flex-col items-center space-y-3 w-full">
-                <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=4057325407/size=large/bgcol=333333/linkcol=e99708/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/primer-contacto-2004">Primer contacto (2004)</a></iframe>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="https://youtube.com/playlist?list=OLAK5uy_nrEjrRcBOILy38SARUEDkCd9nv5VgrSn4&si=NnfcsC-kusukIrRx" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#ff3050]/50 rounded-full hover:bg-[#ff3050]/20 transition-colors text-[#e8e0d0] text-sm">
-                        <span class="text-lg">▶</span><span>YouTube</span>
-                    </a>
-                    <a href="https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
-                        <span class="text-lg">●</span><span>Spotify</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="flex flex-col items-center space-y-3 w-full pt-4">
-                <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3420605549/size=large/bgcol=333333/linkcol=2ebd35/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/star-ship-2006">Star ship (2006)</a></iframe>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="https://www.youtube.com/watch?v=Xzj6FCUvNvQ&list=OLAK5uy_kWYNbMMdMSJtbek_C_rsr42WxI2VwOjXk" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#ff3050]/50 rounded-full hover:bg-[#ff3050]/20 transition-colors text-[#e8e0d0] text-sm">
-                        <span class="text-lg">▶</span><span>YouTube</span>
-                    </a>
-                    <a href="https://open.spotify.com/intl-es/album/30VWqubwOLIcyitfQQKfPO" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
-                        <span class="text-lg">●</span><span>Spotify</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="flex flex-col items-center space-y-3 w-full pt-4">
-                <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2744310584/size=large/bgcol=333333/linkcol=4ec5ec/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/i-will-leave-them-the-new-habits-2007">I will leave them the new habits (2007)</a></iframe>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="https://open.spotify.com/intl-es/album/6cD6wQLYulaEasUkPTJqOj" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-[#13151e] border border-[#00c9a0]/50 rounded-full hover:bg-[#00c9a0]/20 transition-colors text-[#e8e0d0] text-sm">
-                        <span class="text-lg">●</span><span>Spotify</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff8c00]/30 hover:border-[#ff8c00]/60 transition-all duration-300">
-                <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gallegherplus&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
-            </div>
-
-            <div class="w-full flex flex-col items-center space-y-2">
-                <p class="text-[#ff8c00] text-xs font-bold tracking-[0.15em] uppercase opacity-80">I Have a Problem (Gallegher Plus ReMake) · emiliaNO (AR)</p>
-                <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff3050]/30 hover:border-[#ff3050]/60 transition-all duration-300 aspect-video">
-                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/87Pg9DTzjpc" title="I Have a Problem (Gallegher Plus ReMake) · emiliaNO (AR)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </div>
-            </div>
-
-            <!-- VIDEO: Digital Bj - Fleetly -->
-            <div class="w-full flex flex-col items-center space-y-2">
-                <p class="text-[#ff8c00] text-xs font-bold tracking-[0.15em] uppercase opacity-80">Digital Bj - Fleetly</p>
-                <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff3050]/30 hover:border-[#ff3050]/60 transition-all duration-300 aspect-video">
-                    <iframe width="100%" height="100%" src="https://drive.google.com/file/d/1pUHHROvfYZpw3Mc_8_eu_QRt4IPxN7gL/preview" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                </div>
-            </div>
-
-            <div class="rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=479373965/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008">Artificial intelligence (2008)</a></iframe>
-            </div>
-            
-            <div class="w-full rounded-xl overflow-hidden shadow-lg border border-[#2a2c3a] bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border:0;width:100%;height:120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3486002417/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/track=1055934601/transparent=true/" seamless><a href="https://cosmocumples.bandcamp.com/album/40-a-os-en-el-mismo-sistema-solar">40 años en el mismo Sistema Solar</a></iframe>
-            </div>
-
-            <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff3050]/30 bg-[#0c0e14] transition-transform hover:scale-[1.01] duration-300">
-                <iframe width="100%" height="520" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_840307?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_840307" style="width:0px;min-width:100%;max-width:100%;"></iframe>
-            </div>
-        </div>
-
-        <!-- GRABACIONES EN VIVO -->
-        <div class="w-full max-w-md space-y-6 mt-16 mb-4 flex flex-col items-center">
-            <h3 class="text-center text-[#ff3050] font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-[#ff3050]/30 pb-2 w-full">Grabaciones en vivo</h3>
-            
-            <div class="rounded-xl overflow-hidden shadow-lg border border-[#ff3050]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=421278355/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://elacustico.bandcamp.com/album/gallegher-plus">El Acústico</a></iframe>
-            </div>
-
-            <div class="rounded-xl overflow-hidden shadow-lg border border-[#ff3050]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=2308284593/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011">Live in Loser Party (2011)</a></iframe>
-            </div>
-
-            <!-- VIDEO 1: Diente De Sierra -->
-            <div class="w-full flex flex-col items-center space-y-2">
-                <p class="text-[#ff3050] text-xs font-bold tracking-[0.15em] uppercase opacity-80">Diente De Sierra: Live In Room en The Music Store</p>
-                <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[#ff3050]/30 hover:border-[#ff3050]/60 transition-all duration-300 aspect-video">
-                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/cCBDiIYllNw?si=p-v78oMuZ8os93xp" title="Diente De Sierra: Live In Room en The Music Store" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                </div>
-            </div>
-
-
-        </div>
-
-        <!-- COSMOMEDIA COLECTIVO -->
-        <div class="w-full max-w-md space-y-6 mt-16 mb-16">
-            <h3 class="text-center text-[#ffb830] font-bold mb-6 uppercase tracking-[0.2em] text-sm border-b border-[#ffb830]/30 pb-2">CosmoMedia Colectivo</h3>
-            
-            <div class="flex flex-col items-center space-y-8 w-full">
-                <div class="rounded-xl overflow-hidden shadow-lg border border-[#ffb830]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=3756104505/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-1">CosmoMedia Vol. 1</a></iframe>
-                </div>
-
-                <div class="rounded-xl overflow-hidden shadow-lg border border-[#ffb830]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=15350491/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-2">CosmoMedia Vol. 2</a></iframe>
-                </div>
-
-                <div class="rounded-xl overflow-hidden shadow-lg border border-[#ffb830]/30 bg-[#0c0e14] transition-transform hover:scale-[1.02] duration-300">
-                    <iframe style="border:0;width:350px;height:470px;" src="https://bandcamp.com/EmbeddedPlayer/album=134645260/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/" seamless><a href="https://cosmomediacolectivo.bandcamp.com/album/intervenci-n-audiovisual-en-vivo">Intervención Audiovisual en vivo</a></iframe>
-                </div>
-            </div>
-        </div>
-
+<!-- ============ LAB ============ -->
+<section id="lab">
+  <div class="sh reveal">
+    <span class="num">02 /</span><h2 data-scramble>Laboratorio</h2>
+    <p>Un secuenciador que vive en la página. Tocá los pads en vivo o programá tu propio patrón en la grilla: hacé clic (o arrastrá) sobre las celdas. Todo se sintetiza en tu navegador y el patrón queda guardado.</p>
+  </div>
+  <div class="device reveal">
+    <div class="screen"><canvas id="scope"></canvas><div class="lcd"><span>G+ · LAB-01</span><span id="lcdPad">LISTO</span></div></div>
+    <div class="labgrid">
+      <div class="pads" id="pads"></div>
+      <div class="seqwrap"><div class="rows" id="rows" aria-label="Secuenciador de 16 pasos"></div></div>
     </div>
-</div>
-</div>
+    <div class="transport">
+      <button id="seqBtn" aria-pressed="false">▶ Reproducir</button>
+      <button id="recBtn" aria-pressed="false" title="Mientras suena, lo que toques en los pads se graba en la grilla">● Grabar</button>
+      <label class="bpm">BPM <input type="range" id="bpm" min="70" max="170" step="1" value="118"><output id="bpmOut">118</output></label>
+      <span class="tsp"></span>
+      <button id="demoBtn">Demo</button>
+      <button id="randBtn">Aleatorio</button>
+      <button id="clearBtn">Borrar</button>
+    </div>
+  </div>
+  <div class="keys labkeys reveal">
+    <span class="key"><kbd>1</kbd>–<kbd>8</kbd> pads</span>
+    <span class="key"><kbd>Espacio</kbd> reproducir / detener (con el lab a la vista)</span>
+    <span class="key"><kbd>R</kbd> grabar</span>
+    <span class="key"><kbd>P</kbd> transformación</span>
+  </div>
+</section>
+
+<!-- ============ MÚSICA ============ -->
+<section id="musica">
+  <div class="sh reveal">
+    <span class="num">03 /</span><h2 data-scramble>Música</h2>
+    <p>Discos de estudio y colaboraciones. Tocá una portada para cargar el reproductor.</p>
+  </div>
+  <div class="grid" id="discos"></div>
+  <h3 class="subh reveal">Videos y más</h3>
+  <div class="vgrid">
+    <figure class="video reveal">
+      <div class="vbox"><button class="vf" data-yt="87Pg9DTzjpc" data-cursor="PLAY" aria-label="Ver I Have a Problem (Gallegher Plus ReMake)">
+        <img src="https://i.ytimg.com/vi/87Pg9DTzjpc/hqdefault.jpg" alt="" loading="lazy"><span class="playbtn">▶</span></button></div>
+      <figcaption><b>Remake</b> I Have a Problem (Gallegher Plus ReMake) · emiliaNO (AR)</figcaption>
+    </figure>
+    <figure class="video reveal" style="--d:.1s">
+      <div class="vbox"><button class="vf" data-src="https://drive.google.com/file/d/1pUHHROvfYZpw3Mc_8_eu_QRt4IPxN7gL/preview" data-cursor="PLAY" aria-label="Ver Digital Bj - Fleetly">
+        <span class="gen"><span>Fleetly</span></span><span class="playbtn">▶</span></button></div>
+      <figcaption><b>Video</b> Digital Bj — Fleetly</figcaption>
+    </figure>
+  </div>
+  <div class="wide">
+    <div class="embed reveal" style="--hgt:300px;--h:var(--orange)">
+      <button class="load" data-src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gallegherplus&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true" data-cursor="PLAY">
+        <span class="playbtn">▶</span><small>SoundCloud</small><strong>gallegherplus</strong>
+      </button>
+    </div>
+    <div class="embed reveal" style="--hgt:520px;--h:var(--red);--d:.1s">
+      <button class="load" data-src="https://www.reverbnation.com/widget_code/html_widget/artist_840307?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_840307" data-cursor="PLAY">
+        <span class="playbtn">▶</span><small>ReverbNation</small><strong>Archivo de temas</strong>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="marquee rev" aria-hidden="true"><div class="trk" id="mq2"></div></div>
+
+<!-- ============ EN VIVO ============ -->
+<section id="vivo">
+  <div class="sh reveal">
+    <span class="num">04 /</span><h2 data-scramble>En vivo</h2>
+    <p>Grabaciones en vivo: sin red, sin edición, con todo el ruido del lugar.</p>
+  </div>
+  <div class="grid" id="vivoDiscos"></div>
+  <div class="vgrid" style="margin-top:clamp(18px,2.4vw,30px)">
+    <figure class="video reveal">
+      <div class="vbox"><button class="vf" data-yt="cCBDiIYllNw" data-cursor="PLAY" aria-label="Ver Diente De Sierra: Live In Room">
+        <img src="https://i.ytimg.com/vi/cCBDiIYllNw/hqdefault.jpg" alt="" loading="lazy"><span class="playbtn">▶</span></button></div>
+      <figcaption><b>Live</b> Diente De Sierra: Live In Room en The Music Store</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ COSMOMEDIA ============ -->
+<section id="cosmomedia">
+  <div class="sh reveal">
+    <span class="num">05 /</span><h2 data-scramble>CosmoMedia</h2>
+    <p>CosmoMedia Colectivo: compilados e intervenciones audiovisuales en vivo.</p>
+  </div>
+  <div class="grid" id="cosmoDiscos"></div>
+</section>
+
+<!-- ============ ORIGEN ============ -->
+<section id="origen">
+  <div class="sh reveal">
+    <span class="num">06 /</span><h2 data-scramble>Dos mentes</h2>
+    <p>Un laboratorio, dos personajes. Mové el cursor sobre el panel para pasar de uno al otro.</p>
+  </div>
+
+  <div class="split reveal" id="split">
+    <div class="layer l-sobrio">
+      <div class="txt">
+        <span class="role">// el científico</span>
+        <h3>Gallegher</h3>
+        <p>En los cuentos de Henry Kuttner, Gallegher es un inventor brillante que sobrio no entiende ni la mitad de lo que construyó.</p>
+        <p>Acá Gallegher es Ariel Dutria: el que investiga, programa, diseña juegos y arma las máquinas.</p>
+      </div>
+      <svg class="schem" viewBox="0 0 300 300" fill="none" stroke="#00c9a0" stroke-width="1">
+        <circle cx="150" cy="150" r="110" stroke-dasharray="4 6"/>
+        <circle cx="150" cy="150" r="64"/>
+        <path d="M150 20v40M150 240v40M20 150h40M240 150h40"/>
+        <rect x="118" y="118" width="64" height="64" rx="6"/>
+        <path d="M118 135h-30v-40h-25M182 165h30v40h25M135 118V80h40V55M165 182v38h-40v25"/>
+        <circle cx="63" cy="95" r="5"/><circle cx="237" cy="205" r="5"/><circle cx="175" cy="55" r="5"/><circle cx="125" cy="245" r="5"/>
+        <text x="150" y="155" fill="#00c9a0" stroke="none" font-size="10" text-anchor="middle" font-family="monospace">G-01</text>
+      </svg>
+    </div>
+    <div class="layer l-plus">
+      <div class="rings" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i></div>
+      <div class="txt">
+        <span class="role">el músico //</span>
+        <h3>Gallegher Plus</h3>
+        <p>Plus es la otra mitad: el subconsciente desatado que compone, samplea, improvisa en vivo y firma los discos.</p>
+        <p>Un Jekyll &amp; Hyde de laboratorio, con un robot vanidoso mirando desde el rincón.</p>
+      </div>
+    </div>
+    <div class="divider" aria-hidden="true"><b>⇆</b></div>
+  </div>
+  <p class="note reveal">Inspirado en <em>«Gallegher Plus»</em> (1943), cuento de Henry Kuttner publicado como Lewis Padgett, junto a C. L. Moore. Más tarde se incluyó en la colección <em>Robots Have No Tails</em>.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="fbig" aria-hidden="true">GALLEGHER+</div>
+  <div class="frow">
+    <span>© <span id="yr"></span> Ariel Dutria · Gallegher Plus · Hecho en el laboratorio.</span>
+    <div class="links">
+      <a href="https://gallegherplus.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a>
+      <a href="https://soundcloud.com/gallegherplus" target="_blank" rel="noopener">SoundCloud</a>
+      <a href="https://www.reverbnation.com/artist/840307" target="_blank" rel="noopener">ReverbNation</a>
+      <a href="https://cosmomediacolectivo.bandcamp.com" target="_blank" rel="noopener">CosmoMedia</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(pointer: fine)').matches;
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+document.documentElement.classList.add('js');
+$('#yr').textContent = new Date().getFullYear();
+
+/* ================= datos ================= */
+const C = { orange:'#ff8c00', teal:'#00c9a0', red:'#ff3050', amber:'#ffb830', blue:'#5ab8ff' };
+const DISCOS = [
+  { t:'Primer Contacto', y:'2004', sub:'Álbum de estudio', id:'4057325407', c:C.orange,
+    bc:'https://gallegherplus.bandcamp.com/album/primer-contacto-2004',
+    sp:'https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s',
+    yt:'https://youtube.com/playlist?list=OLAK5uy_nrEjrRcBOILy38SARUEDkCd9nv5VgrSn4&si=NnfcsC-kusukIrRx' },
+  { t:'Star Ship', y:'2006', sub:'Álbum de estudio', id:'3420605549', c:C.teal,
+    bc:'https://gallegherplus.bandcamp.com/album/star-ship-2006',
+    sp:'https://open.spotify.com/intl-es/album/30VWqubwOLIcyitfQQKfPO',
+    yt:'https://www.youtube.com/watch?v=Xzj6FCUvNvQ&list=OLAK5uy_kWYNbMMdMSJtbek_C_rsr42WxI2VwOjXk' },
+  { t:'I Will Leave Them the New Habits', y:'2007', sub:'Álbum de estudio', id:'2744310584', c:C.blue,
+    bc:'https://gallegherplus.bandcamp.com/album/i-will-leave-them-the-new-habits-2007',
+    sp:'https://open.spotify.com/intl-es/album/6cD6wQLYulaEasUkPTJqOj' },
+  { t:'Artificial Intelligence', y:'2008', sub:'Álbum de estudio', id:'479373965', c:C.red,
+    bc:'https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008' },
+  { t:'Ciberdelia Vol. 1', y:'VA', sub:'Compilado', id:'1489493561', track:'4237668646', c:C.amber,
+    bc:'https://cphnkx.bandcamp.com/album/ciberdelia-volumen-1' },
+  { t:'40 años en el mismo Sistema Solar', y:'VA', sub:'Compilado', id:'3486002417', track:'1055934601', c:C.orange,
+    bc:'https://cosmocumples.bandcamp.com/album/40-a-os-en-el-mismo-sistema-solar' }
+];
+const VIVO = [
+  { t:'El Acústico', y:'LIVE', sub:'Grabación en vivo', id:'421278355', c:C.red,
+    bc:'https://elacustico.bandcamp.com/album/gallegher-plus' },
+  { t:'Live in Loser Party', y:'2011', sub:'Grabación en vivo', id:'2308284593', c:C.amber,
+    bc:'https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011' }
+];
+const COSMO = [
+  { t:'CosmoMedia Vol. 1', y:'VA', sub:'CosmoMedia Colectivo', id:'3756104505', c:C.amber,
+    bc:'https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-1' },
+  { t:'CosmoMedia Vol. 2', y:'VA', sub:'CosmoMedia Colectivo', id:'15350491', c:C.teal,
+    bc:'https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-2' },
+  { t:'Intervención Audiovisual en vivo', y:'LIVE', sub:'CosmoMedia Colectivo', id:'134645260', c:C.red,
+    bc:'https://cosmomediacolectivo.bandcamp.com/album/intervenci-n-audiovisual-en-vivo' }
+];
+
+// pseudo-random determinístico por álbum, para que cada portada generativa sea siempre igual
+function rng(seed) { let s = seed % 2147483647 || 1; return () => (s = s * 16807 % 2147483647) / 2147483647; }
+const esc = s => s.replace(/[&<>"]/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[ch]));
+
+function albumHTML(a, i) {
+  const r = rng(+a.id);
+  const bars = Array.from({ length: 28 }, (_, k) => `<i style="--v:${(15 + r() * 85).toFixed(0)}%;--k:${k}"></i>`).join('');
+  const links = [
+    a.bc && `<a href="${a.bc}" target="_blank" rel="noopener">Bandcamp</a>`,
+    a.sp && `<a href="${a.sp}" target="_blank" rel="noopener">Spotify</a>`,
+    a.yt && `<a href="${a.yt}" target="_blank" rel="noopener">YouTube</a>`
+  ].filter(Boolean).join('');
+  return `<article class="album tilt reveal" style="--h:${a.c};--d:${(i % 3) * .08}s">
+    <div class="card">
+      <div class="cover">
+        <button class="load" data-album="${a.id}" data-track="${a.track || ''}" data-cursor="PLAY" aria-label="Cargar reproductor de ${esc(a.t)}">
+          <span class="art" style="--cx:${(20 + r() * 60).toFixed(0)}%;--cy:${(15 + r() * 45).toFixed(0)}%;--ang:${(r() * 360).toFixed(0)}deg"></span>
+          <span class="yr">${a.y}</span><span class="playbtn">▶</span>
+          <span class="big">${esc(a.t)}</span><span class="wave">${bars}</span>
+        </button>
+        <span class="glare"></span>
+      </div>
+      <div class="meta"><h3>${esc(a.t)}</h3><p class="sub">${a.sub}</p><div class="links">${links}</div></div>
+    </div>
+  </article>`;
+}
+$('#discos').innerHTML = DISCOS.map(albumHTML).join('');
+$('#vivoDiscos').innerHTML = VIVO.map(albumHTML).join('');
+$('#cosmoDiscos').innerHTML = COSMO.map(albumHTML).join('');
+
+const WORDS = ['Laboratorio', 'Ciberdelia', 'Star Ship', 'Starship', 'Primer Contacto', 'Live', 'CosmoMedia', 'Kuttner', 'Joe el robot', 'Artificial Intelligence'];
+const mq = WORDS.map(w => `<span>${w}</span><em>✦</em>`).join('');
+$('#mq1').innerHTML = mq + mq;
+$('#mq2').innerHTML = [...WORDS].reverse().map(w => `<span>${w}</span><em>+</em>`).join('').repeat(2);
+
+/* ================= reproductores (carga diferida) ================= */
+document.addEventListener('click', e => {
+  const b = e.target.closest('.load, .vf');
+  if (!b) return;
+  const f = document.createElement('iframe');
+  f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+  f.allowFullscreen = true;
+  if (b.dataset.album) {
+    const link = getMode() === 'plus' ? 'ff8c00' : '00c9a0';
+    f.src = `https://bandcamp.com/EmbeddedPlayer/album=${b.dataset.album}/size=large/bgcol=333333/linkcol=${link}/tracklist=false/${b.dataset.track ? 'track=' + b.dataset.track + '/' : ''}transparent=true/`;
+    f.title = b.getAttribute('aria-label').replace('Cargar reproductor de ', '');
+    const al = b.closest('.album'); al.classList.add('loaded'); al.style.removeProperty('--rx'); al.style.removeProperty('--ry');
+  } else if (b.dataset.yt) {
+    f.src = `https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1`;
+    f.title = b.getAttribute('aria-label');
+  } else {
+    f.src = b.dataset.src;
+    f.title = b.getAttribute('aria-label') || 'Reproductor';
+    f.scrolling = 'no';
+  }
+  b.replaceWith(f);
+  setHover(false);
+});
+
+/* ================= modo: Gallegher / Gallegher Plus ================= */
+const root = document.documentElement;
+const getMode = () => root.dataset.mode;
+const flash = $('#flash');
+function setMode(m, ev) {
+  root.dataset.mode = m;
+  $('#modeBtn').setAttribute('aria-pressed', m === 'plus');
+  $('#hudMode').textContent = m === 'plus' ? 'PLUS' : 'CIENTÍFICO';
+  store.set('gp-mode', m);
+  if (!ev) return;
+  scramble($('#plusWord'), 'PLUS', 650);
+  if (reduce) return;
+  flash.style.setProperty('--fx', (ev.clientX ?? innerWidth / 2) + 'px');
+  flash.style.setProperty('--fy', (ev.clientY ?? innerHeight / 2) + 'px');
+  $('p', flash).textContent = m === 'plus' ? 'Fórmula ingerida · Gallegher Plus en línea' : 'Sobriedad restaurada · modo científico';
+  flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
+  document.body.classList.remove('glitch'); void document.body.offsetWidth; document.body.classList.add('glitch');
+  energy += 2.5;
+  if (actx) (m === 'plus' ? S.zap : S.joe)(actx.currentTime);
+}
+setMode(store.get('gp-mode') === 'sobrio' ? 'sobrio' : 'plus');
+const toggle = ev => setMode(getMode() === 'plus' ? 'sobrio' : 'plus', ev);
+$('#modeBtn').addEventListener('click', toggle);
+
+/* ================= boot ================= */
+const boot = $('#boot');
+let booted = false;
+function endBoot() { if (booted) return; booted = true; boot.classList.add('done'); $$('#inicio .reveal').forEach(el => el.classList.add('in')); }
+let seen = false; try { seen = !!sessionStorage.getItem('gp-boot'); } catch (e) {}
+if (reduce || seen) { boot.style.display = 'none'; booted = true; }
+else {
+  try { sessionStorage.setItem('gp-boot', '1'); } catch (e) {}
+  const lines = ['> encendiendo laboratorio de G. Gallegher…', '> calibrando subconsciente ........ <b>OK</b>', '> cargando fórmula [Plus] ........... <b>OK</b>', '> Joe el robot se está mirando al espejo.'];
+  let i = 0;
+  const tick = () => { if (booted) return; $('#bootTxt').innerHTML += lines[i++] + '\n'; if (i < lines.length) setTimeout(tick, 280); };
+  tick();
+  setTimeout(endBoot, 1650);
+  boot.addEventListener('click', endBoot);
+}
+
+/* ================= scramble ================= */
+const GLYPHS = '!<>-_\\/[]{}—=+*^?#01ΔΣΩ';
+function scramble(el, final, dur = 800) {
+  if (reduce) { el.textContent = final; return; }
+  const t0 = performance.now();
+  const step = now => {
+    const p = Math.min(1, (now - t0) / dur);
+    el.textContent = [...final].map((ch, i) => (ch === ' ' || i < p * final.length) ? ch : GLYPHS[Math.random() * GLYPHS.length | 0]).join('');
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+$('#plusWord').addEventListener('pointerenter', e => scramble(e.target, 'PLUS', 500));
+
+/* ================= revelado al hacer scroll ================= */
+const io = new IntersectionObserver(entries => entries.forEach(en => {
+  if (!en.isIntersecting) return;
+  const el = en.target;
+  if (el.closest('#inicio') && !booted) return;
+  el.classList.add('in');
+  const h = $('[data-scramble]', el);
+  if (h) scramble(h, h.textContent, 900);
+  io.unobserve(el);
+}), { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+$$('.reveal').forEach(el => io.observe(el));
+
+/* ================= título reactivo ================= */
+const word = $('#word');
+word.innerHTML = [...word.textContent].map(ch => `<span>${ch}</span>`).join('');
+const letters = $$('span', word);
+// el título siempre ocupa exactamente el ancho disponible
+const title = $('.title');
+function fitTitle() {
+  title.style.setProperty('--fs', '100px');
+  const avail = $('#inicio').clientWidth - parseFloat(getComputedStyle($('#inicio')).paddingLeft) * 2;
+  title.style.setProperty('--fs', Math.min(230, 100 * avail / word.scrollWidth * .98).toFixed(1) + 'px');
+}
+fitTitle();
+addEventListener('resize', fitTitle);
+document.fonts && document.fonts.ready.then(fitTitle);
+
+/* ================= mouse global ================= */
+const mouse = { x: innerWidth / 2, y: innerHeight * .4, on: false };
+const cur = $('#cur'), ring = $('#ring'), ringTxt = $('span', ring);
+let rx = mouse.x, ry = mouse.y;
+function setHover(on, label) {
+  document.body.classList.toggle('cursor-hover', on);
+  ringTxt.textContent = on ? (label || '') : '';
+}
+if (fine) {
+  document.body.classList.add('has-cursor');
+  addEventListener('pointermove', e => {
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    if (!mouse.on) { mouse.on = true; document.body.classList.add('cursor-on'); rx = mouse.x; ry = mouse.y; }
+    cur.style.transform = `translate(${mouse.x}px,${mouse.y}px)`;
+  }, { passive: true });
+  document.addEventListener('mouseleave', () => { mouse.on = false; document.body.classList.remove('cursor-on'); });
+  document.addEventListener('mouseover', e => {
+    if (e.target.tagName === 'IFRAME') { document.body.classList.remove('cursor-on'); mouse.on = false; return; }
+    const t = e.target.closest('a, button, [data-cursor]');
+    setHover(!!t, t && t.dataset.cursor);
+  });
+} else {
+  addEventListener('pointerdown', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+}
+
+// botones magnéticos
+if (fine && !reduce) $$('.mag').forEach(el => {
+  el.addEventListener('pointermove', e => {
+    const r = el.getBoundingClientRect();
+    el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px,${(e.clientY - r.top - r.height / 2) * .35}px)`;
+  });
+  el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  el.style.transition = 'transform .4s cubic-bezier(.2,.8,.2,1), background .3s, color .3s, border-color .4s';
+});
+
+// tarjetas con inclinación 3D
+if (fine && !reduce) document.addEventListener('pointermove', e => {
+  const el = e.target.closest('.tilt');
+  $$('.tilt.tilting').forEach(t => { if (t !== el) { t.classList.remove('tilting'); t.style.setProperty('--rx', '0deg'); t.style.setProperty('--ry', '0deg'); } });
+  if (!el || el.classList.contains('loaded')) return;
+  el.classList.add('tilting');
+  const r = el.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+  el.style.setProperty('--rx', (-y * 9).toFixed(2) + 'deg');
+  el.style.setProperty('--ry', (x * 11).toFixed(2) + 'deg');
+  el.style.setProperty('--gx', ((x + .5) * 100).toFixed(1) + '%');
+  el.style.setProperty('--gy', ((y + .5) * 100).toFixed(1) + '%');
+}, { passive: true });
+
+// panel dividido científico / músico
+const split = $('#split');
+split.addEventListener('pointermove', e => {
+  const r = split.getBoundingClientRect();
+  split.style.setProperty('--x', Math.max(4, Math.min(96, (e.clientX - r.left) / r.width * 100)) + '%');
+});
+split.addEventListener('pointerleave', () => split.style.setProperty('--x', '50%'));
+
+/* ================= nav, scroll ================= */
+const header = $('#top'), prog = $('#progress');
+const navLinks = $$('nav a');
+let lastY = scrollY, skew = 0;
+function onScroll() {
+  const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+  prog.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+  header.classList.toggle('solid', y > 40);
+  root.style.setProperty('--fieldO', y > innerHeight * .8 ? .35 : 1);
+  if (!reduce) skew += (y - lastY) * .04;
+  lastY = y;
+}
+addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+const secIO = new IntersectionObserver(es => es.forEach(en => {
+  if (en.isIntersecting) navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id));
+}), { rootMargin: '-45% 0px -50% 0px' });
+$$('main section[id]').forEach(s => secIO.observe(s));
+
+const nav = $('#nav'), menuBtn = $('#menuBtn');
+menuBtn.addEventListener('click', () => { const o = nav.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', o); });
+navLinks.forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); }));
+
+/* ================= audio: sonidos sintetizados ================= */
+let actx, master, analyser, tdata, nbuf;
+function ensureAudio() {
+  if (!actx) {
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+    master = actx.createGain(); master.gain.value = .6;
+    const comp = actx.createDynamicsCompressor();
+    analyser = actx.createAnalyser(); analyser.fftSize = 1024;
+    master.connect(comp).connect(analyser).connect(actx.destination);
+    tdata = new Uint8Array(analyser.fftSize);
+    nbuf = actx.createBuffer(1, actx.sampleRate, actx.sampleRate);
+    const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  if (actx.state === 'suspended') actx.resume();
+}
+function env(g, t, v, dur) { g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + dur); }
+function tone(t, type, f, dur, v, f2) {
+  const o = actx.createOscillator(), g = actx.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t);
+  if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+  env(g, t, v, dur); o.connect(g).connect(master); o.start(t); o.stop(t + dur + .05);
+}
+function noise(t, dur, type, freq, v) {
+  const s = actx.createBufferSource(), f = actx.createBiquadFilter(), g = actx.createGain();
+  s.buffer = nbuf; f.type = type; f.frequency.value = freq;
+  env(g, t, v, dur); s.connect(f).connect(g).connect(master); s.start(t, Math.random() * .5); s.stop(t + dur + .05);
+}
+const PENTA = [440, 523.25, 587.33, 659.25, 783.99, 880];
+const S = {
+  kick:  t => tone(t, 'sine', 160, .42, 1, 40),
+  snare: t => { noise(t, .2, 'highpass', 1200, .7); tone(t, 'triangle', 190, .1, .35); },
+  hat:   t => noise(t, .05, 'highpass', 7000, .35),
+  clap:  t => [0, .012, .026].forEach(d => noise(t + d, .1, 'bandpass', 1500, .7)),
+  bass:  t => {
+    const o = actx.createOscillator(), f = actx.createBiquadFilter(), g = actx.createGain();
+    o.type = 'sawtooth'; o.frequency.value = 55; f.type = 'lowpass'; f.Q.value = 8;
+    f.frequency.setValueAtTime(2200, t); f.frequency.exponentialRampToValueAtTime(110, t + .28);
+    env(g, t, .55, .34); o.connect(f).connect(g).connect(master); o.start(t); o.stop(t + .4);
+  },
+  bleep: t => tone(t, 'square', PENTA[Math.random() * PENTA.length | 0], .14, .16),
+  zap:   t => tone(t, 'sine', 1500, .28, .4, 60),
+  joe:   t => [880, 1320, 660, 1760].forEach((f, i) => tone(t + i * .06, 'square', f, .05, .1))
+};
+const PADS = [
+  { n:'kick', label:'PULSO', c:C.orange }, { n:'snare', label:'IMPACTO', c:C.red },
+  { n:'hat', label:'CHISPA', c:C.amber }, { n:'clap', label:'ECO', c:C.teal },
+  { n:'bass', label:'ONDA', c:C.orange }, { n:'bleep', label:'SEÑAL', c:C.blue },
+  { n:'zap', label:'RAYO', c:C.red }, { n:'joe', label:'JOE', c:C.teal }
+];
+const LABEL = Object.fromEntries(PADS.map(p => [p.n, p.label]));
+$('#pads').innerHTML = PADS.map((p, i) => `<button class="pad" data-pad="${p.n}" style="--pc:${p.c}" aria-label="Pad ${p.label} (tecla ${i + 1})"><span>${p.label}</span><small>${i + 1}</small></button>`).join('');
+const padEls = Object.fromEntries($$('.pad').map(el => [el.dataset.pad, el]));
+function flashPad(n) {
+  const el = padEls[n]; if (!el) return;
+  el.classList.remove('hit'); void el.offsetWidth; el.classList.add('hit');
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('hit'), 110);
+  $('#lcdPad').textContent = LABEL[n];
+  energy += n === 'kick' ? .9 : .45;
+}
+function hit(n) {
+  ensureAudio(); S[n](actx.currentTime); flashPad(n);
+  if (seqOn && recOn) { setCell(PADS.findIndex(p => p.n === n), nearestStep(), true); saveGrid(); }
+}
+$('#pads').addEventListener('pointerdown', e => { const p = e.target.closest('.pad'); if (p) { e.preventDefault(); hit(p.dataset.pad); } });
+$('#pads').addEventListener('keydown', e => { const p = e.target.closest('.pad'); if (p && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); hit(p.dataset.pad); } });
+
+// secuenciador programable: 8 pistas x 16 pasos, agenda de Web Audio (lookahead)
+const DEMO = {
+  kick:[0, 6, 8, 11], snare:[4, 12], hat:[2, 6, 10, 14, 15], clap:[12],
+  bass:[0, 3, 7, 10], bleep:[5, 13], zap:[15], joe:[]
+};
+const DENSITY = { kick:.3, snare:.12, hat:.45, clap:.1, bass:.25, bleep:.15, zap:.06, joe:.05 };
+const fromDemo = () => PADS.map(p => Array.from({ length: 16 }, (_, i) => DEMO[p.n].includes(i)));
+let grid;
+try { grid = JSON.parse(store.get('gp-pattern')); } catch (e) {}
+if (!Array.isArray(grid) || grid.length !== 8 || !grid.every(r => Array.isArray(r) && r.length === 16)) grid = fromDemo();
+let bpm = Math.min(170, Math.max(70, +store.get('gp-bpm') || 118));
+
+$('#rows').innerHTML = PADS.map((p, r) => `<div class="row" style="--pc:${p.c}"><span class="rl">${p.label}</span>${
+  Array.from({ length: 16 }, (_, i) => `<button class="cell${i % 4 === 0 ? ' q' : ''}" data-r="${r}" data-s="${i}" aria-label="${p.label}, paso ${i + 1}"></button>`).join('')
+}</div>`).join('');
+const cells = PADS.map((_, r) => $$(`.cell[data-r="${r}"]`));
+const saveGrid = () => store.set('gp-pattern', JSON.stringify(grid));
+function setCell(r, i, on) { grid[r][i] = on; cells[r][i].setAttribute('aria-pressed', on); }
+function paintGrid() { grid.forEach((row, r) => row.forEach((on, i) => setCell(r, i, !!on))); saveGrid(); }
+paintGrid();
+
+// clic para activar / desactivar; con el mouse, arrastrar pinta varias celdas
+let painting = null;
+$('#rows').addEventListener('pointerdown', e => {
+  const c = e.target.closest('.cell'); if (!c) return;
+  const r = +c.dataset.r, i = +c.dataset.s, on = !grid[r][i];
+  setCell(r, i, on); saveGrid();
+  if (on && !seqOn) { ensureAudio(); S[PADS[r].n](actx.currentTime); flashPad(PADS[r].n); }
+  if (e.pointerType === 'mouse') { e.preventDefault(); painting = on; }
+});
+$('#rows').addEventListener('pointerover', e => {
+  const c = e.target.closest('.cell'); if (painting === null || !c) return;
+  setCell(+c.dataset.r, +c.dataset.s, painting); saveGrid();
+});
+addEventListener('pointerup', () => { painting = null; });
+$('#rows').addEventListener('keydown', e => {
+  const c = e.target.closest('.cell'); if (!c || (e.key !== 'Enter' && e.key !== ' ')) return;
+  e.preventDefault(); e.stopPropagation();
+  const r = +c.dataset.r, i = +c.dataset.s;
+  setCell(r, i, !grid[r][i]); saveGrid();
+});
+
+const bpmIn = $('#bpm'), bpmOut = $('#bpmOut');
+bpmIn.value = bpmOut.textContent = bpm;
+bpmIn.addEventListener('input', () => { bpm = +bpmIn.value; bpmOut.textContent = bpm; store.set('gp-bpm', bpm); });
+$('#demoBtn').addEventListener('click', () => { grid = fromDemo(); paintGrid(); });
+$('#clearBtn').addEventListener('click', () => { grid = PADS.map(() => Array(16).fill(false)); paintGrid(); });
+$('#randBtn').addEventListener('click', () => {
+  grid = PADS.map(p => Array.from({ length: 16 }, (_, i) => Math.random() < DENSITY[p.n] * (i % 4 === 0 ? 1.8 : 1)));
+  paintGrid();
+});
+
+let seqOn = false, recOn = false, step = 0, nextT = 0, seqTimer, shown = -1;
+const stepTimes = [];
+function showStep(s) {
+  if (shown >= 0) cells.forEach(row => row[shown].classList.remove('now'));
+  shown = s;
+  if (s >= 0) cells.forEach(row => row[s].classList.add('now'));
+}
+// el paso agendado más cercano al momento en que se tocó el pad
+function nearestStep() {
+  const now = actx.currentTime;
+  let best = 0, d = Infinity;
+  stepTimes.forEach((t, i) => { if (Math.abs(t - now) < d) { d = Math.abs(t - now); best = i; } });
+  return best;
+}
+function schedule() {
+  while (nextT < actx.currentTime + .12) {
+    const s = step, t = nextT, delay = Math.max(0, (t - actx.currentTime) * 1000);
+    stepTimes[s] = t;
+    PADS.forEach((p, r) => { if (grid[r][s]) { S[p.n](t); setTimeout(() => flashPad(p.n), delay); } });
+    setTimeout(() => { if (seqOn) showStep(s); }, delay);
+    nextT += 60 / bpm / 4; step = (step + 1) % 16;
+  }
+}
+function setSeq(on) {
+  seqOn = on;
+  $('#seqBtn').setAttribute('aria-pressed', on);
+  $('#seqBtn').textContent = on ? '■ Detener' : '▶ Reproducir';
+  clearInterval(seqTimer);
+  if (on) { ensureAudio(); step = 0; stepTimes.length = 0; nextT = actx.currentTime + .06; seqTimer = setInterval(schedule, 25); }
+  else { showStep(-1); if (recOn) setRec(false); }
+}
+function setRec(on) { recOn = on; $('#recBtn').setAttribute('aria-pressed', on); if (on && !seqOn) setSeq(true); }
+$('#seqBtn').addEventListener('click', () => setSeq(!seqOn));
+$('#recBtn').addEventListener('click', () => setRec(!recOn));
+document.addEventListener('visibilitychange', () => { if (document.hidden && seqOn) setSeq(false); });
+
+function level() {
+  if (!analyser) return 0;
+  analyser.getByteTimeDomainData(tdata);
+  let sum = 0; for (let i = 0; i < tdata.length; i += 4) { const v = (tdata[i] - 128) / 128; sum += v * v; }
+  return Math.sqrt(sum / (tdata.length / 4));
+}
+
+/* ================= teclado ================= */
+let labVisible = false;
+new IntersectionObserver(([en]) => { labVisible = en.isIntersecting; }, { threshold: .3 }).observe($('#lab'));
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+  const k = e.key.toLowerCase();
+  if (k >= '1' && k <= '8') hit(PADS[+k - 1].n);
+  else if (k === 'p' && !e.repeat) toggle({ clientX: mouse.x, clientY: mouse.y });
+  else if (k === ' ' && labVisible && !e.target.closest('button, a, input')) { e.preventDefault(); setSeq(!seqOn); }
+  else if (k === 'r' && labVisible && !e.repeat) setRec(!recOn);
+  const cap = $(`.cap[data-key="${k}"]`); if (cap) cap.classList.add('down');
+});
+addEventListener('keyup', e => { const cap = $(`.cap[data-key="${e.key.toLowerCase()}"]`); if (cap) cap.classList.remove('down'); });
+
+/* ================= campo de partículas (fondo) ================= */
+const cv = $('#field'), g = cv.getContext('2d');
+let W, H, P = [], energy = 0;
+const PAL = { plus:['#ff8c00', '#ff3050', '#ffb830'], sobrio:['#00c9a0', '#5ab8ff', '#e8e0d0'] };
+function resize() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const n = Math.round(Math.min(150, W * H / (fine ? 9000 : 16000)));
+  P = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4, r: Math.random() * 1.6 + .5, c: Math.random() * 3 | 0 }));
+}
+addEventListener('resize', resize);
+resize();
+
+function rgba(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${n >> 8 & 255},${n & 255},${a})`; }
+
+function drawGrid() {
+  g.strokeStyle = 'rgba(0,201,160,.05)'; g.lineWidth = 1;
+  g.beginPath();
+  for (let x = 0; x < W; x += 48) { g.moveTo(x + .5, 0); g.lineTo(x + .5, H); }
+  for (let y = 0; y < H; y += 48) { g.moveTo(0, y + .5); g.lineTo(W, y + .5); }
+  g.stroke();
+  if (!fine || !mouse.on) return;
+  g.strokeStyle = 'rgba(0,201,160,.35)';
+  g.beginPath(); g.moveTo(mouse.x, 0); g.lineTo(mouse.x, H); g.moveTo(0, mouse.y); g.lineTo(W, mouse.y); g.stroke();
+  g.beginPath(); g.arc(mouse.x, mouse.y, 26, 0, Math.PI * 2); g.stroke();
+  g.fillStyle = 'rgba(0,201,160,.8)'; g.font = '10px "IBM Plex Mono", monospace';
+  g.fillText(`x:${mouse.x | 0}  y:${mouse.y | 0}`, mouse.x + 34, mouse.y - 10);
+}
+function drawWaves(t) {
+  const base = H * .64, amp = 18 + energy * 60;
+  ['#ff8c00', '#ff3050', '#00c9a0'].forEach((col, k) => {
+    g.strokeStyle = rgba(col, .22 + Math.min(energy, 1) * .3); g.lineWidth = 1.2;
+    g.beginPath();
+    for (let x = 0; x <= W; x += 6) {
+      const pull = mouse.on || !fine ? Math.exp(-((x - mouse.x) ** 2) / (2 * 120 * 120)) * (mouse.y - base) * .55 : 0;
+      const y = base + k * 14 + Math.sin(x * .008 * (k + 1) + t * .0016 * (k + 1)) * amp * Math.sin(t * .0005 + k * 2) + pull;
+      x ? g.lineTo(x, y) : g.moveTo(x, y);
+    }
+    g.stroke();
+  });
+}
+
+let hudT = 0;
+function frame(t) {
+  energy = Math.min(4, Math.max(energy * .93, level() * 4));
+  const plus = getMode() === 'plus', pal = PAL[plus ? 'plus' : 'sobrio'];
+  g.clearRect(0, 0, W, H);
+  plus ? drawWaves(t) : drawGrid();
+
+  const R = 150, jitter = plus ? .05 + energy * .35 : .015 + energy * .1;
+  for (const p of P) {
+    if (mouse.on || !fine) {
+      const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+      if (d2 < R * R) { const d = Math.sqrt(d2) || 1, f = (1 - d / R) * (plus ? 1.4 : .7); p.vx += dx / d * f; p.vy += dy / d * f; }
+    }
+    p.vx = p.vx * .95 + (Math.random() - .5) * jitter;
+    p.vy = p.vy * .95 + (Math.random() - .5) * jitter + (plus ? 0 : -.006);
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < -10) p.x = W + 10; else if (p.x > W + 10) p.x = -10;
+    if (p.y < -10) p.y = H + 10; else if (p.y > H + 10) p.y = -10;
+  }
+  const L = plus ? 120 : 100;
+  g.lineWidth = .7;
+  for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+    const a = P[i], b = P[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+    if (d2 < L * L) { g.strokeStyle = rgba(pal[a.c], (1 - Math.sqrt(d2) / L) * .28); g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke(); }
+  }
+  const boost = 1 + Math.min(energy, 2) * .8;
+  for (const p of P) { g.fillStyle = pal[p.c]; g.beginPath(); g.arc(p.x, p.y, p.r * boost, 0, Math.PI * 2); g.fill(); }
+
+  // título: las letras se levantan hacia el cursor
+  const lit = [];
+  for (const el of letters) {
+    const r = el.getBoundingClientRect();
+    const d = Math.hypot(mouse.x - (r.left + r.width / 2), mouse.y - (r.top + r.height / 2));
+    lit.push(fine && !mouse.on ? 0 : Math.max(0, 1 - d / 320));
+  }
+  letters.forEach((el, i) => {
+    const p = lit[i] + Math.min(energy, 1.5) * .15 * Math.sin(t * .01 + i);
+    el.style.setProperty('--ty', (-p * 0.12).toFixed(3) + 'em');
+    el.style.setProperty('--sy', (1 + p * .08).toFixed(3));
+    el.style.setProperty('--p', Math.max(0, Math.min(1, lit[i] * 1.2)).toFixed(2));
+  });
+
+  // marquesina: se inclina según la velocidad de scroll
+  skew *= .88;
+  root.style.setProperty('--skew', Math.max(-4, Math.min(4, skew)).toFixed(2));
+
+  if (t - hudT > 90) {
+    hudT = t;
+    const lv = Math.min(5, Math.round(1 + energy * 2));
+    $('#hudSig').textContent = '▮'.repeat(lv) + '▯'.repeat(5 - lv);
+    $('#hudXY').textContent = String(mouse.x | 0).padStart(3, '0') + ' · ' + String(mouse.y | 0).padStart(3, '0');
+  }
+  drawScope();
+  if (!reduce) requestAnimationFrame(frame);
+}
+
+/* ================= osciloscopio del lab ================= */
+const sc = $('#scope'), sg = sc.getContext('2d');
+function sizeScope() { const r = sc.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2); sc.width = r.width * dpr; sc.height = r.height * dpr; sg.setTransform(dpr, 0, 0, dpr, 0, 0); }
+addEventListener('resize', sizeScope);
+sizeScope();
+function drawScope() {
+  if (!labVisible) return;
+  const w = sc.clientWidth, h = sc.clientHeight, col = getMode() === 'plus' ? '#ff8c00' : '#00c9a0';
+  sg.clearRect(0, 0, w, h);
+  sg.strokeStyle = 'rgba(255,255,255,.06)'; sg.beginPath();
+  for (let x = 0; x < w; x += 24) { sg.moveTo(x, 0); sg.lineTo(x, h); }
+  sg.moveTo(0, h / 2); sg.lineTo(w, h / 2); sg.stroke();
+  sg.strokeStyle = col; sg.lineWidth = 1.6; sg.shadowColor = col; sg.shadowBlur = 8;
+  sg.beginPath();
+  if (analyser) {
+    analyser.getByteTimeDomainData(tdata);
+    for (let i = 0; i < tdata.length; i++) { const x = i / (tdata.length - 1) * w, y = h / 2 + (tdata[i] - 128) / 128 * h * .42 + 8; i ? sg.lineTo(x, y) : sg.moveTo(x, y); }
+  } else { sg.moveTo(0, h / 2 + 8); sg.lineTo(w, h / 2 + 8); }
+  sg.stroke(); sg.shadowBlur = 0;
+}
+
+requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>

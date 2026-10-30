@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es" data-mode="plus">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ariel Dutria aka Gallegher Plus</title>
+<meta name="description" content="Música, juegos y arte digital de Gallegher Plus / CosmoMedia Colectivo">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ariel Dutria aka Gallegher Plus">
+<meta property="og:description" content="Música, juegos y arte digital de Gallegher Plus / CosmoMedia Colectivo">
+<meta property="og:image" content="https://gallegherplus.github.io/og-site.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://gallegherplus.github.io/">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ariel Dutria aka Gallegher Plus">
+<meta name="twitter:description" content="Música, juegos y arte digital de Gallegher Plus / CosmoMedia Colectivo">
+<meta name="twitter:image" content="https://gallegherplus.github.io/og-site.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   TOKENS — dos modos: "lab" (Gallegher) y "plus" (Gallegher Plus)
+   Para cambiar colores, tocá solo este bloque.
+   ========================================================= */
+:root{
+  --font-display:'Unbounded',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --orange:#ff8c00; --teal:#00c9a0; --red:#ff3050; --amber:#ffb830; --cream:#e8e0d0;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+html[data-mode="plus"]{
+  --bg:#07080c; --bg2:#0d0f14; --panel:#101219; --line:#23263a;
+  --text:#e8e0d0; --muted:#8c8fa5;
+  --accent:#ff3050; --accent2:#ff8c00;
+}
+html[data-mode="lab"]{
+  --bg:#06191d; --bg2:#0a2329; --panel:#0c2a31; --line:#17525a;
+  --text:#d9f3ee; --muted:#6fa8a6;
+  --accent:#00c9a0; --accent2:#ffb830;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font-mono);
+  line-height:1.6;overflow-x:hidden;transition:background .6s var(--ease),color .6s var(--ease);
+}
+a{color:inherit}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* cursor custom (solo con mouse) */
+@media (hover:hover) and (pointer:fine){
+  body.has-cursor, body.has-cursor a, body.has-cursor button{cursor:none}
+}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90}
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:100;border-radius:50%;opacity:0;transition:opacity .3s}
+.cursor-dot{width:8px;height:8px;background:var(--accent);margin:-4px 0 0 -4px}
+.cursor-ring{width:38px;height:38px;border:1.5px solid var(--accent2);margin:-19px 0 0 -19px;transition:width .25s var(--ease),height .25s var(--ease),margin .25s var(--ease),opacity .3s,background .25s}
+.cursor-ring.big{width:66px;height:66px;margin:-33px 0 0 -33px;background:color-mix(in srgb,var(--accent) 18%,transparent)}
+body.has-cursor .cursor-dot,body.has-cursor .cursor-ring{opacity:1}
+
+/* barra de progreso estilo VU */
+#progress{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);z-index:95;
+  background:linear-gradient(90deg,var(--teal),var(--amber),var(--orange),var(--red))}
+
+/* ===== NAV ===== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;
+  padding:14px clamp(16px,4vw,48px);backdrop-filter:blur(10px);background:color-mix(in srgb,var(--bg) 70%,transparent);
+  border-bottom:1px solid var(--line);transition:background .6s}
+.logo{font-family:var(--font-display);font-weight:900;font-size:1.1rem;text-decoration:none;letter-spacing:.04em}
+.logo b{color:var(--accent)}
+.nav-links{display:flex;gap:clamp(10px,2vw,26px);font-size:.72rem;text-transform:uppercase;letter-spacing:.14em}
+.nav-links a{text-decoration:none;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--accent2)}
+.mode{display:flex;align-items:center;gap:10px;background:none;border:0;color:var(--text);font:inherit;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase}
+.mode svg{width:42px;height:42px;touch-action:none}
+.mode .knob-body{fill:var(--panel);stroke:var(--accent2);stroke-width:2}
+.mode .knob-line{stroke:var(--accent);stroke-width:3;stroke-linecap:round;transition:transform .35s var(--ease);transform-origin:21px 21px}
+@media (max-width:760px){.nav-links{display:none}}
+
+/* ===== HERO dividido ===== */
+.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;--split:50%;touch-action:pan-y;background:#000}
+.layer{position:absolute;inset:0;display:grid;place-items:center;padding:90px 20px 60px}
+.layer.lab{
+  clip-path:inset(0 calc(100% - var(--split)) 0 0);
+  background:
+    linear-gradient(rgba(0,201,160,.13) 1px,transparent 1px) 0 0/40px 40px,
+    linear-gradient(90deg,rgba(0,201,160,.13) 1px,transparent 1px) 0 0/40px 40px,
+    radial-gradient(circle at 30% 40%,#0c3a42,#06191d 70%);
+  color:#d9f3ee;
+}
+.layer.plus{
+  clip-path:inset(0 0 0 var(--split));
+  background:
+    radial-gradient(circle at 75% 30%,rgba(255,48,80,.35),transparent 45%),
+    radial-gradient(circle at 60% 80%,rgba(255,140,0,.28),transparent 50%),
+    #07080c;
+  color:#e8e0d0;
+}
+.hero-inner{width:min(1100px,100%);text-align:left;position:relative}
+.tag{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;margin-bottom:18px;display:block}
+.lab .tag{color:var(--teal)} .plus .tag{color:var(--amber)}
+.title{font-family:var(--font-display);font-weight:900;line-height:.95;font-size:clamp(2.2rem,10.5vw,9rem);letter-spacing:-.02em;white-space:nowrap}
+.lab .title{color:transparent;-webkit-text-stroke:2px var(--teal)}
+.plus .title{background:linear-gradient(100deg,#ff8c00,#ff3050 45%,#ffb830);-webkit-background-clip:text;background-clip:text;color:transparent;
+  background-size:200% auto;animation:flow 4s linear infinite}
+@keyframes flow{to{background-position:200% 50%}}
+.subtitle{font-family:var(--font-display);font-size:clamp(1rem,3vw,2rem);margin-top:14px;font-weight:400}
+.lab .subtitle{color:var(--teal);font-family:var(--font-mono)}
+.plus .subtitle{color:var(--cream)}
+.byline{margin-top:20px;font-size:.78rem;max-width:42ch;opacity:.8}
+.formula{position:absolute;right:0;bottom:-70px;font-size:.7rem;opacity:.55;text-align:right;display:none}
+@media(min-width:900px){.formula{display:block}}
+
+/* barras ecualizador en la capa plus */
+.eq{display:flex;align-items:flex-end;gap:6px;height:56px;margin-top:26px}
+.eq i{width:9px;background:linear-gradient(var(--orange),var(--red));border-radius:3px 3px 0 0;height:20%;animation:eq .6s ease-in-out infinite alternate}
+@keyframes eq{to{height:100%}}
+.eq i:nth-child(2n){animation-duration:.45s}.eq i:nth-child(3n){animation-duration:.8s}.eq i:nth-child(5n){animation-duration:.35s}
+
+/* divisor */
+.divider{position:absolute;top:0;bottom:0;left:var(--split);width:2px;background:var(--cream);z-index:5;box-shadow:0 0 18px var(--teal),0 0 18px var(--red)}
+.divider::after{content:"⇄";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--cream);display:grid;place-items:center;color:var(--cream);font-size:1.1rem}
+.hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:6;font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translate(-50%,6px)}}
+
+/* ===== TICKER ===== */
+.ticker{overflow:hidden;border-block:1px solid var(--line);background:var(--bg2);padding:14px 0;transition:background .6s}
+.ticker-track{display:flex;gap:48px;width:max-content;animation:tick 28s linear infinite;font-family:var(--font-display);font-size:clamp(1rem,2.4vw,1.6rem);font-weight:700;text-transform:uppercase;white-space:nowrap}
+.ticker-track span:nth-child(odd){color:var(--accent)}
+.ticker-track span:nth-child(even){color:transparent;-webkit-text-stroke:1px var(--accent2)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ===== SECCIONES ===== */
+section.block{padding:clamp(70px,10vw,130px) clamp(16px,4vw,48px);max-width:1280px;margin:0 auto}
+.sec-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:38px;border-bottom:1px solid var(--line);padding-bottom:16px}
+.sec-num{font-size:.8rem;color:var(--sc,var(--accent));letter-spacing:.2em}
+.sec-title{font-family:var(--font-display);font-weight:900;font-size:clamp(1.8rem,6vw,4rem);text-transform:uppercase;letter-spacing:-.01em;
+  clip-path:inset(0 100% 0 0);transition:clip-path 1s var(--ease)}
+.sec-title.in{clip-path:inset(0 0 0 0)}
+.sec-sub{font-size:.78rem;color:var(--muted);margin-left:auto}
+.about{max-width:70ch;font-size:.95rem;color:var(--muted)}
+.about strong{color:var(--accent2);font-weight:700}
+
+/* reveal al scroll */
+.reveal{opacity:0;transform:translateY(34px) scale(.98);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:calc(var(--i,0)*70ms)}
+.reveal.in{opacity:1;transform:none}
+
+.grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr))}
+
+/* tarjetas */
+.card{--sc:var(--accent);position:relative;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px;
+  display:flex;flex-direction:column;gap:10px;transform-style:preserve-3d;transition:border-color .3s,box-shadow .3s,background .6s}
+.card:hover{border-color:var(--sc);box-shadow:0 0 0 1px var(--sc),0 18px 50px -18px var(--sc)}
+.card.wide{grid-column:1/-1}
+.facade{position:relative;width:100%;min-height:var(--h,360px);border:0;border-radius:12px;overflow:hidden;color:var(--text);
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;padding:20px;text-align:left;font:inherit;
+  background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--sc) 35%,transparent),transparent 60%),var(--bg2);isolation:isolate}
+.facade.video{min-height:0;aspect-ratio:16/9}
+.vinyl{position:absolute;right:-18%;top:50%;width:70%;aspect-ratio:1;border-radius:50%;transform:translateY(-50%);z-index:-1;
+  background:repeating-radial-gradient(circle,#000 0 3px,#14161f 3px 5px);box-shadow:0 0 0 2px #000;transition:transform 1.4s var(--ease)}
+.vinyl::after{content:"";position:absolute;inset:36%;border-radius:50%;background:var(--sc)}
+.card:hover .vinyl{transform:translateY(-50%) rotate(180deg) translateX(-6%)}
+.fy{font-size:.72rem;letter-spacing:.25em;color:var(--sc)}
+.ft{font-family:var(--font-display);font-weight:700;font-size:clamp(1.05rem,2.2vw,1.35rem);line-height:1.15;margin-top:6px;max-width:80%}
+.play{position:absolute;top:16px;left:16px;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--sc);color:#000;font-size:1.1rem;transition:transform .3s var(--ease)}
+.facade:hover .play{transform:scale(1.15)}
+.card iframe{width:100%;border:0;border-radius:12px;display:block}
+
+/* ===== VIDEO (YouTube / Drive): caja 16:9 que nunca se deforma ===== */
+.vwrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;isolation:isolate}
+.card:has(.vwrap):not(.wide){align-self:start}
+.card.wide .vwrap{max-width:960px;margin:0 auto}
+.vwrap iframe,.vwrap .yt{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0}
+.vwrap iframe{display:block}
+.yt{padding:0;background:#000;color:var(--text);font:inherit;text-align:left;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;transition:transform .8s var(--ease),opacity .3s;z-index:-2}
+.yt::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgba(0,0,0,.85),transparent 55%)}
+.yt:hover img{transform:scale(1.05);opacity:1}
+.yt .play{top:50%;left:50%;width:68px;height:68px;margin:-34px 0 0 -34px;font-size:1.5rem;padding-left:4px}
+.yt:hover .play{transform:scale(1.15)}
+.yt .yt-t{padding:16px 18px;font-family:var(--font-display);font-weight:700;font-size:clamp(.85rem,1.8vw,1.1rem);line-height:1.2;max-width:90%}
+.yt .yt-t small{display:block;font-family:var(--font-mono);font-weight:400;font-size:.68rem;letter-spacing:.2em;color:var(--sc);margin-bottom:4px;text-transform:uppercase}
+.links{display:flex;gap:10px;flex-wrap:wrap;padding:0 6px 6px}
+.pill{font-size:.72rem;text-decoration:none;padding:7px 14px;border:1px solid var(--line);border-radius:99px;transition:all .25s}
+.pill:hover{background:var(--sc);color:#000;border-color:var(--sc)}
+
+/* tarjetas de juegos */
+.game{--sc:var(--teal);text-decoration:none;display:block;position:relative;overflow:hidden;border-radius:18px;border:1px solid var(--line);background:var(--panel);transition:border-color .3s,box-shadow .3s,transform .4s var(--ease)}
+.game:hover{border-color:var(--sc);box-shadow:0 18px 50px -18px var(--sc)}
+.game .shot{position:relative;overflow:hidden}
+.game img,.game svg{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;display:block;transition:transform .8s var(--ease)}
+.game:hover img,.game:hover svg{transform:scale(1.07)}
+.game .shot::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 2px,transparent 2px 4px);opacity:0;transition:opacity .3s;mix-blend-mode:multiply}
+.game:hover .shot::after{opacity:1}
+.game .meta{padding:16px 18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.game h3{font-family:var(--font-display);font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em}
+.badge.go::before{content:"▶ "}
+.badge{white-space:nowrap;flex-shrink:0;font-size:.68rem;font-weight:700;letter-spacing:.18em;background:var(--sc);color:#000;padding:4px 10px;border-radius:99px;text-transform:uppercase}
+.controls{margin-top:22px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.ctrl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;font-size:.8rem;color:var(--muted)}
+.ctrl strong{display:block;color:var(--accent2);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+kbd{font-family:var(--font-mono);background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;color:var(--text)}
+
+/* ===== ESTUDIO ===== */
+.studio{display:grid;gap:26px;grid-template-columns:1fr;align-items:start}
+@media(min-width:860px){.studio{grid-template-columns:1.1fr 1fr}}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.pad{aspect-ratio:1;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:.7rem;letter-spacing:.1em;
+  transition:transform .08s,background .15s,box-shadow .15s}
+.pad b{font-family:var(--font-display);font-size:1.4rem}
+.pad.hit,.pad:active{transform:scale(.93);background:var(--pc);color:#000;box-shadow:0 0 30px var(--pc)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:18px}
+#viz{width:100%;height:140px;border-radius:10px;background:var(--bg2);display:block}
+.row{display:grid;gap:6px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.btn{font:inherit;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:10px 16px;border:1px solid var(--accent);background:transparent;color:var(--text);border-radius:99px;transition:all .25s}
+.btn:hover{background:var(--accent);color:#000}
+
+/* ===== FOOTER ===== */
+footer{border-top:1px solid var(--line);padding:60px clamp(16px,4vw,48px) 90px;text-align:center;background:var(--bg2);transition:background .6s}
+footer .big{font-family:var(--font-display);font-weight:900;font-size:clamp(1.6rem,6vw,4rem);margin-bottom:22px}
+footer .links{justify-content:center}
+.pill.ig{display:inline-flex;align-items:center;gap:8px;border-color:var(--accent2)}
+.pill.ig svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+.nav-ig{display:grid;place-items:center;color:var(--muted)}
+.nav-ig svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+.nav-ig:hover{color:var(--accent2)}
+footer small{display:block;margin-top:26px;color:var(--muted);font-size:.7rem}
+
+/* ===== Accesibilidad: menos movimiento ===== */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}.sec-title{clip-path:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" aria-label="Principal">
+  <a class="logo" href="#top">GALLEGHER<b>+</b></a>
+  <div class="nav-links">
+    <a href="#juegos">Juegos</a><a href="#musica">Música</a><a href="#vivo">En vivo</a><a href="#cosmo">CosmoMedia</a><a href="#estudio">Estudio</a><a class="nav-ig" href="https://www.instagram.com/gallegher_plus/" target="_blank" rel="noopener" aria-label="Instagram @gallegher_plus"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+  </div>
+  <button class="mode" id="modeBtn" aria-label="Cambiar entre modo Gallegher (laboratorio) y Gallegher Plus (estudio)">
+    <svg viewBox="0 0 42 42" aria-hidden="true"><circle class="knob-body" cx="21" cy="21" r="17"/><line class="knob-line" id="knobLine" x1="21" y1="8" x2="21" y2="21"/></svg>
+    <span id="modeLabel">Plus</span>
+  </button>
+</nav>
+
+<!-- ===== HERO: dos mundos ===== -->
+<header class="hero" id="top">
+  <div class="layer lab">
+    <div class="hero-inner">
+      <span class="tag">// Laboratorio · Exp. 001</span>
+      <h1 class="title">GALLEGHER</h1>
+      <p class="subtitle">el científico_</p>
+      <p class="byline">Ariel Dutria. Juegos, código y experimentos sonoros.</p>
+    </div>
+  </div>
+  <div class="layer plus" aria-hidden="true">
+    <div class="hero-inner">
+      <span class="tag">★ Estudio · Directo</span>
+      <div class="title">GALLEGHER</div>
+      <p class="subtitle">PLUS — el músico</p>
+      <div class="eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="divider" aria-hidden="true"></div>
+  <span class="hint" aria-hidden="true">mové el mouse · deslizá</span>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickTrack"></div>
+</div>
+
+<main>
+
+<!-- ===== SOBRE ===== -->
+<section class="block" id="sobre">
+  <div class="sec-head"><span class="sec-num">00</span><h2 class="sec-title">Dos estados</h2></div>
+  <p class="about reveal">
+    <strong>Gallegher</strong> es el científico: el que programa, inventa y construye juegos.
+    <strong>Gallegher Plus</strong> es el que hace la música. El nombre viene de un personaje de ciencia ficción de Henry Kuttner,
+    un inventor brillante con un doble que aparece cuando entra en trance. Esta página son los dos lados del mismo cerebro. Movelo con el mouse.
+  </p>
+</section>
+
+<!-- ===== JUEGOS ===== -->
+<section class="block" id="juegos" style="--sc:var(--teal)">
+  <div class="sec-head"><span class="sec-num">01 // LAB</span><h2 class="sec-title">Juegos / Games</h2><span class="sec-sub">Gallegher Starship</span></div>
+  <div class="grid">
+    <a class="game reveal" href="ship.html" style="--i:0">
+      <div class="shot">
+        <svg role="img" aria-label="Gallegher Starship" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice"><defs>
+<radialGradient id="bg0" cx="30%" cy="25%" r="90%"><stop offset="0" stop-color="#00c9a0" stop-opacity=".45"/><stop offset="1" stop-color="#05070b"/></radialGradient>
+<linearGradient id="sh0" x1="0" x2="1"><stop offset="0" stop-color="#e8e0d0"/><stop offset="1" stop-color="#00c9a0"/></linearGradient>
+<linearGradient id="fl0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb830"/><stop offset="1" stop-color="#ff8c00" stop-opacity="0"/></linearGradient>
+<pattern id="gr0" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#00c9a0" stroke-opacity=".12"/></pattern>
+</defs><rect fill="url(#bg0)"/><rect fill="url(#gr0)"/><circle cx="259" cy="75" r="0.8" fill="#e8e0d0" opacity="0.34"/><circle cx="429" cy="183" r="0.8" fill="#e8e0d0" opacity="0.85"/><circle cx="172" cy="43" r="2" fill="#e8e0d0" opacity="0.34"/><circle cx="73" cy="212" r="0.8" fill="#e8e0d0" opacity="0.87"/><circle cx="505" cy="291" r="0.8" fill="#e8e0d0" opacity="0.65"/><circle cx="317" cy="488" r="0.8" fill="#e8e0d0" opacity="0.63"/><circle cx="107" cy="210" r="0.8" fill="#e8e0d0" opacity="0.64"/><circle cx="448" cy="341" r="0.8" fill="#e8e0d0" opacity="0.65"/><circle cx="511" cy="186" r="0.8" fill="#e8e0d0" opacity="0.64"/><circle cx="495" cy="248" r="2" fill="#e8e0d0" opacity="0.77"/><circle cx="372" cy="462" r="1.4" fill="#e8e0d0" opacity="0.48"/><circle cx="636" cy="349" r="1" fill="#e8e0d0" opacity="0.35"/><circle cx="240" cy="248" r="1.4" fill="#e8e0d0" opacity="0.74"/><circle cx="230" cy="490" r="0.8" fill="#e8e0d0" opacity="0.61"/><circle cx="132" cy="171" r="2" fill="#e8e0d0" opacity="0.55"/><circle cx="770" cy="39" r="1.4" fill="#e8e0d0" opacity="0.50"/><circle cx="280" cy="248" r="2" fill="#e8e0d0" opacity="0.34"/><circle cx="75" cy="135" r="0.8" fill="#e8e0d0" opacity="0.34"/><circle cx="561" cy="324" r="2" fill="#e8e0d0" opacity="0.47"/><circle cx="309" cy="334" r="0.8" fill="#e8e0d0" opacity="0.86"/><circle cx="284" cy="305" r="2" fill="#e8e0d0" opacity="0.34"/><circle cx="615" cy="65" r="1" fill="#e8e0d0" opacity="0.54"/><circle cx="733" cy="248" r="1" fill="#e8e0d0" opacity="0.57"/><circle cx="440" cy="442" r="2" fill="#e8e0d0" opacity="0.82"/><circle cx="223" cy="208" r="1.4" fill="#e8e0d0" opacity="0.71"/><circle cx="304" cy="115" r="0.8" fill="#e8e0d0" opacity="0.41"/><circle cx="186" cy="117" r="2" fill="#e8e0d0" opacity="0.80"/><circle cx="146" cy="141" r="1" fill="#e8e0d0" opacity="0.55"/><circle cx="295" cy="283" r="1" fill="#e8e0d0" opacity="0.71"/><circle cx="412" cy="309" r="0.8" fill="#e8e0d0" opacity="0.57"/><circle cx="697" cy="476" r="2" fill="#e8e0d0" opacity="0.54"/><circle cx="315" cy="241" r="2" fill="#e8e0d0" opacity="0.34"/><circle cx="54" cy="104" r="1" fill="#e8e0d0" opacity="0.37"/><circle cx="481" cy="51" r="1" fill="#e8e0d0" opacity="0.62"/><circle cx="759" cy="307" r="0.8" fill="#e8e0d0" opacity="0.82"/><circle cx="491" cy="74" r="1.4" fill="#e8e0d0" opacity="0.87"/><circle cx="482" cy="237" r="0.8" fill="#e8e0d0" opacity="0.81"/><circle cx="794" cy="233" r="2" fill="#e8e0d0" opacity="0.49"/><circle cx="115" cy="375" r="1.4" fill="#e8e0d0" opacity="0.59"/><circle cx="554" cy="258" r="1" fill="#e8e0d0" opacity="0.87"/><circle cx="423" cy="73" r="0.8" fill="#e8e0d0" opacity="0.75"/><circle cx="238" cy="321" r="0.8" fill="#e8e0d0" opacity="0.72"/><circle cx="209" cy="183" r="1" fill="#e8e0d0" opacity="0.51"/><circle cx="178" cy="271" r="1.4" fill="#e8e0d0" opacity="0.68"/><circle cx="491" cy="394" r="1" fill="#e8e0d0" opacity="0.78"/><circle cx="655" cy="370" r="1" fill="#e8e0d0" opacity="0.42"/><circle cx="394" cy="366" r="0.8" fill="#e8e0d0" opacity="0.77"/><circle cx="378" cy="97" r="1.4" fill="#e8e0d0" opacity="0.57"/><circle cx="750" cy="494" r="1.4" fill="#e8e0d0" opacity="0.35"/><circle cx="82" cy="235" r="1.4" fill="#e8e0d0" opacity="0.42"/><circle cx="499" cy="450" r="0.8" fill="#e8e0d0" opacity="0.59"/><circle cx="522" cy="400" r="0.8" fill="#e8e0d0" opacity="0.80"/><circle cx="96" cy="194" r="1" fill="#e8e0d0" opacity="0.59"/><circle cx="143" cy="395" r="1.4" fill="#e8e0d0" opacity="0.35"/><circle cx="757" cy="361" r="2" fill="#e8e0d0" opacity="0.54"/><circle cx="757" cy="362" r="1" fill="#e8e0d0" opacity="0.90"/><circle cx="22" cy="295" r="2" fill="#e8e0d0" opacity="0.78"/><circle cx="117" cy="413" r="2" fill="#e8e0d0" opacity="0.69"/><circle cx="280" cy="274" r="1" fill="#e8e0d0" opacity="0.31"/><circle cx="639" cy="363" r="0.8" fill="#e8e0d0" opacity="0.62"/><circle cx="747" cy="217" r="1" fill="#e8e0d0" opacity="0.80"/><circle cx="169" cy="126" r="1.4" fill="#e8e0d0" opacity="0.60"/><circle cx="611" cy="163" r="2" fill="#e8e0d0" opacity="0.80"/><circle cx="49" cy="370" r="2" fill="#e8e0d0" opacity="0.70"/><circle cx="652" cy="258" r="1" fill="#e8e0d0" opacity="0.62"/><circle cx="419" cy="9" r="2" fill="#e8e0d0" opacity="0.77"/><circle cx="487" cy="388" r="1" fill="#e8e0d0" opacity="0.40"/><circle cx="379" cy="363" r="0.8" fill="#e8e0d0" opacity="0.50"/><circle cx="415" cy="278" r="0.8" fill="#e8e0d0" opacity="0.83"/><circle cx="45" cy="96" r="0.8" fill="#e8e0d0" opacity="0.76"/><circle cx="406" cy="281" r="0.8" fill="#e8e0d0" opacity="0.57"/><circle cx="490" cy="253" r="1" fill="#e8e0d0" opacity="0.72"/><circle cx="362" cy="267" r="2" fill="#e8e0d0" opacity="0.60"/><circle cx="198" cy="262" r="1.4" fill="#e8e0d0" opacity="0.85"/><circle cx="714" cy="101" r="2" fill="#e8e0d0" opacity="0.38"/><circle cx="97" cy="221" r="0.8" fill="#e8e0d0" opacity="0.70"/><circle cx="343" cy="106" r="1.4" fill="#e8e0d0" opacity="0.77"/><circle cx="718" cy="77" r="1.4" fill="#e8e0d0" opacity="0.39"/><circle cx="706" cy="484" r="1" fill="#e8e0d0" opacity="0.75"/><circle cx="75" cy="442" r="1" fill="#e8e0d0" opacity="0.89"/><circle cx="666" cy="81" r="2" fill="#e8e0d0" opacity="0.90"/><circle cx="323" cy="211" r="1.4" fill="#e8e0d0" opacity="0.49"/><circle cx="578" cy="10" r="2" fill="#e8e0d0" opacity="0.56"/><circle cx="14" cy="166" r="1.4" fill="#e8e0d0" opacity="0.61"/><circle cx="51" cy="493" r="1" fill="#e8e0d0" opacity="0.88"/><circle cx="84" cy="133" r="0.8" fill="#e8e0d0" opacity="0.84"/><circle cx="145" cy="378" r="2" fill="#e8e0d0" opacity="0.81"/><circle cx="541" cy="473" r="2" fill="#e8e0d0" opacity="0.39"/><circle cx="735" cy="285" r="1.4" fill="#e8e0d0" opacity="0.35"/><circle cx="46" cy="344" r="2" fill="#e8e0d0" opacity="0.84"/><circle cx="656.0" cy="100.0" r="85.0" fill="#ff8c00" opacity=".85"/><circle cx="630.5" cy="74.5" r="63.75" fill="#00c9a0" opacity=".35"/><ellipse cx="656.0" cy="100.0" rx="144.5" ry="27.2" fill="none" stroke="#e8e0d0" stroke-opacity=".6" stroke-width="3" transform="rotate(-18 656.0 100.0)"/><g transform="translate(112 80) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff8c00"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="110" y="94" width="4" height="17" fill="#ff3050"/><g transform="translate(224 115) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff8c00"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="222" y="129" width="4" height="17" fill="#ff3050"/><g transform="translate(336 80) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff8c00"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="334" y="94" width="4" height="17" fill="#ff3050"/><g transform="translate(448 115) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff8c00"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="446" y="129" width="4" height="17" fill="#ff3050"/><g transform="translate(560 80) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff8c00"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="558" y="94" width="4" height="17" fill="#ff3050"/><g transform="translate(400 330) scale(1.19)"><path d="M-14 24 L0 120 L14 24Z" fill="url(#fl0)"/><path d="M0 -70 L16 -20 L62 30 L62 52 L24 36 L12 50 H-12 L-24 36 L-62 52 L-62 30 L-16 -20Z" fill="url(#sh0)" stroke="#05070b" stroke-width="3"/><ellipse cx="0" cy="-8" rx="9" ry="20" fill="#05070b"/><ellipse cx="0" cy="-12" rx="4" ry="10" fill="#00c9a0"/><rect x="-52" y="26" width="8" height="18" fill="#ff3050"/><rect x="44" y="26" width="8" height="18" fill="#ff3050"/></g><rect x="397" y="140" width="6" height="100" rx="3" fill="#ffb830"/><circle cx="528" cy="230" r="25" fill="none" stroke="#ff3050" stroke-width="4"/><circle cx="528" cy="230" r="12" fill="#ff3050"/><rect fill="url(#sl)" opacity="0"/><text x="40" y="50" font-family="JetBrains Mono,Consolas,monospace" font-size="17" fill="#00c9a0" letter-spacing="5">// GAME 01</text></svg>
+      </div>
+      <div class="meta"><h3>Gallegher Starship Game</h3><span class="badge go">Jugar</span></div>
+    </a>
+    <!-- ship2 debajo del primer juego -->
+    <a class="game reveal" href="https://gallegherplus.github.io/ship2.html" style="--i:1;--sc:var(--orange)">
+      <div class="shot">
+        <svg role="img" aria-label="Gallegher Starship v2 - Nuevos tracks" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice"><defs>
+<radialGradient id="bg1" cx="30%" cy="25%" r="90%"><stop offset="0" stop-color="#ff8c00" stop-opacity=".45"/><stop offset="1" stop-color="#05070b"/></radialGradient>
+<linearGradient id="sh1" x1="0" x2="1"><stop offset="0" stop-color="#e8e0d0"/><stop offset="1" stop-color="#ff8c00"/></linearGradient>
+<linearGradient id="fl1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb830"/><stop offset="1" stop-color="#ff3050" stop-opacity="0"/></linearGradient>
+<pattern id="gr1" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#ff8c00" stroke-opacity=".12"/></pattern>
+</defs><rect fill="url(#bg1)"/><rect fill="url(#gr1)"/><circle cx="362" cy="280" r="2" fill="#e8e0d0" opacity="0.57"/><circle cx="684" cy="95" r="2" fill="#e8e0d0" opacity="0.68"/><circle cx="634" cy="47" r="1.4" fill="#e8e0d0" opacity="0.39"/><circle cx="431" cy="445" r="0.8" fill="#e8e0d0" opacity="0.66"/><circle cx="317" cy="226" r="1" fill="#e8e0d0" opacity="0.67"/><circle cx="665" cy="32" r="0.8" fill="#e8e0d0" opacity="0.41"/><circle cx="194" cy="15" r="2" fill="#e8e0d0" opacity="0.50"/><circle cx="473" cy="98" r="1" fill="#e8e0d0" opacity="0.68"/><circle cx="400" cy="331" r="2" fill="#e8e0d0" opacity="0.69"/><circle cx="325" cy="276" r="0.8" fill="#e8e0d0" opacity="0.72"/><circle cx="252" cy="115" r="1.4" fill="#e8e0d0" opacity="0.32"/><circle cx="451" cy="54" r="0.8" fill="#e8e0d0" opacity="0.81"/><circle cx="309" cy="479" r="0.8" fill="#e8e0d0" opacity="0.43"/><circle cx="742" cy="26" r="2" fill="#e8e0d0" opacity="0.89"/><circle cx="318" cy="37" r="1" fill="#e8e0d0" opacity="0.77"/><circle cx="216" cy="44" r="1.4" fill="#e8e0d0" opacity="0.31"/><circle cx="328" cy="461" r="1" fill="#e8e0d0" opacity="0.45"/><circle cx="81" cy="30" r="2" fill="#e8e0d0" opacity="0.41"/><circle cx="447" cy="224" r="1" fill="#e8e0d0" opacity="0.89"/><circle cx="616" cy="210" r="2" fill="#e8e0d0" opacity="0.37"/><circle cx="337" cy="106" r="1.4" fill="#e8e0d0" opacity="0.82"/><circle cx="780" cy="296" r="0.8" fill="#e8e0d0" opacity="0.43"/><circle cx="315" cy="427" r="0.8" fill="#e8e0d0" opacity="0.33"/><circle cx="117" cy="221" r="0.8" fill="#e8e0d0" opacity="0.76"/><circle cx="263" cy="148" r="0.8" fill="#e8e0d0" opacity="0.34"/><circle cx="167" cy="318" r="0.8" fill="#e8e0d0" opacity="0.66"/><circle cx="297" cy="227" r="2" fill="#e8e0d0" opacity="0.80"/><circle cx="109" cy="193" r="1" fill="#e8e0d0" opacity="0.49"/><circle cx="183" cy="305" r="1" fill="#e8e0d0" opacity="0.40"/><circle cx="503" cy="277" r="2" fill="#e8e0d0" opacity="0.83"/><circle cx="483" cy="211" r="0.8" fill="#e8e0d0" opacity="0.37"/><circle cx="410" cy="128" r="2" fill="#e8e0d0" opacity="0.45"/><circle cx="659" cy="298" r="1.4" fill="#e8e0d0" opacity="0.61"/><circle cx="743" cy="489" r="1" fill="#e8e0d0" opacity="0.44"/><circle cx="447" cy="426" r="0.8" fill="#e8e0d0" opacity="0.47"/><circle cx="734" cy="102" r="0.8" fill="#e8e0d0" opacity="0.34"/><circle cx="329" cy="125" r="0.8" fill="#e8e0d0" opacity="0.41"/><circle cx="295" cy="286" r="1" fill="#e8e0d0" opacity="0.36"/><circle cx="111" cy="225" r="1.4" fill="#e8e0d0" opacity="0.69"/><circle cx="553" cy="292" r="1" fill="#e8e0d0" opacity="0.65"/><circle cx="739" cy="237" r="1.4" fill="#e8e0d0" opacity="0.72"/><circle cx="770" cy="11" r="0.8" fill="#e8e0d0" opacity="0.59"/><circle cx="584" cy="159" r="0.8" fill="#e8e0d0" opacity="0.35"/><circle cx="437" cy="369" r="1" fill="#e8e0d0" opacity="0.78"/><circle cx="732" cy="176" r="2" fill="#e8e0d0" opacity="0.84"/><circle cx="697" cy="209" r="0.8" fill="#e8e0d0" opacity="0.82"/><circle cx="458" cy="312" r="2" fill="#e8e0d0" opacity="0.53"/><circle cx="10" cy="36" r="0.8" fill="#e8e0d0" opacity="0.68"/><circle cx="795" cy="440" r="1.4" fill="#e8e0d0" opacity="0.53"/><circle cx="588" cy="290" r="2" fill="#e8e0d0" opacity="0.58"/><circle cx="433" cy="259" r="0.8" fill="#e8e0d0" opacity="0.49"/><circle cx="70" cy="11" r="0.8" fill="#e8e0d0" opacity="0.60"/><circle cx="492" cy="460" r="1.4" fill="#e8e0d0" opacity="0.84"/><circle cx="294" cy="72" r="1" fill="#e8e0d0" opacity="0.61"/><circle cx="603" cy="171" r="2" fill="#e8e0d0" opacity="0.60"/><circle cx="193" cy="202" r="1.4" fill="#e8e0d0" opacity="0.42"/><circle cx="345" cy="403" r="1" fill="#e8e0d0" opacity="0.83"/><circle cx="308" cy="292" r="1.4" fill="#e8e0d0" opacity="0.43"/><circle cx="108" cy="175" r="0.8" fill="#e8e0d0" opacity="0.73"/><circle cx="760" cy="138" r="1" fill="#e8e0d0" opacity="0.37"/><circle cx="377" cy="463" r="2" fill="#e8e0d0" opacity="0.53"/><circle cx="416" cy="336" r="2" fill="#e8e0d0" opacity="0.49"/><circle cx="663" cy="139" r="0.8" fill="#e8e0d0" opacity="0.71"/><circle cx="225" cy="177" r="0.8" fill="#e8e0d0" opacity="0.68"/><circle cx="324" cy="95" r="1.4" fill="#e8e0d0" opacity="0.44"/><circle cx="113" cy="23" r="0.8" fill="#e8e0d0" opacity="0.57"/><circle cx="504" cy="328" r="1.4" fill="#e8e0d0" opacity="0.88"/><circle cx="548" cy="100" r="2" fill="#e8e0d0" opacity="0.45"/><circle cx="571" cy="378" r="0.8" fill="#e8e0d0" opacity="0.41"/><circle cx="218" cy="173" r="1" fill="#e8e0d0" opacity="0.54"/><circle cx="634" cy="453" r="0.8" fill="#e8e0d0" opacity="0.55"/><circle cx="714" cy="194" r="2" fill="#e8e0d0" opacity="0.57"/><circle cx="500" cy="455" r="2" fill="#e8e0d0" opacity="0.63"/><circle cx="522" cy="251" r="1.4" fill="#e8e0d0" opacity="0.58"/><circle cx="521" cy="102" r="0.8" fill="#e8e0d0" opacity="0.43"/><circle cx="720" cy="490" r="1.4" fill="#e8e0d0" opacity="0.62"/><circle cx="633" cy="160" r="0.8" fill="#e8e0d0" opacity="0.51"/><circle cx="66" cy="220" r="2" fill="#e8e0d0" opacity="0.76"/><circle cx="390" cy="14" r="0.8" fill="#e8e0d0" opacity="0.56"/><circle cx="28" cy="267" r="1" fill="#e8e0d0" opacity="0.58"/><circle cx="800" cy="450" r="2" fill="#e8e0d0" opacity="0.87"/><circle cx="394" cy="475" r="0.8" fill="#e8e0d0" opacity="0.75"/><circle cx="352" cy="279" r="1" fill="#e8e0d0" opacity="0.61"/><circle cx="675" cy="280" r="1.4" fill="#e8e0d0" opacity="0.70"/><circle cx="764" cy="435" r="1" fill="#e8e0d0" opacity="0.48"/><circle cx="113" cy="272" r="1.4" fill="#e8e0d0" opacity="0.64"/><circle cx="161" cy="268" r="0.8" fill="#e8e0d0" opacity="0.66"/><circle cx="22" cy="485" r="2" fill="#e8e0d0" opacity="0.63"/><circle cx="792" cy="61" r="0.8" fill="#e8e0d0" opacity="0.71"/><circle cx="53" cy="269" r="2" fill="#e8e0d0" opacity="0.85"/><circle cx="656.0" cy="100.0" r="85.0" fill="#ff3050" opacity=".85"/><circle cx="630.5" cy="74.5" r="63.75" fill="#ff8c00" opacity=".35"/><ellipse cx="656.0" cy="100.0" rx="144.5" ry="27.2" fill="none" stroke="#e8e0d0" stroke-opacity=".6" stroke-width="3" transform="rotate(-18 656.0 100.0)"/><g transform="translate(112 80) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff3050"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="110" y="94" width="4" height="17" fill="#ff3050"/><g transform="translate(224 115) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff3050"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="222" y="129" width="4" height="17" fill="#ff3050"/><g transform="translate(336 80) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff3050"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="334" y="94" width="4" height="17" fill="#ff3050"/><g transform="translate(448 115) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff3050"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="446" y="129" width="4" height="17" fill="#ff3050"/><g transform="translate(560 80) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff3050"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="558" y="94" width="4" height="17" fill="#ff3050"/><g transform="translate(672 115) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff3050"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="670" y="129" width="4" height="17" fill="#ff3050"/><g transform="translate(784 80) scale(0.79)"><path d="M-26 0 L-12 -16 H12 L26 0 L12 14 H-12Z" fill="#ff3050"/><rect x="-8" y="-5" width="16" height="10" fill="#05070b"/><circle cx="0" cy="0" r="3" fill="#ff3050"/></g><rect x="782" y="94" width="4" height="17" fill="#ff3050"/><rect x="48" y="455" width="9" height="25" fill="#ff8c00" opacity=".55"/><rect x="63" y="416" width="9" height="64" fill="#ff8c00" opacity=".55"/><rect x="78" y="396" width="9" height="84" fill="#ff8c00" opacity=".55"/><rect x="94" y="403" width="9" height="77" fill="#ff8c00" opacity=".55"/><rect x="109" y="435" width="9" height="45" fill="#ff8c00" opacity=".55"/><rect x="124" y="434" width="9" height="46" fill="#ff8c00" opacity=".55"/><rect x="139" y="403" width="9" height="77" fill="#ff8c00" opacity=".55"/><rect x="154" y="396" width="9" height="84" fill="#ff8c00" opacity=".55"/><rect x="170" y="417" width="9" height="63" fill="#ff8c00" opacity=".55"/><rect x="185" y="454" width="9" height="26" fill="#ff8c00" opacity=".55"/><rect x="200" y="416" width="9" height="64" fill="#ff8c00" opacity=".55"/><rect x="215" y="396" width="9" height="84" fill="#ff8c00" opacity=".55"/><rect x="230" y="404" width="9" height="76" fill="#ff8c00" opacity=".55"/><rect x="246" y="436" width="9" height="44" fill="#ff8c00" opacity=".55"/><rect x="261" y="433" width="9" height="47" fill="#ff8c00" opacity=".55"/><rect x="276" y="402" width="9" height="78" fill="#ff8c00" opacity=".55"/><rect x="291" y="396" width="9" height="84" fill="#ff8c00" opacity=".55"/><rect x="306" y="418" width="9" height="62" fill="#ff8c00" opacity=".55"/><rect x="322" y="453" width="9" height="27" fill="#ff8c00" opacity=".55"/><rect x="337" y="415" width="9" height="65" fill="#ff8c00" opacity=".55"/><rect x="352" y="396" width="9" height="84" fill="#ff8c00" opacity=".55"/><rect x="367" y="404" width="9" height="76" fill="#ff8c00" opacity=".55"/><rect x="382" y="437" width="9" height="43" fill="#ff8c00" opacity=".55"/><rect x="398" y="432" width="9" height="48" fill="#ff8c00" opacity=".55"/><g transform="translate(400 330) scale(1.19)"><path d="M-14 24 L0 120 L14 24Z" fill="url(#fl1)"/><path d="M0 -70 L16 -20 L62 30 L62 52 L24 36 L12 50 H-12 L-24 36 L-62 52 L-62 30 L-16 -20Z" fill="url(#sh1)" stroke="#05070b" stroke-width="3"/><ellipse cx="0" cy="-8" rx="9" ry="20" fill="#05070b"/><ellipse cx="0" cy="-12" rx="4" ry="10" fill="#ff8c00"/><rect x="-52" y="26" width="8" height="18" fill="#ff3050"/><rect x="44" y="26" width="8" height="18" fill="#ff3050"/></g><rect x="397" y="140" width="6" height="100" rx="3" fill="#ffb830"/><circle cx="528" cy="230" r="25" fill="none" stroke="#ff3050" stroke-width="4"/><circle cx="528" cy="230" r="12" fill="#ff3050"/><rect fill="url(#sl)" opacity="0"/><text x="40" y="50" font-family="JetBrains Mono,Consolas,monospace" font-size="17" fill="#ff8c00" letter-spacing="5">// NEW TRACKS</text></svg>
+      </div>
+      <div class="meta"><h3>v2 Nuevos tracks</h3><span class="badge go">Jugar v2</span></div>
+    </a>
+  </div>
+  <div class="controls">
+    <div class="ctrl reveal"><strong>⌨️ PC (Teclado)</strong><kbd>A</kbd> Disparo · <kbd>S</kbd> Bomba · <kbd>D</kbd> Inicia juego</div>
+    <div class="ctrl reveal" style="--i:1"><strong>🎮 Joystick USB</strong><kbd>D-Pad/Stick</kbd> Mover · <kbd>1</kbd> Inicio - Disparo · <kbd>2</kbd> Bomba</div>
+    <div class="ctrl reveal" style="--i:2"><strong>📱 Mobile / Touch</strong>Dedo para mover la nave. Tocar pantalla para tirar bomba.</div>
+  </div>
+</section>
+
+<!-- ===== MÚSICA ===== -->
+<section class="block" id="musica" style="--sc:var(--orange)">
+  <div class="sec-head"><span class="sec-num">02 // PLUS</span><h2 class="sec-title">Música / Music</h2></div>
+  <div class="grid" id="gridMusica"></div>
+</section>
+
+<!-- ===== VIVO ===== -->
+<section class="block" id="vivo" style="--sc:var(--red)">
+  <div class="sec-head"><span class="sec-num">03 // LIVE</span><h2 class="sec-title">Grabaciones en vivo</h2></div>
+  <div class="grid" id="gridVivo"></div>
+</section>
+
+<!-- ===== COSMOMEDIA ===== -->
+<section class="block" id="cosmo" style="--sc:var(--amber)">
+  <div class="sec-head"><span class="sec-num">04 // COLECTIVO</span><h2 class="sec-title">CosmoMedia Colectivo</h2></div>
+  <div class="grid" id="gridCosmo"></div>
+</section>
+
+<!-- ===== ESTUDIO INTERACTIVO ===== -->
+<section class="block" id="estudio" style="--sc:var(--accent)">
+  <div class="sec-head"><span class="sec-num">05 // JAM</span><h2 class="sec-title">El estudio</h2><span class="sec-sub">teclas 1–8 o tocá los pads</span></div>
+  <div class="studio">
+    <div class="pads" id="pads" role="group" aria-label="Pads de percusión"></div>
+    <div class="panel">
+      <canvas id="viz" aria-label="Visualizador de audio" role="img"></canvas>
+      <label class="row">Volumen<input type="range" id="vol" min="0" max="1" step="0.01" value="0.7"></label>
+      <label class="row">Filtro<input type="range" id="flt" min="300" max="12000" step="10" value="9000"></label>
+      <div><button class="btn" id="muteBtn" aria-pressed="false">Silenciar</button></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="big">GALLEGHER<span style="color:var(--accent)">+</span></div>
+  <div class="links">
+    <a class="pill" href="https://gallegherplus.bandcamp.com/album/primer-contacto-2004" target="_blank" rel="noopener">Bandcamp</a>
+    <a class="pill" href="https://soundcloud.com/gallegherplus" target="_blank" rel="noopener">SoundCloud</a>
+    <a class="pill" href="https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s" target="_blank" rel="noopener">Spotify</a>
+    <a class="pill ig" href="https://www.instagram.com/gallegher_plus/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>@gallegher_plus</a>
+    <a class="pill" href="https://youtube.com/playlist?list=OLAK5uy_nrEjrRcBOILy38SARUEDkCd9nv5VgrSn4&si=NnfcsC-kusukIrRx" target="_blank" rel="noopener">YouTube</a>
+  </div>
+  <small>© Ariel Dutria aka Gallegher Plus · CosmoMedia Colectivo</small>
+</footer>
+
+<script>
+/* =========================================================
+   1) DATOS — para agregar un disco, sumá una línea acá.
+   type: bandcamp | video | embed. h = alto del reproductor.
+   ========================================================= */
+const BC = 'https://bandcamp.com/EmbeddedPlayer/';
+const MUSICA = [
+  {t:'Ciberdelia',y:'Vol. 1',h:470,src:BC+'album=1489493561/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/track=4237668646/transparent=true/',c:'--orange'},
+  {t:'Primer contacto',y:'2004',h:470,src:BC+'album=4057325407/size=large/bgcol=333333/linkcol=e99708/tracklist=false/transparent=true/',c:'--amber',
+    links:[['YouTube','https://youtube.com/playlist?list=OLAK5uy_nrEjrRcBOILy38SARUEDkCd9nv5VgrSn4&si=NnfcsC-kusukIrRx'],['Spotify','https://open.spotify.com/intl-es/album/5Irw3rBvFMO30ORmkwBL8s']]},
+  {t:'Star ship',y:'2006',h:470,src:BC+'album=3420605549/size=large/bgcol=333333/linkcol=2ebd35/tracklist=false/transparent=true/',c:'--teal',
+    links:[['YouTube','https://www.youtube.com/watch?v=Xzj6FCUvNvQ&list=OLAK5uy_kWYNbMMdMSJtbek_C_rsr42WxI2VwOjXk'],['Spotify','https://open.spotify.com/intl-es/album/30VWqubwOLIcyitfQQKfPO']]},
+  {t:'I will leave them the new habits',y:'2007',h:470,src:BC+'album=2744310584/size=large/bgcol=333333/linkcol=4ec5ec/tracklist=false/transparent=true/',c:'--red',
+    links:[['Spotify','https://open.spotify.com/intl-es/album/6cD6wQLYulaEasUkPTJqOj']]},
+  {t:'Artificial intelligence',y:'2008',h:470,src:BC+'album=479373965/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',c:'--orange'},
+  {t:'40 años en el mismo Sistema Solar',y:'CosmoCumples',h:120,src:BC+'album=3486002417/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/track=1055934601/transparent=true/',c:'--amber'},
+  {t:'SoundCloud · Gallegher Plus',y:'Streaming',h:300,type:'embed',src:'https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gallegherplus&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true',c:'--orange'},
+  {t:'ReverbNation',y:'Streaming',h:520,type:'embed',src:'https://www.reverbnation.com/widget_code/html_widget/artist_840307?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_840307',c:'--red'},
+  {t:'I Have a Problem (Gallegher Plus ReMake) · emiliaNO (AR)',y:'Video',type:'video',src:'https://www.youtube.com/embed/87Pg9DTzjpc',c:'--red',wide:true},
+  {t:'Digital Bj - Fleetly',y:'Video',type:'video',src:'https://drive.google.com/file/d/1pUHHROvfYZpw3Mc_8_eu_QRt4IPxN7gL/preview',c:'--orange',wide:true}
+];
+const VIVO = [
+  {t:'El Acústico',y:'En vivo',h:470,src:BC+'album=421278355/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',c:'--red'},
+  {t:'Live in Loser Party',y:'2011',h:470,src:BC+'album=2308284593/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',c:'--red'},
+  {t:'Diente De Sierra: Live In Room en The Music Store',y:'Video',type:'video',src:'https://www.youtube.com/embed/cCBDiIYllNw?si=p-v78oMuZ8os93xp',c:'--red'}
+];
+const COSMO = [
+  {t:'CosmoMedia Vol. 1',y:'VA',h:470,src:BC+'album=3756104505/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',c:'--amber'},
+  {t:'CosmoMedia Vol. 2',y:'VA',h:470,src:BC+'album=15350491/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',c:'--amber'},
+  {t:'Intervención Audiovisual en vivo',y:'Live',h:470,src:BC+'album=134645260/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',c:'--amber'}
+];
+
+/* =========================================================
+   2) TARJETAS "FACADE": el reproductor real (iframe) se carga
+      recién al hacer clic. Así la página abre rápido.
+   ========================================================= */
+/* Links originales de cada disco en Bandcamp (los mismos del index.html anterior) */
+const BCLINK={
+  'Ciberdelia':'https://cphnkx.bandcamp.com/album/ciberdelia-volumen-1',
+  'Primer contacto':'https://gallegherplus.bandcamp.com/album/primer-contacto-2004',
+  'Star ship':'https://gallegherplus.bandcamp.com/album/star-ship-2006',
+  'I will leave them the new habits':'https://gallegherplus.bandcamp.com/album/i-will-leave-them-the-new-habits-2007',
+  'Artificial intelligence':'https://gallegherplus.bandcamp.com/album/artificial-intelligence-2008',
+  '40 años en el mismo Sistema Solar':'https://cosmocumples.bandcamp.com/album/40-a-os-en-el-mismo-sistema-solar',
+  'El Acústico':'https://elacustico.bandcamp.com/album/gallegher-plus',
+  'Live in Loser Party':'https://gallegherplus.bandcamp.com/album/live-in-loser-party-2011',
+  'CosmoMedia Vol. 1':'https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-1',
+  'CosmoMedia Vol. 2':'https://cosmomediacolectivo.bandcamp.com/album/va-cosmomedia-vol-2',
+  'Intervención Audiovisual en vivo':'https://cosmomediacolectivo.bandcamp.com/album/intervenci-n-audiovisual-en-vivo'
+};
+/* Los reproductores se muestran directamente (con la tapa del disco, como en la versión original).
+   loading="lazy" hace que cada uno cargue recién cuando se acerca a la pantalla. */
+function buildCard(it,i){
+  const art=document.createElement('article');
+  art.className='card reveal'+(it.wide?' wide':'');
+  art.style.setProperty('--i',i%6);
+  art.style.setProperty('--sc',`var(${it.c||'--accent'})`);
+  const isVideo=it.type==='video';
+  if(isVideo){
+    const wrap=document.createElement('div');wrap.className='vwrap';
+    const ym=it.src.match(/youtube(?:-nocookie)?\.com\/embed\/([\w-]{11})/);
+    if(ym){
+      /* YouTube: miniatura + botón. El reproductor se carga al hacer clic. */
+      const id=ym[1],b=document.createElement('button');b.type='button';b.className='yt';b.setAttribute('aria-label','Reproducir: '+it.t);
+      b.innerHTML=`<img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt="" loading="lazy"><span class="play" aria-hidden="true">▶</span><span class="yt-t"><small>${it.y||'Video'}</small>${it.t}</span>`;
+      b.addEventListener('click',()=>{
+        const f=document.createElement('iframe');
+        f.src=`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
+        f.title=it.t;f.allowFullscreen=true;
+        f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+        f.referrerPolicy='strict-origin-when-cross-origin';
+        wrap.replaceChildren(f);
+      });
+      wrap.appendChild(b);
+    }else{
+      const f=document.createElement('iframe');
+      f.src=it.src;f.title=it.t;f.loading='lazy';f.allowFullscreen=true;
+      f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.referrerPolicy='strict-origin-when-cross-origin';
+      wrap.appendChild(f);
+    }
+    art.appendChild(wrap);
+  }else{
+    const f=document.createElement('iframe');
+    f.src=it.src;f.title=it.t;f.loading='lazy';f.allowFullscreen=true;
+    f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.height=it.h||470;
+    if(it.type!=='embed'&&it.h!==120){f.style.maxWidth='350px';f.style.margin='0 auto'} // mismo tamaño que el original (350x470)
+    art.appendChild(f);
+  }
+  const all=[];
+  if(BCLINK[it.t])all.push(['Bandcamp',BCLINK[it.t]]);
+  if(it.links)all.push(...it.links);
+  if(all.length){
+    const d=document.createElement('div');d.className='links';
+    all.forEach(([n,u])=>{const a=document.createElement('a');a.className='pill';a.href=u;a.target='_blank';a.rel='noopener';a.textContent=n;d.appendChild(a)});
+    art.appendChild(d);
+  }
+  return art;
+}
+[['gridMusica',MUSICA],['gridVivo',VIVO],['gridCosmo',COSMO]].forEach(([id,list])=>{
+  const g=document.getElementById(id);list.forEach((it,i)=>g.appendChild(buildCard(it,i)));
+});
+
+/* ticker infinito (texto duplicado para que el loop sea continuo) */
+const tickWords=['Gallegher Plus','CosmoMedia Colectivo','Ariel Dutria','Gallegher Starship','Ciberdelia','Star ship 2006'];
+document.getElementById('tickTrack').innerHTML=[...tickWords,...tickWords,...tickWords,...tickWords].map(w=>`<span>${w}</span>`).join('');
+
+/* =========================================================
+   3) PREFERENCIAS: movimiento reducido y dispositivo táctil
+   ========================================================= */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+/* =========================================================
+   4) HERO: el divisor sigue al mouse/dedo con suavizado.
+      EASE = velocidad de seguimiento (0.05 lento, 0.3 rápido).
+   ========================================================= */
+const hero=document.getElementById('top');
+const EASE=0.12;
+let target=50,current=50,userMoved=false;
+function setTarget(clientX){const r=hero.getBoundingClientRect();target=Math.max(4,Math.min(96,(clientX-r.left)/r.width*100));userMoved=true}
+hero.addEventListener('pointermove',e=>setTarget(e.clientX));
+hero.addEventListener('pointerdown',e=>setTarget(e.clientX));
+let t0=performance.now();
+function heroLoop(now){
+  if(!userMoved&&!reduce){target=50+Math.sin((now-t0)/1800)*22}  // vaivén automático si nadie toca
+  current+=(target-current)*EASE;
+  hero.style.setProperty('--split',current.toFixed(2)+'%');
+  requestAnimationFrame(heroLoop);
+}
+requestAnimationFrame(heroLoop);
+
+/* =========================================================
+   5) MODO LAB / PLUS — perilla en el menú (clic o arrastre)
+   ========================================================= */
+const root=document.documentElement,modeBtn=document.getElementById('modeBtn'),
+      knobLine=document.getElementById('knobLine'),modeLabel=document.getElementById('modeLabel');
+let accentCache='';
+function setMode(m){
+  root.dataset.mode=m;
+  knobLine.style.transform=`rotate(${m==='plus'?55:-55}deg)`;
+  modeLabel.textContent=m==='plus'?'Plus':'Lab';
+  accentCache=getComputedStyle(root).getPropertyValue('--accent').trim();
+  try{localStorage.setItem('gmode',m)}catch(e){}
+}
+modeBtn.addEventListener('click',()=>setMode(root.dataset.mode==='plus'?'lab':'plus'));
+let dragX=null;
+modeBtn.addEventListener('pointerdown',e=>{dragX=e.clientX});
+window.addEventListener('pointerup',e=>{
+  if(dragX!==null&&Math.abs(e.clientX-dragX)>14){setMode(e.clientX>dragX?'plus':'lab')}
+  dragX=null;
+});
+let saved='plus';try{saved=localStorage.getItem('gmode')||'plus'}catch(e){}
+setMode(saved);
+
+/* =========================================================
+   6) CURSOR PERSONALIZADO + RASTRO DE PARTÍCULAS
+      MAX_P = cantidad máxima de partículas.
+   ========================================================= */
+const cvs=document.getElementById('fx'),ctx2=cvs.getContext('2d');
+const dot=document.querySelector('.cursor-dot'),ring=document.querySelector('.cursor-ring');
+const MAX_P=60;let parts=[],mx=0,my=0,rx=0,ry=0;
+function resize(){cvs.width=innerWidth;cvs.height=innerHeight}
+resize();addEventListener('resize',resize);
+if(fine&&!reduce){
+  document.body.classList.add('has-cursor');
+  addEventListener('pointermove',e=>{
+    mx=e.clientX;my=e.clientY;
+    dot.style.transform=`translate(${mx}px,${my}px)`;
+    if(parts.length<MAX_P)parts.push({x:mx,y:my,vx:(Math.random()-.5)*1.4,vy:(Math.random()-.5)*1.4-.3,l:1,s:2+Math.random()*3});
+  });
+  document.addEventListener('pointerover',e=>{ring.classList.toggle('big',!!e.target.closest('a,button,input,.pad'))});
+  (function fxLoop(){
+    rx+=(mx-rx)*.18;ry+=(my-ry)*.18;
+    ring.style.transform=`translate(${rx}px,${ry}px)`;
+    ctx2.clearRect(0,0,cvs.width,cvs.height);
+    ctx2.fillStyle=accentCache||'#ff3050';
+    parts=parts.filter(p=>p.l>0);
+    for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.l-=.025;ctx2.globalAlpha=Math.max(p.l,0);ctx2.beginPath();ctx2.arc(p.x,p.y,p.s*p.l,0,6.283);ctx2.fill()}
+    ctx2.globalAlpha=1;requestAnimationFrame(fxLoop);
+  })();
+}
+
+/* =========================================================
+   7) SCROLL: barra de progreso + aparición de elementos
+   ========================================================= */
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-innerHeight;
+  prog.style.transform=`scaleX(${h>0?scrollY/h:0})`;
+},{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal,.sec-title').forEach(el=>io.observe(el));
+
+/* =========================================================
+   8) ESTUDIO: pads con Web Audio (sonidos sintetizados, sin archivos)
+   ========================================================= */
+let actx,master,filter,analyser,muted=false;
+function initAudio(){
+  if(actx)return;
+  actx=new (window.AudioContext||window.webkitAudioContext)();
+  master=actx.createGain();master.gain.value=+document.getElementById('vol').value;
+  filter=actx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=+document.getElementById('flt').value;
+  analyser=actx.createAnalyser();analyser.fftSize=128;
+  filter.connect(master);master.connect(analyser);analyser.connect(actx.destination);
+}
+function noise(dur){
+  const b=actx.createBuffer(1,actx.sampleRate*dur,actx.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const s=actx.createBufferSource();s.buffer=b;return s;
+}
+function env(g,t,a,d){g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(a,t+.005);g.gain.exponentialRampToValueAtTime(0.0001,t+d)}
+function osc(type,f1,f2,dur,amp){
+  const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain();
+  o.type=type;o.frequency.setValueAtTime(f1,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+  env(g,t,amp,dur);o.connect(g);g.connect(filter);o.start(t);o.stop(t+dur+.05);
+}
+function nz(dur,amp,hp,bp){
+  const t=actx.currentTime,s=noise(dur),g=actx.createGain(),f=actx.createBiquadFilter();
+  f.type=bp?'bandpass':'highpass';f.frequency.value=hp;env(g,t,amp,dur);
+  s.connect(f);f.connect(g);g.connect(filter);s.start(t);
+}
+/* Cada pad: nombre, color y función de sonido. Cambiá acá los sonidos. */
+const PADS=[
+  {n:'KICK',c:'#ff3050',f:()=>osc('sine',160,40,.35,1)},
+  {n:'SNARE',c:'#ff8c00',f:()=>{nz(.2,.7,1500);osc('triangle',220,110,.12,.5)}},
+  {n:'HAT',c:'#ffb830',f:()=>nz(.07,.4,7000)},
+  {n:'CLAP',c:'#00c9a0',f:()=>{nz(.05,.6,1200,true);setTimeout(()=>nz(.06,.6,1200,true),28);setTimeout(()=>nz(.12,.5,1200,true),58)}},
+  {n:'BASS',c:'#00c9a0',f:()=>osc('sawtooth',55,50,.5,.5)},
+  {n:'SYNTH',c:'#ffb830',f:()=>{osc('square',440,435,.35,.25);osc('square',659,655,.35,.2)}},
+  {n:'TOM',c:'#ff8c00',f:()=>osc('sine',200,70,.3,.9)},
+  {n:'ZAP',c:'#ff3050',f:()=>osc('sawtooth',1800,80,.25,.35)}
+];
+const padsEl=document.getElementById('pads');
+PADS.forEach((p,i)=>{
+  const b=document.createElement('button');b.className='pad';b.style.setProperty('--pc',p.c);
+  b.setAttribute('aria-label','Pad '+p.n+', tecla '+(i+1));
+  b.innerHTML=`<b>${i+1}</b>${p.n}`;
+  b.addEventListener('pointerdown',e=>{e.preventDefault();hit(i)});
+  padsEl.appendChild(b);
+});
+function hit(i){
+  initAudio();if(actx.state==='suspended')actx.resume();
+  if(!muted)PADS[i].f();
+  const el=padsEl.children[i];el.classList.add('hit');setTimeout(()=>el.classList.remove('hit'),110);
+}
+addEventListener('keydown',e=>{
+  if(e.repeat||e.target.matches('input'))return;
+  const n=parseInt(e.key,10);if(n>=1&&n<=8)hit(n-1);
+});
+document.getElementById('vol').addEventListener('input',e=>{initAudio();master.gain.value=muted?0:+e.target.value});
+document.getElementById('flt').addEventListener('input',e=>{initAudio();filter.frequency.value=+e.target.value});
+const muteBtn=document.getElementById('muteBtn');
+muteBtn.addEventListener('click',()=>{
+  initAudio();muted=!muted;master.gain.value=muted?0:+document.getElementById('vol').value;
+  muteBtn.setAttribute('aria-pressed',muted);muteBtn.textContent=muted?'Activar sonido':'Silenciar';
+});
+
+/* Visualizador: usa el audio real; en reposo dibuja una onda suave */
+const viz=document.getElementById('viz'),vctx=viz.getContext('2d');
+function vizLoop(now){
+  const w=viz.width=viz.clientWidth*devicePixelRatio,h=viz.height=viz.clientHeight*devicePixelRatio;
+  vctx.clearRect(0,0,w,h);
+  const bars=32,bw=w/bars;
+  const data=analyser?new Uint8Array(analyser.frequencyBinCount):null;
+  if(analyser)analyser.getByteFrequencyData(data);
+  for(let i=0;i<bars;i++){
+    const v=data?data[i]/255:0;
+    const idle=reduce?.05:(Math.sin(now/500+i*.5)+1)*.04+.03;
+    const bh=Math.max(v,idle)*h;
+    vctx.fillStyle=`hsl(${170-i*4.5},90%,55%)`;
+    vctx.fillRect(i*bw+2,h-bh,bw-4,bh);
+  }
+  requestAnimationFrame(vizLoop);
+}
+requestAnimationFrame(vizLoop);
+</script>
+</body>
+</html>
